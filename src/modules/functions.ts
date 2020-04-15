@@ -1,4 +1,17 @@
-module.exports = (client) => {
+module.exports = (client, connection) => {
+
+    // SQL queries to return promises so we can await them
+    client.query = (query) => {
+        return new Promise((resolve, reject) => {
+        connection.query(query, (err, res) => {
+                if (err || res.length < 1)
+                    reject(err || 'Query returned nothing');
+                resolve(res);
+            });
+        });
+    };
+
+    // Used for fetching guild member objects easier.
     client.fetchGuildMember = (ctx) => {
         let msg = ctx.message;
 		let args = msg.content.slice(ctx.prefix.length).split(' ');
