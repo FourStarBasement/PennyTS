@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'test',
-    run: (context) => {
-        context.reply(`I am running.`);
-    }
-}
+	name: 'test',
+	run: (context) => {
+		context.reply('I am running.');
+	}
+};
