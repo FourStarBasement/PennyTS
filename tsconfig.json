@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "outDir": "out",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "incremental": true
+  }
+}

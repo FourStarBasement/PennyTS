@@ -4,7 +4,7 @@
   "description": "Pennybot but in TypeScript",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc && node out/index.js"
   },
   "author": "Lilwiggy, Pixel",
   "license": "MIT",
