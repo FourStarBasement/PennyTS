@@ -2,9 +2,13 @@ import { CommandOptions, Context } from 'detritus-client/lib/command';
 
 export const stats = {
   name: 'stats',
-  run: async (context: Context) => {
+  run: async (ctx: Context) => {
     try {
-      let ping = await context.client.ping();
+      if (!ctx.channel?.canEmbedLinks) {
+        ctx.reply('I cannot send embeds in this chat.');
+        return;
+    }
+      let ping = await ctx.client.ping();
 
       // Shout out to https://github.com/Gravebot/Gravebot/blob/master/src/commands/info/uptime.js for
       // doing the math I didn't wanna do
@@ -14,12 +18,12 @@ export const stats = {
       const minutes = Math.floor((currentUptime % (60 * 60)) / 60);
       const seconds = Math.floor(currentUptime % 60);
 
-      context.reply({
+      ctx.reply({
         embed: {
           title: "Penny's Website",
           author: {
             name: 'PennyBot',
-            iconUrl: context.user.avatarUrl,
+            iconUrl: ctx.user.avatarUrl,
           },
           color: 9043849,
           footer: {
@@ -31,7 +35,7 @@ export const stats = {
               name: 'Stats',
               value: `**Uptime:** ${days} days ${hours} hours, ${minutes} minutes, and ${seconds} seconds.
             \n**Ping:** ${ping.gateway}ms
-            \n**Total Servers:** ${context.client.guilds.cache.size}
+            \n**Total Servers:** ${ctx.client.guilds.cache.size}
             \n**Server Prefix:** TBA
             \n**FrameWork:** Detritus-client
             \n**NodeJS version:** ${process.version.substr(1)}`,
