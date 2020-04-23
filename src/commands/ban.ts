@@ -26,17 +26,20 @@ export const ban = {
         }
 
         const fetch = require('node-fetch');
-        let img = await fetch('https://i.makeagif.com/media/6-01-2015/yeWyfV.gif');
-        img = await img.buffer();
+        let banImage = undefined;
+        
+        if (ctx.channel?.canAttachFiles) {
+            let img = await fetch('https://i.makeagif.com/media/6-01-2015/yeWyfV.gif');
+            img = await img.buffer();
+            banImage = {filename: 'ban.gif', data: img};
+        }
+
         ctx.guild?.createBan(ctx.message.mentions.first()!.id, {
             reason: `Action done by ${ctx.user.username}.`
         });
         ctx.reply({
             content: `${ctx.message.mentions.first()?.username} was banned by ${ctx.message.author.username}`,
-            file: {
-                filename: 'ban.gif',
-                data: img
-            }
+            file: banImage
         });
     }
 
