@@ -8,7 +8,7 @@ export const ban = {
             ctx.reply('This command is restricted to server mods.');
             return;
         }
-        if (!ctx.guild?.me?.canBanMembers) {
+        if (!ctx.me?.canBanMembers) {
             ctx.reply('I cannot ban members!');
             return;
         }
@@ -16,12 +16,16 @@ export const ban = {
             ctx.reply('Please mention a valid user.');
             return;
         }
-        if (ctx.guild.me.highestRole!.position <= (ctx.message.mentions.first()! as Member).highestRole!.position) {
-            ctx.reply('I cannot ban this user.');
+        if (ctx.message.mentions.first()?.id === ctx.me?.id) {
+            ctx.reply('I cannot let you do that.');
             return;
         }
-        if (ctx.message.mentions.first()?.id === '309531399789215744') {
-            ctx.reply('I cannot let you do that.');
+        if (ctx.message.mentions.first()?.id == ctx.message.author.id) {
+            ctx.reply('You cannot ban yourself!');
+            return;
+        }
+        if (ctx.me?.highestRole!.position <= (ctx.message.mentions.first()! as Member).highestRole!.position) {
+            ctx.reply('I cannot ban this user.');
             return;
         }
 

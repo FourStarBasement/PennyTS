@@ -4,7 +4,8 @@ import { stats } from './stats';
 import { test } from './test';
 import { ban } from './ban';
 import { waifu } from './waifu';
-import { random } from './random'
+import { random } from './random';
+import { invite } from './invite';
 
 export default [
   avatar,
@@ -14,4 +15,5 @@ export default [
   ban,
   waifu,
   random,
+  invite,
 ];
