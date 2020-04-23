@@ -16,14 +16,6 @@ const cmdClient = new CommandClient(config.token, {
   prefix: '!!',
 });
 
-cmdClient.onPrefixCheck = async (context: Context) => {
-  if (!context.user.bot && context.guildId) {
-    let prefix = '!!';
-    if (context.message.content.indexOf(prefix) === 0) return prefix;
-    else return false;
-  }
-  return false;
-};
 
 functions(cmdClient, connection);
 //cmdClient.addMultipleIn('../src/commands');

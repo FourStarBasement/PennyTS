@@ -2,11 +2,13 @@
 import { Context } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User } from 'detritus-client/lib/structures';
+import images from '../images';
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
     query: (query: string) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined;
+    checkImage: (image: string) => Promise<string>;
   }
 }
 
@@ -38,5 +40,23 @@ export default (client: CommandClient, connection: any) => {
         (m) => m.nick?.toLowerCase() === args[1].toLowerCase()
       );
     return m;
+  };
+
+  client.checkImage = async(image: string) => {
+    //console.log(image)
+    const fetch = require('node-fetch');
+    let r = await fetch(image);
+    if (r.statusText !== 'OK')
+    return '';
+
+    return image; 
+  }
+
+  client.onPrefixCheck = async (context: Context) => {
+    if (!context.user.bot && context.guildId) {
+      let prefix = '!!';
+      if (context.message.content.indexOf(prefix) === 0) return prefix;
+    }
+    return '';
   };
 };
