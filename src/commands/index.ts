@@ -10,6 +10,7 @@ import { topic } from './topic';
 import { define } from './define';
 import { complain } from './complain';
 import { inspire } from './inspire';
+import { embarrass } from './embarrass';
 
 export default [
   avatar,
@@ -24,4 +25,5 @@ export default [
   define,
   complain,
   inspire,
+  embarrass,
 ];
