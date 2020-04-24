@@ -11,6 +11,7 @@ import { define } from './define';
 import { complain } from './complain';
 import { inspire } from './inspire';
 import { embarrass } from './embarrass';
+import { delete_cmd } from './delete';
 
 export default [
   avatar,
@@ -26,4 +27,5 @@ export default [
   complain,
   inspire,
   embarrass,
+  delete_cmd,
 ];
