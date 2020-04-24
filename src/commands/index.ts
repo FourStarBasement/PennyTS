@@ -14,6 +14,7 @@ import { embarrass } from './embarrass';
 import { delete_cmd } from './delete';
 import { rabbit } from './rabbit';
 import { slap } from './slap';
+import { sam } from './sam';
 
 export default [
   avatar,
@@ -32,4 +33,5 @@ export default [
   delete_cmd,
   rabbit,
   slap,
+  sam,
 ];
