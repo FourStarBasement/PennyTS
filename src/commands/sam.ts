@@ -5,6 +5,11 @@ import stuff from '../modules/sam';
 export const sam = {
   name: 'sam',
   run: async (ctx: Context) => {
+    if (!ctx.channel?.canAttachFiles) {
+      ctx.reply("I don't have permissions to send images in this chat.");
+      return;
+    }
+
     let toSam = stuff.things[Math.floor(Math.random() * stuff.things.length)];
 
     let split = toSam.split('.');

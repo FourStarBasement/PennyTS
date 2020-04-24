@@ -5,6 +5,11 @@ import stuff from '../modules/slap';
 export const slap = {
   name: 'slap',
   run: async (ctx: Context) => {
+    if (!ctx.channel?.canAttachFiles) {
+      ctx.reply("I don't have permissions to send images in this chat.");
+      return;
+    }
+
     let slap = stuff.things[Math.floor(Math.random() * stuff.things.length)];
 
     let mention = ctx.message.mentions.first();
