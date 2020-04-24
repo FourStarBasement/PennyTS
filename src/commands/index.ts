@@ -6,6 +6,8 @@ import { ban } from './ban';
 import { waifu } from './waifu';
 import { random } from './random';
 import { invite } from './invite';
+import { topic } from './topic';
+import { define } from './define';
 
 export default [
   avatar,
@@ -16,4 +18,6 @@ export default [
   waifu,
   random,
   invite,
+  topic,
+  define,
 ];

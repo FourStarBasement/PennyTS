@@ -7,7 +7,7 @@ export const stats = {
       if (!ctx.channel?.canEmbedLinks) {
         ctx.reply('I cannot send embeds in this chat.');
         return;
-    }
+      }
       let ping = await ctx.client.ping();
 
       // Shout out to https://github.com/Gravebot/Gravebot/blob/master/src/commands/info/uptime.js for

@@ -7,7 +7,7 @@ export const avatar = {
     if (!ctx.channel?.canEmbedLinks) {
       ctx.reply('I cannot send embeds in this chat.');
       return;
-  }
+    }
     ctx.reply({
       embed: {
         title: `${user.username}'s avatar.`,

@@ -42,15 +42,14 @@ export default (client: CommandClient, connection: any) => {
     return m;
   };
 
-  client.checkImage = async(image: string) => {
+  client.checkImage = async (image: string) => {
     //console.log(image)
     const fetch = require('node-fetch');
     let r = await fetch(image);
-    if (r.statusText !== 'OK')
-    return '';
+    if (r.statusText !== 'OK') return '';
 
-    return image; 
-  }
+    return image;
+  };
 
   client.onPrefixCheck = async (context: Context) => {
     if (!context.user.bot && context.guildId) {

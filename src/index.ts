@@ -16,7 +16,6 @@ const cmdClient = new CommandClient(config.token, {
   prefix: '!!',
 });
 
-
 functions(cmdClient, connection);
 //cmdClient.addMultipleIn('../src/commands');
 cmdClient.addMultiple(commands);
