@@ -8,6 +8,8 @@ import { random } from './random';
 import { invite } from './invite';
 import { topic } from './topic';
 import { define } from './define';
+import { complain } from './complain';
+import { inspire } from './inspire';
 
 export default [
   avatar,
@@ -20,4 +22,6 @@ export default [
   invite,
   topic,
   define,
+  complain,
+  inspire,
 ];
