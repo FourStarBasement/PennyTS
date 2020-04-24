@@ -13,6 +13,7 @@ import { inspire } from './inspire';
 import { embarrass } from './embarrass';
 import { delete_cmd } from './delete';
 import { rabbit } from './rabbit';
+import { slap } from './slap';
 
 export default [
   avatar,
@@ -30,4 +31,5 @@ export default [
   embarrass,
   delete_cmd,
   rabbit,
+  slap,
 ];
