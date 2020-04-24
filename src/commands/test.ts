@@ -1,11 +1,12 @@
 import { CommandOptions, Context } from 'detritus-client/lib/command';
+import fetch from 'node-fetch';
 
 export const test = {
   name: 'test',
   run: async (context: Context) => {
-    const fetch = require('node-fetch');
-    let img = await fetch(`${context.member?.avatarUrl}?size=2048`);
-    img = await img.buffer();
+    let img = await fetch(`${context.member?.avatarUrl}?size=2048`).then(
+      async (r) => await r.buffer()
+    );
     context
       .reply({
         content: "I'm running!",

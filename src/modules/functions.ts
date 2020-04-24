@@ -2,6 +2,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User } from 'detritus-client/lib/structures';
+import fetch from 'node-fetch';
 import images from '../images';
 
 declare module 'detritus-client/lib/commandclient' {
@@ -44,7 +45,6 @@ export default (client: CommandClient, connection: any) => {
 
   client.checkImage = async (image: string) => {
     //console.log(image)
-    const fetch = require('node-fetch');
     let r = await fetch(image);
     if (r.statusText !== 'OK') return '';
 

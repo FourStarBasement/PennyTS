@@ -1,4 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
+import fetch from 'node-fetch';
 import images from '../images';
 
 declare module 'detritus-client/lib/structures' {
@@ -28,10 +29,12 @@ export const waifu = {
     ];
     let emote: string = emotes[Math.floor(Math.random() * emotes.length)];
     // console.log(ctx.client.commandClient!.checkImage('https://distribution.faceit-cdn.net/images/617b5e63-b8a7-468c-b60a-131ad21ad34b.jpeg'))
-    const fetch = require('node-fetch');
     let rand = await randomImage(ctx.guild!.waifuArr, images.waifu, 0, ctx);
-    let img = await fetch(rand);
-    img = await img.buffer();
+    if (rand === undefined) {
+      return; // this should ideally only happen after 3 retries
+    }
+
+    let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
       content: `I approve ${emote}`,
       file: {
