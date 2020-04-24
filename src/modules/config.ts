@@ -7,4 +7,8 @@ export default {
     password: '',
     db_name: '',
   },
+
+  giphy: {
+    key: '',
+  },
 };

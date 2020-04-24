@@ -12,6 +12,7 @@ import { complain } from './complain';
 import { inspire } from './inspire';
 import { embarrass } from './embarrass';
 import { delete_cmd } from './delete';
+import { rabbit } from './rabbit';
 
 export default [
   avatar,
@@ -28,4 +29,5 @@ export default [
   inspire,
   embarrass,
   delete_cmd,
+  rabbit,
 ];
