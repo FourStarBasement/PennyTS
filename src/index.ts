@@ -14,6 +14,9 @@ const connection = mysql.createConnection({
 
 const cmdClient = new CommandClient(config.token, {
   prefix: '!!',
+  gateway: {
+    loadAllMembers: true,
+  },
 });
 
 functions(cmdClient, connection);

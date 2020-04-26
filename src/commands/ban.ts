@@ -42,7 +42,7 @@ export const ban = {
       banImage = { filename: 'ban.gif', data: img };
     }
 
-    ctx.guild?.createBan(ctx.message.mentions.first()!.id, {
+    ctx.guild?.createBan!(ctx.message.mentions.first()!.id, {
       reason: `Action done by ${ctx.user.username}.`,
     });
     ctx.reply({

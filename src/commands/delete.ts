@@ -44,7 +44,7 @@ export const delete_cmd = {
         return;
       }
 
-      let ids = Array.from(messages.keys());
+      let ids: Array<string> = Array.from(messages.keys());
       ctx.channel?.bulkDelete(ids).catch(console.error);
       ctx.reply(`Deleted ${args.delete} messages.`).then((m) => {
         setTimeout(() => m.delete(), 4000);
