@@ -17,11 +17,11 @@ export const slap = {
 
     let content;
 
-    if (!mention || mention.id == ctx.message.author.id) {
+    if (!mention || mention.id === ctx.message.author.id) {
       content = `${username} has just slapped themselves in confusion.`;
-    } else if (mention.id == '232614905533038593') {
+    } else if (mention.id === '232614905533038593') {
       content = `${username} just tried to slap my creator, Lilwiggy, but instead themselves in confusion.`;
-    } else if (mention.id == ctx.me!.id) {
+    } else if (mention.id === ctx.me!.id) {
       content = `${username} just tried to slap me. But they missed and I slapped them back.`;
     }
 

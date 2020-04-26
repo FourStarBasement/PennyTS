@@ -15,6 +15,7 @@ import { delete_cmd } from './delete';
 import { rabbit } from './rabbit';
 import { slap } from './slap';
 import { sam } from './sam';
+import { highfive } from './highfive';
 
 export default [
   avatar,
@@ -34,4 +35,5 @@ export default [
   rabbit,
   slap,
   sam,
+  highfive,
 ];
