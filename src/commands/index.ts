@@ -16,6 +16,7 @@ import { rabbit } from './rabbit';
 import { slap } from './slap';
 import { sam } from './sam';
 import { highfive } from './highfive';
+import { kiss } from './kiss';
 
 export default [
   avatar,
@@ -36,4 +37,5 @@ export default [
   slap,
   sam,
   highfive,
+  kiss,
 ];

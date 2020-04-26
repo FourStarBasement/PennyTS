@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { Webhook } from 'detritus-client/lib/structures';
-import stuff from '../modules/embarrass';
+import images from '../modules/images';
 
 export const embarrass = {
   name: 'embarrass',
@@ -36,7 +36,8 @@ export const embarrass = {
 };
 
 async function sendMessage(hook: Webhook, avatarUrl: string) {
-  let content = stuff.things[Math.floor(Math.random() * stuff.things.length)];
+  let content =
+    images.embarrass[Math.floor(Math.random() * images.embarrass.length)];
   return hook.createMessage({
     content: content,
     avatarUrl: avatarUrl,

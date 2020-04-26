@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import stuff from '../modules/slap';
+import images from '../modules/images';
 
 export const slap = {
   name: 'slap',
@@ -10,7 +10,7 @@ export const slap = {
       return;
     }
 
-    let slap = stuff.things[Math.floor(Math.random() * stuff.things.length)];
+    let slap = images.slap[Math.floor(Math.random() * images.slap.length)];
 
     let mention = ctx.message.mentions.first();
     let username = ctx.message.author.username;

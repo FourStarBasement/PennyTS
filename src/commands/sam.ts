@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import stuff from '../modules/sam';
+import images from '../modules/images';
 
 export const sam = {
   name: 'sam',
@@ -10,7 +10,7 @@ export const sam = {
       return;
     }
 
-    let toSam = stuff.things[Math.floor(Math.random() * stuff.things.length)];
+    let toSam = images.sam[Math.floor(Math.random() * images.sam.length)];
 
     let split = toSam.split('.');
     let ext = split[split.length - 1];
