@@ -17,6 +17,8 @@ import { slap } from './slap';
 import { sam } from './sam';
 import { highfive } from './highfive';
 import { kiss } from './kiss';
+import { credits } from './credits';
+import { background } from './background';
 
 export default [
   avatar,
@@ -38,4 +40,6 @@ export default [
   sam,
   highfive,
   kiss,
+  credits,
+  background,
 ];
