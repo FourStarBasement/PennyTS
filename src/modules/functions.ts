@@ -7,6 +7,7 @@ import { Paginator, Page } from './paginator';
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
+    shopAll: Map<string, number>;
     query: (query: string) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined;
     checkImage: (image: string) => Promise<string>;

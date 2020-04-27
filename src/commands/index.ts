@@ -19,6 +19,10 @@ import { highfive } from './highfive';
 import { kiss } from './kiss';
 import { credits } from './credits';
 import { backgrounds } from './backgrounds';
+import { shopinfoAll } from './shopinfo.all';
+import { shopinfo } from './shopinfo';
+import { shopinfoBackgrounds } from './shopinfo.backgrounds';
+import { shopinfoEmblems } from './shopinfo.emblems';
 
 export default [
   avatar,
@@ -42,4 +46,8 @@ export default [
   kiss,
   credits,
   backgrounds,
+  shopinfoAll,
+  shopinfoBackgrounds,
+  shopinfoEmblems,
+  shopinfo,
 ];

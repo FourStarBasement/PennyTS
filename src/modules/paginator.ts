@@ -1,16 +1,27 @@
 import { Context } from 'detritus-client/lib/command';
-import { Embed } from 'detritus-client/lib/utils';
+import { Embed, EmbedField } from 'detritus-client/lib/utils';
 import { Message, Reaction } from 'detritus-client/lib/structures';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 
+export interface PageField {
+  name: string;
+  value: string;
+}
+
 export interface Page {
+  author: {
+    iconUrl?: string;
+    name?: string;
+    url?: string;
+  };
   title: string;
-  colour: number;
+  color: number;
   image: {
     url: string;
   };
-  footer: {
+  fields?: PageField[];
+  footer?: {
     text: string;
     iconUrl?: string;
   };
