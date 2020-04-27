@@ -32,6 +32,9 @@ export class Paginator {
   pages: Array<Page>;
   currIndex: number = 0;
   message: Message;
+  idleTimeout: number = 30000; // 30 000 ms | 30 s - When the paginator is first deployed
+  timeout: number = 60000; // 60 000 ms | 60 s | 1 m - If a reaction occurs after deployment
+  resetWithin: boolean = false;
 
   constructor(ctx: Context, pages: Array<Page>) {
     this.ctx = ctx;
@@ -49,6 +52,18 @@ export class Paginator {
       }
     );
     await this.addReactions();
+    await this.deleteLoop();
+  }
+
+  async deleteLoop(timeout: number = this.idleTimeout) {
+    setTimeout(async () => {
+      if (this.resetWithin) {
+        this.resetWithin = false;
+        this.deleteLoop(this.timeout);
+      } else {
+        this.destroy();
+      }
+    }, timeout);
   }
 
   async addReactions() {
@@ -86,6 +101,8 @@ export class Paginator {
       default:
         break;
     }
+
+    this.resetWithin = true;
 
     // try delete
     payload.message
