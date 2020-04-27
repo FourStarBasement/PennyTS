@@ -6,7 +6,9 @@ export const background = {
     let bg: Array<any> = [];
     let i = 0;
     let data = await ctx.commandClient
-      .query(`SELECT * FROM \`userB\` WHERE User_ID = '232614905533038593'`)
+      .query(
+        `SELECT * FROM \`userB\` WHERE User_ID = '${ctx.message.author.id}'`
+      )
       .catch((r) => {
         if (r == 'Query returned nothing') {
           ctx.reply('You do not own any backgrounds.');
