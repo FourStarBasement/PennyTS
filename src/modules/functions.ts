@@ -1,15 +1,16 @@
-//import { CommandClient } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
-import images from '../images';
+import { Embed } from 'detritus-client/lib/utils';
+import { Paginator, Page } from './paginator';
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
     query: (query: string) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined;
     checkImage: (image: string) => Promise<string>;
+    paginate: (ctx: Context, pages: Array<Page>) => Promise<Paginator>;
   }
 }
 
@@ -57,5 +58,12 @@ export default (client: CommandClient, connection: any) => {
       if (context.message.content.indexOf(prefix) === 0) return prefix;
     }
     return '';
+  };
+
+  client.paginate = async (ctx: Context, pages: Array<Page>) => {
+    let p = new Paginator(ctx, pages);
+    await p.start();
+
+    return p;
   };
 };

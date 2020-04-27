@@ -4,50 +4,62 @@ import { Message, Reaction } from 'detritus-client/lib/structures';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 
+export interface Page {
+  title: string;
+  colour: number;
+  image: {
+    url: string;
+  };
+  footer: {
+    text: string;
+    iconUrl?: string;
+  };
+}
+
 export class Paginator {
   ctx: Context;
-  pages: Array<Embed>;
+  pages: Array<Page>;
   currIndex: number = 0;
   message: Message;
-  ready: boolean = false;
 
-  constructor(ctx: Context, pages: Array<Embed>) {
+  constructor(ctx: Context, pages: Array<Page>) {
     this.ctx = ctx;
     this.pages = pages;
   }
 
   async start() {
-    this.message = await this.ctx.reply({ embed: this.pages[this.currIndex] });
-    this.ctx.commandClient.addListener(
+    let toShow = this.pages[this.currIndex];
+    toShow.footer = { text: `Page ${this.currIndex + 1}/${this.pages.length}` };
+    this.message = await this.ctx.reply({ embed: toShow });
+    this.ctx.commandClient.client.addListener(
       ClientEvents.MESSAGE_REACTION_ADD,
-      this.reactionCollector
+      async (payload: GatewayClientEvents.MessageReactionAdd) => {
+        await this.reactionCollector(payload);
+      }
     );
     await this.addReactions();
   }
 
   async addReactions() {
-    await this.message
-      .react('⬅')
-      .then(async (r) => await this.message.react('⏹️'))
-      .then(async (r) => await this.message.react('➡'));
+    await this.message.react('⬅');
+    await this.message.react('⏹️');
+    await this.message.react('➡');
   }
 
-  async reactionCollector(reaction: GatewayClientEvents.MessageReactionAdd) {
+  async reactionCollector(payload: GatewayClientEvents.MessageReactionAdd) {
     if (!this.message) {
       return;
     }
 
-    if (reaction.userId !== this.ctx.message.author.id) {
+    if (payload.userId !== this.ctx.message.author.id) {
       return;
     }
 
-    if (reaction.messageId !== this.message.id) {
+    if (payload.messageId !== this.message.id) {
       return;
     }
 
-    console.log(reaction.reaction);
-
-    switch (reaction.reaction.emoji.name) {
+    switch (payload.reaction.emoji.name) {
       case '⬅':
         await this.back();
         break;
@@ -63,6 +75,11 @@ export class Paginator {
       default:
         break;
     }
+
+    // try delete
+    payload.message
+      ?.deleteReaction(payload.reaction.emoji.name, payload.userId)
+      .catch(() => null);
   }
 
   async back() {
@@ -76,11 +93,10 @@ export class Paginator {
 
   async destroy() {
     await this.message.delete();
-    this.ctx.commandClient.removeListener(
+    this.ctx.commandClient.client.removeListener(
       ClientEvents.MESSAGE_REACTION_ADD,
       this.reactionCollector
     );
-    this.ready = false;
   }
 
   async forward() {
@@ -93,6 +109,8 @@ export class Paginator {
   }
 
   async show() {
-    this.message.edit({ embed: this.pages[this.currIndex] });
+    let toShow = this.pages[this.currIndex];
+    toShow.footer = { text: `Page ${this.currIndex + 1}/${this.pages.length}` };
+    this.message.edit({ embed: toShow });
   }
 }

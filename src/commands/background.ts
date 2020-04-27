@@ -1,6 +1,4 @@
 import { Context } from 'detritus-client/lib/command';
-import { Paginator } from '../modules/paginator';
-import { Embed } from 'detritus-client/lib/utils';
 
 export const background = {
   name: 'background',
@@ -21,13 +19,7 @@ export const background = {
       }
     });
 
-    try {
-      let pg = new Paginator(ctx, bg);
-
-      pg.start();
-    } catch (error) {
-      console.log(error);
-    }
+    ctx.commandClient.paginate(ctx, bg);
   },
 };
 
