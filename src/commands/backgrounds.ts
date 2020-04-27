@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 
-export const background = {
-  name: 'background',
+export const backgrounds = {
+  name: 'backgrounds',
   run: async (ctx: Context) => {
     let bg: Array<any> = [];
     let i = 0;

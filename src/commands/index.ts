@@ -18,7 +18,7 @@ import { sam } from './sam';
 import { highfive } from './highfive';
 import { kiss } from './kiss';
 import { credits } from './credits';
-import { background } from './background';
+import { backgrounds } from './backgrounds';
 
 export default [
   avatar,
@@ -41,5 +41,5 @@ export default [
   highfive,
   kiss,
   credits,
-  background,
+  backgrounds,
 ];
