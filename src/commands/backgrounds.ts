@@ -4,6 +4,7 @@ export const backgrounds = {
   name: 'backgrounds',
   metadata: {
     description: 'View the background(s) you have purchased.',
+    checks: ['embed'],
   },
   aliases: ['background'],
   run: async (ctx: Context) => {

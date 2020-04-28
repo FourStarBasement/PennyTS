@@ -1,4 +1,4 @@
-import { Context } from 'detritus-client/lib/command';
+import { Context, Command } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
@@ -74,5 +74,69 @@ export default (client: CommandClient, connection: any) => {
     await p.start();
 
     return p;
+  };
+
+  client.onCommandCheck = async (ctx: Context, command: Command) => {
+    if (!command.metadata.checks) {
+      return true;
+    }
+
+    for (let check of command.metadata.checks) {
+      switch (check) {
+        case 'embeds':
+          if (!ctx.channel?.canEmbedLinks) {
+            ctx.reply('I cannot send embeds in this chat.');
+            return false;
+          }
+          break;
+
+        case 'ban':
+          if (!ctx.member?.canBanMembers) {
+            ctx.reply('This command is restricted to server mods.');
+            return false;
+          }
+          if (!ctx.me?.canBanMembers) {
+            ctx.reply('I cannot ban members!');
+            return false;
+          }
+          break;
+
+        case 'manageMessages':
+          if (!ctx.member?.canManageMessages) {
+            ctx.reply('This command is restricted to server mods.');
+            return false;
+          }
+
+          if (!ctx.me?.canManageMessages) {
+            ctx.reply('I cannot delete messages in this chat.');
+            return false;
+          }
+          break;
+
+        case 'webhooks':
+          if (!ctx.me?.canManageWebhooks) {
+            ctx.reply(
+              "I don't have permissions to make a webhook. Please change this in your guild settings."
+            );
+            return false;
+          }
+          break;
+
+        case 'attachments':
+          if (!ctx.channel?.canAttachFiles) {
+            ctx.reply("I don't have permissions to send images in this chat.");
+            return false;
+          }
+          break;
+
+        case 'nsfw':
+          if (!ctx.channel?.nsfw) {
+            ctx.reply('This channel is not marked as NSFW.');
+            return false;
+          }
+          break;
+      }
+    }
+    return true;
   };
 };

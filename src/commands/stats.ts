@@ -4,13 +4,10 @@ export const stats = {
   name: 'stats',
   metadata: {
     description: "Penny's various stats.",
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
     try {
-      if (!ctx.channel?.canEmbedLinks) {
-        ctx.reply('I cannot send embeds in this chat.');
-        return;
-      }
       let ping = await ctx.client.ping();
 
       // Shout out to https://github.com/Gravebot/Gravebot/blob/master/src/commands/info/uptime.js for

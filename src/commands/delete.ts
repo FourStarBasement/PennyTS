@@ -8,19 +8,10 @@ export const delete_cmd = {
   name: 'delete',
   metadata: {
     description: 'Delets X number of messages',
+    checks: ['manageMessages'],
   },
   arg: { name: 'amount', default: undefined, type: Number },
   run: async (ctx: Context, args: CommandArgs) => {
-    if (!ctx.member?.canManageMessages) {
-      ctx.reply('This command is restricted to server mods.');
-      return;
-    }
-
-    if (!ctx.me?.canManageMessages) {
-      ctx.reply('I cannot delete messages in this chat.');
-      return;
-    }
-
     if (!args.delete) {
       ctx.reply(`Usage: ${ctx.prefix}delete {amount of messages to delete}`);
       return;

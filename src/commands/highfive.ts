@@ -5,6 +5,7 @@ export const highfive = {
   name: 'highfive',
   metadata: {
     description: 'Give someone a high-five.',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
     let mention = ctx.message.mentions.first();

@@ -7,6 +7,7 @@ export const shopinfoBackgrounds = {
   name: 'shopinfo backgrounds',
   metadata: {
     description: 'View all backgrounds available at the shop.',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();

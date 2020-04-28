@@ -9,6 +9,7 @@ export const help = {
   name: 'help',
   metadata: {
     description: 'Does what you think it does.',
+    checks: ['embed'],
   },
   arg: { name: 'command' },
   run: async (ctx: Context, args: CommandArgs) => {
@@ -26,6 +27,34 @@ export const help = {
       });
 
       ctx.commandClient.paginate(ctx, pages, 'PennyBot by Lilwiggy');
+    }
+
+    let command = ctx.commandClient.commands.filter(
+      (c) => c.name === args.help
+    );
+
+    if (command.length > 0) {
+      let c = command[0];
+      ctx.reply({
+        embed: {
+          title: 'Official server',
+          author: {
+            iconUrl: ctx.me!.avatarUrl,
+          },
+          fields: [
+            {
+              name: ctx.prefix + c.name,
+              value: c.metadata.description
+                ? c.metadata.description
+                : 'Not Found.',
+            },
+          ],
+          color: 9043849,
+          url: 'https://discord.gg/kwcd9dq',
+        },
+      });
+    } else {
+      ctx.reply('I could not find the command you were looking for.');
     }
   },
 };

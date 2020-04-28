@@ -5,12 +5,9 @@ export const random = {
   name: 'random',
   metadata: {
     description: "Get a random user's avatar.",
+    checks: ['embed'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canEmbedLinks) {
-      ctx.reply('I cannot send embeds in this chat.');
-      return;
-    }
     let users: Array<User> = ctx.client.users.toArray();
     let user: User = users[Math.floor(Math.random() * users.length)];
     console.log(ctx.member?.color);

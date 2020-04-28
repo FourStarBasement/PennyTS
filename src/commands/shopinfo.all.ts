@@ -7,6 +7,7 @@ export const shopinfoAll = {
   name: 'shopinfo all',
   metadata: {
     description: 'View all items at the shop.',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();

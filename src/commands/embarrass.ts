@@ -6,15 +6,9 @@ export const embarrass = {
   name: 'embarrass',
   metadata: {
     description: 'Yes',
+    checks: ['webhooks'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.me?.canManageWebhooks) {
-      ctx.reply(
-        "I don't have permissions to make a webhook. Please change this in your guild settings."
-      );
-      return;
-    }
-
     ctx.channel
       ?.createWebhook({ name: ctx.message.author.name })
       .then(async (hook) =>

@@ -9,15 +9,11 @@ export const define = {
   name: 'define',
   metadata: {
     description: 'Gets a definition for a word from urban dictionary.',
+    checks: ['embed'],
   },
   arg: { name: 'word' },
   run: async (ctx: Context, args: CommandArgs) => {
     try {
-      if (!ctx.channel?.canEmbedLinks) {
-        ctx.reply('I cannot send embeds in this chat.');
-        return;
-      }
-
       if (!args.define) {
         ctx.reply(`Usage: ${ctx.prefix}define {word to define}`);
         return;

@@ -13,13 +13,9 @@ export const waifu = {
   name: 'waifu',
   metadata: {
     description: 'Posts a random waifu.',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canAttachFiles) {
-      ctx.reply("I don't have permissions to send images in this chat.");
-      return;
-    }
-
     if (!ctx.guild?.waifuArr) ctx.guild!.waifuArr = [];
 
     let emotes: Array<string> = [

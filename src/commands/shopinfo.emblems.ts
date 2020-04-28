@@ -7,6 +7,7 @@ export const shopinfoEmblems = {
   name: 'shopinfo emblems',
   metadata: {
     description: 'View all emblems available at the shop.',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();

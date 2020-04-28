@@ -6,13 +6,9 @@ export const sam = {
   name: 'sam',
   metadata: {
     description: 'sam',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canAttachFiles) {
-      ctx.reply("I don't have permissions to send images in this chat.");
-      return;
-    }
-
     let toSam = images.sam[Math.floor(Math.random() * images.sam.length)];
 
     let split = toSam.split('.');

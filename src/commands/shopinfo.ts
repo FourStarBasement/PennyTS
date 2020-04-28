@@ -23,6 +23,7 @@ export const shopinfo = {
   name: 'shopinfo',
   metadata: {
     description: 'View an item or a certain category of items at the shop.',
+    checks: ['embeds'],
   },
   arg: { name: 'subcommand' },
   run: async (ctx: Context, arg: CommandArgs) => {

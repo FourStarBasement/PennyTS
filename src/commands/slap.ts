@@ -6,13 +6,9 @@ export const slap = {
   name: 'slap',
   metadata: {
     description: 'Slap someone.',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canAttachFiles) {
-      ctx.reply("I don't have permissions to send images in this chat.");
-      return;
-    }
-
     let slap = images.slap[Math.floor(Math.random() * images.slap.length)];
 
     let mention = ctx.message.mentions.first();

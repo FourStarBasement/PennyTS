@@ -8,6 +8,7 @@ export const kiss = {
   name: 'kiss',
   metadata: {
     description: 'Kisses a user',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
     let author = ctx.message.author;

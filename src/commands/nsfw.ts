@@ -4,16 +4,11 @@ import images from '../images';
 
 export const nsfw = {
   name: 'nsfw',
+  metadata: {
+    description: 'Posts a random NSFW image. Only works in NSFW labeled chats.',
+    checks: ['nsfw', 'attachments'],
+  },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.nsfw) {
-      ctx.reply('This channel is not marked as NSFW.');
-      return;
-    }
-    if (!ctx.channel?.canAttachFiles) {
-      ctx.reply("I don't have permissions to send images in this chat.");
-      return;
-    }
-
     if (!ctx.guild?.nsfwArr) ctx.guild!.nsfwArr = [];
 
     // console.log(ctx.client.commandClient!.checkImage('https://distribution.faceit-cdn.net/images/617b5e63-b8a7-468c-b60a-131ad21ad34b.jpeg'))

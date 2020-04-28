@@ -6,16 +6,9 @@ export const ban = {
   name: 'ban',
   metadata: {
     description: 'Ban a user.',
+    checks: ['ban'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.member?.canBanMembers) {
-      ctx.reply('This command is restricted to server mods.');
-      return;
-    }
-    if (!ctx.me?.canBanMembers) {
-      ctx.reply('I cannot ban members!');
-      return;
-    }
     if (ctx.message.mentions.size < 1) {
       ctx.reply('Please mention a valid user.');
       return;

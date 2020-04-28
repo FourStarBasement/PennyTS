@@ -6,12 +6,9 @@ export const serverinfo = {
   name: 'serverinfo',
   metadata: {
     description: 'Server information',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canEmbedLinks) {
-      ctx.reply('I cannot send embeds in this chat.');
-      return;
-    }
     let total = ctx.guild!.members.filter((m: Member) => !m.bot).length;
     let online = ctx.guild!.members.filter(
       (m: Member) => !m.bot && m.presence?.status === PresenceStatuses.ONLINE

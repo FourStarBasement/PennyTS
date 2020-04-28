@@ -4,13 +4,10 @@ export const spacehuhn = {
   name: 'spacehuhn',
   metadata: {
     description: '<3',
+    checks: ['embeds'],
   },
   aliases: ['chicken', 'stef'],
   run: async (ctx: Context) => {
-    if (!ctx.channel?.canEmbedLinks) {
-      ctx.reply('I cannot send embeds in this chat.');
-      return;
-    }
     let hi = Math.floor(Math.random() * 42);
     let embed = {
       title: "Here's your official Spacehuhn meme:tm:",

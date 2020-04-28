@@ -5,6 +5,7 @@ export const inspire = {
   name: 'inspire',
   metadata: {
     description: 'Posts an "inspirational" image.',
+    checks: ['attachments'],
   },
   run: async (ctx: Context) => {
     let img = await fetch(`http://inspirobot.me/api?generate=true`);
