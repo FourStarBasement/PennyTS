@@ -10,14 +10,14 @@ export interface PageField {
 }
 
 export interface Page {
-  author: {
+  author?: {
     iconUrl?: string;
     name?: string;
     url?: string;
   };
-  title: string;
-  color: number;
-  image: {
+  title?: string;
+  color?: number;
+  image?: {
     url: string;
   };
   fields?: PageField[];
