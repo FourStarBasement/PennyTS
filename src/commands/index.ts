@@ -29,6 +29,7 @@ import { listening } from './listening';
 import { docs } from './docs';
 import { hug } from './hug';
 import { cookie } from './cookie';
+import { weeb } from './weeb';
 
 export default [
   avatar,
@@ -62,4 +63,5 @@ export default [
   docs,
   hug,
   cookie,
+  weeb,
 ];
