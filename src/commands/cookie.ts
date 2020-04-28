@@ -15,7 +15,7 @@ export const cookie = {
   },
   arg: { name: 'user' },
   run: async (ctx: Context, args: CommandArgs) => {
-    let mention = ctx.message.mentions.first();
+    let mention = ctx.commandClient.fetchGuildMember(ctx);
 
     if (args.cookie && !mention) {
       ctx.reply('Please mention a valid user.');
