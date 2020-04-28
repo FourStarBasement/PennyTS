@@ -11,7 +11,7 @@ export const kiss = {
     checks: ['attachments'],
   },
   run: async (ctx: Context) => {
-    let author = ctx.message.author;
+    let author = ctx.member!;
     let mention = ctx.message.mentions.first();
 
     if (!mention) {

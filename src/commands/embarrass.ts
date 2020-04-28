@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { Webhook } from 'detritus-client/lib/structures';
-import images from '../modules/images';
+import text from '../modules/embarrass';
 
 export const embarrass = {
   name: 'embarrass',
@@ -10,31 +10,27 @@ export const embarrass = {
   },
   run: async (ctx: Context) => {
     ctx.channel
-      ?.createWebhook({ name: ctx.message.author.name })
-      .then(async (hook) =>
-        sendMessage(hook, ctx.message.author.avatarUrl).then(async (hook) =>
-          hook?.delete()
-        )
-      )
+      ?.createWebhook({ name: ctx.member!.name })
+      .then(async (hook) => {
+        sendMessage(hook, ctx.member!.avatarUrl);
+        hook.delete();
+      })
       .catch(() => {
         ctx.channel?.fetchWebhooks().then(async (hooks) => {
           hooks[0].delete();
           ctx.channel
-            ?.createWebhook({ name: ctx.message.author.name })
-            .then(async (hook) =>
-              sendMessage(
-                hook,
-                ctx.message.author.avatarUrl
-              ).then(async (hook) => hook?.delete())
-            );
+            ?.createWebhook({ name: ctx.member!.name })
+            .then(async (hook) => {
+              sendMessage(hook, ctx.member!.avatarUrl);
+              hook.delete();
+            });
         });
       });
   },
 };
 
 async function sendMessage(hook: Webhook, avatarUrl: string) {
-  let content =
-    images.embarrass[Math.floor(Math.random() * images.embarrass.length)];
+  let content = text.things[Math.floor(Math.random() * text.things.length)];
   return hook.createMessage({
     content: content,
     avatarUrl: avatarUrl,

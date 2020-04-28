@@ -12,11 +12,11 @@ export const slap = {
     let slap = images.slap[Math.floor(Math.random() * images.slap.length)];
 
     let mention = ctx.message.mentions.first();
-    let username = ctx.message.author.username;
+    let username = ctx.member!.username;
 
     let content;
 
-    if (!mention || mention.id === ctx.message.author.id) {
+    if (!mention || mention.id === ctx.member!.id) {
       content = `${username} has just slapped themselves in confusion.`;
     } else if (mention.id === '232614905533038593') {
       content = `${username} just tried to slap my creator, Lilwiggy, but instead themselves in confusion.`;

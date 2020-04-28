@@ -36,8 +36,8 @@ export const define = {
             },
           ],
           footer: {
-            text: `Requested by ${ctx.message.author}`,
-            iconUrl: ctx.message.author.avatarUrl,
+            text: `Requested by ${ctx.member}`,
+            iconUrl: ctx.member!.avatarUrl,
           },
           color: 9043849,
         },

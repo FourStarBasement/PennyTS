@@ -2,7 +2,7 @@ import { Context, Command } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
-import { Embed } from 'detritus-client/lib/utils';
+import { Job } from 'node-schedule';
 import { Paginator, Page } from './paginator';
 
 declare module 'detritus-client/lib/commandclient' {
@@ -16,6 +16,7 @@ declare module 'detritus-client/lib/commandclient' {
       pages: Array<Page>,
       footer?: string
     ) => Promise<Paginator>;
+    job: Job;
   }
 }
 

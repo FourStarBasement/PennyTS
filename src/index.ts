@@ -30,7 +30,7 @@ cmdClient.addMultiple(commands);
 
   const s = require('node-schedule');
 
-  client.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {
+  cmdClient.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {
     cmdClient.query('UPDATE `User` SET `CT` = 1');
     cmdClient.query('UPDATE `User` SET `DailyTime` = 1');
   });

@@ -82,7 +82,7 @@ export class Paginator {
       return;
     }
 
-    if (payload.userId !== this.ctx.message.author.id) {
+    if (payload.userId !== this.ctx.member!.id) {
       return;
     }
 

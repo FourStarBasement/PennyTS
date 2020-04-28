@@ -1,24 +1,23 @@
 import { CommandOptions, Context } from 'detritus-client/lib/command';
-import { User, Member } from 'detritus-client/lib/structures';
+import moment from 'moment';
+import { humanize } from '../modules/utils';
 
 export const daily = {
   name: 'daily',
   metadata: {
     description: 'Get your daily credits. Or give them to someone else.',
   },
-  run: async (context: Context) => {
-    const moment = require('moment');
-    let user =
-      context.commandClient.fetchGuildMember(context) || context.message.author;
+  run: async (ctx: Context) => {
+    let user = ctx.commandClient.fetchGuildMember(ctx) || ctx.message.author;
 
     if (user === undefined) return;
 
     if (user.bot) {
-      context.reply('Bots have no use for money.');
+      ctx.reply('Bots have no use for money.');
       return;
     }
 
-    let res = await context.commandClient.query(
+    let res = await ctx.commandClient.query(
       `SELECT \`DailyTime\`, \`patron\` FROM \`User\` WHERE \`User_ID\` = '${user.id}'`
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;
@@ -26,31 +25,33 @@ export const daily = {
     if (res[0].patron === 1) amount += 500;
 
     if (res[0].DailyTime === 1) {
-      if (user.id === context.message.author.id) {
-        await context.commandClient.query(
+      if (user.id === ctx.member!.id) {
+        await ctx.commandClient.query(
           `UPDATE \`User\` SET \`DailyTime\` = 0,\`Credits\`=\`Credits\` + ${amount} WHERE \`User_ID\` = '${user.id}'`
         );
-        context.reply(`💸 Here's your ${amount} credits 💸`);
+        ctx.reply(`💸 Here's your ${amount} credits 💸`);
       } else {
         amount = Math.floor(Math.random() * (2000 - 1000)) + 1000;
 
-        await context.commandClient.query(
+        await ctx.commandClient.query(
           `UPDATE \`User\` SET \`Credits\`=\`Credits\` + ${amount} WHERE \`User_ID\` = '${user.id}'`
         );
-        await context.commandClient.query(
-          `UPDATE \`User\` SET \`DailyTime\` = 0 WHERE \`User_ID\` = '${context.message.author.id}'`
+        await ctx.commandClient.query(
+          `UPDATE \`User\` SET \`DailyTime\` = 0 WHERE \`User_ID\` = '${
+            ctx.member!.id
+          }'`
         );
-        context.reply(
-          `💸 ${context.message.author.username} just gave ${user.username} ${amount} daily credits! 💸`
+        ctx.reply(
+          `💸 ${ctx.member!.username} just gave ${
+            user.username
+          } ${amount} daily credits! 💸`
         );
       }
     } else {
-      /*const dur = moment.duration(
-        context.client.job.nextInvocation()._date - Date.now()
-      );
-      context.reply(
-        `Your daily will reset in, ${dur.hours()} hours, ${dur.minutes()} minutes, and ${dur.seconds()} seconds.`
-      );*/
+      // Typing is incorrect, it returns a CronDate, not Date.
+      let nextInvocation = ctx.commandClient.job.nextInvocation();
+      let dur = moment.duration(nextInvocation.toDate() - Date.now());
+      ctx.reply(`Your daily will reset in ${humanize(dur)}.`);
     }
   },
 };

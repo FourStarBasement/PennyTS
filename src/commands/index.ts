@@ -28,6 +28,7 @@ import { nsfw } from './nsfw';
 import { listening } from './listening';
 import { docs } from './docs';
 import { hug } from './hug';
+import { cookie } from './cookie';
 
 export default [
   avatar,
@@ -60,4 +61,5 @@ export default [
   listening,
   docs,
   hug,
+  cookie,
 ];

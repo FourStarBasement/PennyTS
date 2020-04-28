@@ -27,6 +27,7 @@ export const help = {
       });
 
       ctx.commandClient.paginate(ctx, pages, 'PennyBot by Lilwiggy');
+      return;
     }
 
     let command = ctx.commandClient.commands.filter(

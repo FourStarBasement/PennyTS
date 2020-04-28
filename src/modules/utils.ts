@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { ItemInfo } from './shop';
 import { Page } from './paginator';
+import { Duration } from 'moment';
 
 export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
   return {
@@ -24,4 +25,28 @@ export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
       url: currItem.image,
     },
   };
+}
+
+export function humanize(duration: Duration) {
+  let ret = [];
+
+  let days = duration.days();
+  let hours = duration.hours();
+  let minutes = duration.minutes();
+
+  if (days > 0) {
+    ret.push(`${days} day${days > 1 ? 's' : ''}`);
+  }
+  if (hours > 0) {
+    ret.push(`${hours} hour${hours > 1 ? 's' : ''}`);
+  }
+  if (minutes > 0) {
+    ret.push(
+      `${ret.length > 0 ? 'and ' : ''}${minutes} minute${
+        minutes > 1 ? 's' : ''
+      }`
+    );
+  }
+
+  return ret.join(', ');
 }

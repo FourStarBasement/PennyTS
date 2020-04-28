@@ -17,7 +17,7 @@ export const ban = {
       ctx.reply('I cannot let you do that.');
       return;
     }
-    if (ctx.message.mentions.first()?.id == ctx.message.author.id) {
+    if (ctx.message.mentions.first()?.id == ctx.member!.id) {
       ctx.reply('You cannot ban yourself!');
       return;
     }
@@ -43,7 +43,7 @@ export const ban = {
     });
     ctx.reply({
       content: `${ctx.message.mentions.first()?.username} was banned by ${
-        ctx.message.author.username
+        ctx.member!.username
       }`,
       file: banImage,
     });
