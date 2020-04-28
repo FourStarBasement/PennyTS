@@ -25,7 +25,7 @@ export const help = {
         pages.push(embed(ctx, commands));
       });
 
-      ctx.commandClient.paginate(ctx, pages, 'PennyBot © Lilwiggy 2019');
+      ctx.commandClient.paginate(ctx, pages, 'PennyBot by Lilwiggy');
     }
   },
 };

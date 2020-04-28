@@ -15,6 +15,10 @@ export interface Page {
     name?: string;
     url?: string;
   };
+  thumbnail?: {
+    url: string;
+  };
+  description?: string;
   title?: string;
   color?: number;
   image?: {

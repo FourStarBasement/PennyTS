@@ -2,48 +2,32 @@ import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import images from '../images';
 
-declare module 'detritus-client/lib/structures/guild' {
-  interface Guild {
-    waifuArr: Array<string>;
-    nsfwArr: Array<string>;
-  }
-}
-
-export const waifu = {
-  name: 'waifu',
-  metadata: {
-    description: 'Posts a random waifu.',
-  },
+export const nsfw = {
+  name: 'nsfw',
   run: async (ctx: Context) => {
+    if (!ctx.channel?.nsfw) {
+      ctx.reply('This channel is not marked as NSFW.');
+      return;
+    }
     if (!ctx.channel?.canAttachFiles) {
       ctx.reply("I don't have permissions to send images in this chat.");
       return;
     }
 
-    if (!ctx.guild?.waifuArr) ctx.guild!.waifuArr = [];
+    if (!ctx.guild?.nsfwArr) ctx.guild!.nsfwArr = [];
 
-    let emotes: Array<string> = [
-      '<:yep:563113732872339456>',
-      '<a:wink:667936075024564241>',
-      '<:TranceGirlGasm:564557763024388097>',
-      '<:blushu:458688271917121537>',
-      '<a:abitch_aww:563514404637769728>',
-      '<:yeah:506525240986173441>',
-      '<:gasm:500019753411411969>',
-    ];
-    let emote: string = emotes[Math.floor(Math.random() * emotes.length)];
     // console.log(ctx.client.commandClient!.checkImage('https://distribution.faceit-cdn.net/images/617b5e63-b8a7-468c-b60a-131ad21ad34b.jpeg'))
-    let rand = await randomImage(ctx.guild!.waifuArr, images.waifu, 0, ctx);
+    let rand = await randomImage(ctx.guild!.nsfwArr, images.nsfw, 0, ctx);
     if (rand === undefined) {
       return; // this should ideally only happen after 3 retries
     }
-
+    let split = rand.split('.');
+    let ext = split[split.length - 1];
     let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
-      content: `I approve ${emote}`,
       file: {
         data: img,
-        filename: 'waifu.png',
+        filename: `nsfw.${ext}`,
       },
     });
   },
@@ -69,7 +53,7 @@ async function randomImage(
     randomImage(arr, images, failed, ctx);
   }
   if (arr.length === images.length) {
-    ctx.guild!.waifuArr = [];
+    ctx.guild!.nsfwArr = [];
     return ran;
   } else {
     shuffle(arr);

@@ -24,6 +24,8 @@ import { shopinfo } from './shopinfo';
 import { shopinfoBackgrounds } from './shopinfo.backgrounds';
 import { shopinfoEmblems } from './shopinfo.emblems';
 import { help } from './help';
+import { nsfw } from './nsfw';
+import { listening } from './listening';
 
 export default [
   avatar,
@@ -52,4 +54,6 @@ export default [
   shopinfoEmblems,
   shopinfo,
   help,
+  nsfw,
+  listening,
 ];
