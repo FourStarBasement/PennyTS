@@ -27,6 +27,7 @@ import { help } from './help';
 import { nsfw } from './nsfw';
 import { listening } from './listening';
 import { docs } from './docs';
+import { hug } from './hug';
 
 export default [
   avatar,
@@ -58,4 +59,5 @@ export default [
   nsfw,
   listening,
   docs,
+  hug,
 ];
