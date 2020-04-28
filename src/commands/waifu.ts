@@ -10,6 +10,9 @@ declare module 'detritus-client/lib/structures' {
 
 export const waifu = {
   name: 'waifu',
+  metadata: {
+    description: 'Posts a random waifu.',
+  },
   run: async (ctx: Context) => {
     if (!ctx.channel?.canAttachFiles) {
       ctx.reply("I don't have permissions to send images in this chat.");

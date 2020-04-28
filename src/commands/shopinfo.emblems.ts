@@ -5,6 +5,9 @@ import { shopEmbed } from '../modules/utils';
 
 export const shopinfoEmblems = {
   name: 'shopinfo emblems',
+  metadata: {
+    description: 'View all emblems available at the shop.',
+  },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();
     let shopKeys = Object.keys(items);
@@ -12,7 +15,7 @@ export const shopinfoEmblems = {
     shopKeys.forEach((element: string) => {
       var currItem: ItemInfo = items[element];
 
-      if (currItem.type !== 'emblems') {
+      if (currItem.type !== 'emblem') {
         return;
       }
 

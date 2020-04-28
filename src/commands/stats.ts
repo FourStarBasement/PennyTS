@@ -2,6 +2,9 @@ import { CommandOptions, Context } from 'detritus-client/lib/command';
 
 export const stats = {
   name: 'stats',
+  metadata: {
+    description: "Penny's various stats.",
+  },
   run: async (ctx: Context) => {
     try {
       if (!ctx.channel?.canEmbedLinks) {

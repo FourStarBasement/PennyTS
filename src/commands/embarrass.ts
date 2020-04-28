@@ -4,6 +4,9 @@ import images from '../modules/images';
 
 export const embarrass = {
   name: 'embarrass',
+  metadata: {
+    description: 'Yes',
+  },
   run: async (ctx: Context) => {
     if (!ctx.me?.canManageWebhooks) {
       ctx.reply(

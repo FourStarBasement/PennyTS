@@ -23,6 +23,7 @@ import { shopinfoAll } from './shopinfo.all';
 import { shopinfo } from './shopinfo';
 import { shopinfoBackgrounds } from './shopinfo.backgrounds';
 import { shopinfoEmblems } from './shopinfo.emblems';
+import { help } from './help';
 
 export default [
   avatar,
@@ -50,4 +51,5 @@ export default [
   shopinfoBackgrounds,
   shopinfoEmblems,
   shopinfo,
+  help,
 ];

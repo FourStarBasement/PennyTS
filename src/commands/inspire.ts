@@ -3,6 +3,9 @@ import fetch from 'node-fetch';
 
 export const inspire = {
   name: 'inspire',
+  metadata: {
+    description: 'Posts an "inspirational" image.',
+  },
   run: async (ctx: Context) => {
     let img = await fetch(`http://inspirobot.me/api?generate=true`);
     let imgText = await img.text();

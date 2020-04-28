@@ -6,6 +6,9 @@ interface CommandArgs {
 
 export const delete_cmd = {
   name: 'delete',
+  metadata: {
+    description: 'Delets X number of messages',
+  },
   arg: { name: 'amount', default: undefined, type: Number },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!ctx.member?.canManageMessages) {

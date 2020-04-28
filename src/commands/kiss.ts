@@ -6,6 +6,9 @@ const canKissWiggy = ['407773762814083072'];
 
 export const kiss = {
   name: 'kiss',
+  metadata: {
+    description: 'Kisses a user',
+  },
   run: async (ctx: Context) => {
     let author = ctx.message.author;
     let mention = ctx.message.mentions.first();

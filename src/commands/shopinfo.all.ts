@@ -5,6 +5,9 @@ import { shopEmbed } from '../modules/utils';
 
 export const shopinfoAll = {
   name: 'shopinfo all',
+  metadata: {
+    description: 'View all items at the shop.',
+  },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();
     let shopKeys = Object.keys(items);

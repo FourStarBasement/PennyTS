@@ -4,6 +4,9 @@ import images from '../modules/images';
 
 export const slap = {
   name: 'slap',
+  metadata: {
+    description: 'Slap someone.',
+  },
   run: async (ctx: Context) => {
     if (!ctx.channel?.canAttachFiles) {
       ctx.reply("I don't have permissions to send images in this chat.");

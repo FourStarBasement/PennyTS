@@ -2,6 +2,9 @@ import { Context } from 'detritus-client/lib/command';
 
 export const credits = {
   name: 'credits',
+  metadata: {
+    description: "View your credits or someone else's credits.",
+  },
   run: async (ctx: Context) => {
     let user = ctx.commandClient.fetchGuildMember(ctx) || ctx.member;
     if (user!.bot) {

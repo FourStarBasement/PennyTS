@@ -7,6 +7,9 @@ interface CommandArgs {
 
 export const define = {
   name: 'define',
+  metadata: {
+    description: 'Gets a definition for a word from urban dictionary.',
+  },
   arg: { name: 'word' },
   run: async (ctx: Context, args: CommandArgs) => {
     try {

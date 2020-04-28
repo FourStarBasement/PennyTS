@@ -3,7 +3,7 @@ import { items, ItemInfo } from '../modules/shop';
 import { Page } from '../modules/paginator';
 import { shopEmbed } from '../modules/utils';
 
-const validSubcommands = ['all'];
+const validSubcommands = ['all', 'backgrounds', 'emblems'];
 
 let categories = new Array<string>();
 
@@ -21,12 +21,16 @@ interface CommandArgs {
 
 export const shopinfo = {
   name: 'shopinfo',
+  metadata: {
+    description: 'View an item or a certain category of items at the shop.',
+  },
   arg: { name: 'subcommand' },
   run: async (ctx: Context, arg: CommandArgs) => {
     if (!arg.shopinfo) {
       ctx.reply(
-        `Usage: ${ctx.prefix}shopinfo [backgrounds/emblems/all/category]`
+        `Usage: ${ctx.prefix}shopinfo {backgrounds/emblems/all/category}`
       );
+      return;
     } else if (validSubcommands.includes(arg.shopinfo)) {
       return;
     }

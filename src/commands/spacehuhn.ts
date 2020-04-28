@@ -2,6 +2,9 @@ import { Context } from 'detritus-client/lib/command';
 
 export const spacehuhn = {
   name: 'spacehuhn',
+  metadata: {
+    description: '<3',
+  },
   aliases: ['chicken', 'stef'],
   run: async (ctx: Context) => {
     if (!ctx.channel?.canEmbedLinks) {

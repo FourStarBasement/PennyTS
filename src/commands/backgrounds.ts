@@ -2,6 +2,10 @@ import { Context } from 'detritus-client/lib/command';
 
 export const backgrounds = {
   name: 'backgrounds',
+  metadata: {
+    description: 'View the background(s) you have purchased.',
+  },
+  aliases: ['background'],
   run: async (ctx: Context) => {
     let bg: Array<any> = [];
     let i = 0;

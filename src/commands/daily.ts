@@ -3,6 +3,9 @@ import { User, Member } from 'detritus-client/lib/structures';
 
 export const daily = {
   name: 'daily',
+  metadata: {
+    description: 'Get your daily credits. Or give them to someone else.',
+  },
   run: async (context: Context) => {
     const moment = require('moment');
     let user =

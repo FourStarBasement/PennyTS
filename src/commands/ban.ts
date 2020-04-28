@@ -4,6 +4,9 @@ import fetch from 'node-fetch';
 
 export const ban = {
   name: 'ban',
+  metadata: {
+    description: 'Ban a user.',
+  },
   run: async (ctx: Context) => {
     if (!ctx.member?.canBanMembers) {
       ctx.reply('This command is restricted to server mods.');

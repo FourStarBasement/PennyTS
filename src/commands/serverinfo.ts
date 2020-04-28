@@ -4,6 +4,9 @@ import { PresenceStatuses } from 'detritus-client/lib/constants';
 
 export const serverinfo = {
   name: 'serverinfo',
+  metadata: {
+    description: 'Server information',
+  },
   run: async (ctx: Context) => {
     if (!ctx.channel?.canEmbedLinks) {
       ctx.reply('I cannot send embeds in this chat.');

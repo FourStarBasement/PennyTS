@@ -3,6 +3,9 @@ import { User } from 'detritus-client/lib/structures';
 
 export const random = {
   name: 'random',
+  metadata: {
+    description: "Get a random user's avatar.",
+  },
   run: async (ctx: Context) => {
     if (!ctx.channel?.canEmbedLinks) {
       ctx.reply('I cannot send embeds in this chat.');

@@ -25,6 +25,7 @@ export interface Page {
     text: string;
     iconUrl?: string;
   };
+  url?: string;
 }
 
 export class Paginator {
@@ -35,16 +36,16 @@ export class Paginator {
   idleTimeout: number = 30000; // 30 000 ms | 30 s - When the paginator is first deployed
   timeout: number = 60000; // 60 000 ms | 60 s | 1 m - If a reaction occurs after deployment
   resetWithin: boolean = false;
+  footer: string = '';
 
-  constructor(ctx: Context, pages: Array<Page>) {
+  constructor(ctx: Context, pages: Array<Page>, footer: string = '') {
     this.ctx = ctx;
     this.pages = pages;
+    this.footer = footer;
   }
 
   async start() {
-    let toShow = this.pages[this.currIndex];
-    toShow.footer = { text: `Page ${this.currIndex + 1}/${this.pages.length}` };
-    this.message = await this.ctx.reply({ embed: toShow });
+    this.message = await this.ctx.reply({ embed: this.prepare() });
     this.ctx.commandClient.client.addListener(
       ClientEvents.MESSAGE_REACTION_ADD,
       async (payload: GatewayClientEvents.MessageReactionAdd) => {
@@ -120,7 +121,7 @@ export class Paginator {
   }
 
   async destroy() {
-    await this.message.delete();
+    await this.message.delete().catch(() => null);
     this.ctx.commandClient.client.removeListener(
       ClientEvents.MESSAGE_REACTION_ADD,
       this.reactionCollector
@@ -136,9 +137,21 @@ export class Paginator {
     this.show();
   }
 
-  async show() {
+  prepare() {
     let toShow = this.pages[this.currIndex];
-    toShow.footer = { text: `Page ${this.currIndex + 1}/${this.pages.length}` };
-    this.message.edit({ embed: toShow });
+
+    let pageIndicator = `Page ${this.currIndex + 1}/${this.pages.length}`;
+    let text = pageIndicator;
+    if (this.footer) {
+      text = `${this.footer} (${pageIndicator})`;
+    }
+
+    toShow.footer = { text: text };
+
+    return toShow;
+  }
+
+  async show() {
+    this.message.edit({ embed: this.prepare() });
   }
 }

@@ -5,6 +5,9 @@ import { shopEmbed } from '../modules/utils';
 
 export const shopinfoBackgrounds = {
   name: 'shopinfo backgrounds',
+  metadata: {
+    description: 'View all backgrounds available at the shop.',
+  },
   run: async (ctx: Context) => {
     let pages = new Array<Page>();
     let shopKeys = Object.keys(items);

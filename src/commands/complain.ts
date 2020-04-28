@@ -6,6 +6,10 @@ interface CommandArgs {
 
 export const complain = {
   name: 'complain',
+  metadata: {
+    description:
+      'Complain about Penny.\n"I see all these messages so have fun :)" - Lilwiggy',
+  },
   arg: { name: 'complaint' },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args.complain) {

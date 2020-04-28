@@ -3,6 +3,9 @@ import fetch from 'node-fetch';
 
 export const highfive = {
   name: 'highfive',
+  metadata: {
+    description: 'Give someone a high-five.',
+  },
   run: async (ctx: Context) => {
     let mention = ctx.message.mentions.first();
 
