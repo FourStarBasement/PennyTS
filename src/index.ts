@@ -1,7 +1,7 @@
-import { Context } from 'detritus-client/lib/command';
 import config from './modules/config';
 import commands from './commands/index';
 import functions from './modules/functions';
+import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 
 const { CommandClient } = require('detritus-client');
 const mysql = require('mysql');
@@ -13,9 +13,20 @@ const connection = mysql.createConnection({
 });
 
 const cmdClient = new CommandClient(config.token, {
-  prefix: '!!',
+  prefix: '}}',
+  activateOnEdits: true,
   gateway: {
+    presence: {
+      activity: {
+        name: 'Testing hard!',
+        type: ActivityTypes.PLAYING,
+      },
+      status: PresenceStatuses.ONLINE,
+    },
     loadAllMembers: true,
+    identifyProperties: {
+      $browser: 'Discord iOS',
+    },
   },
 });
 

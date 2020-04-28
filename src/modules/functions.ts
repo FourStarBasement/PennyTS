@@ -76,7 +76,21 @@ export default (client: CommandClient, connection: any) => {
 
     return p;
   };
-
+  client.on('commandRunError', (err) => {
+    err.context.client.channels
+      .get('686714427650736133')
+      ?.createMessage(
+        `An error occured in command ${err.command.name}.\n${err.error}`
+      );
+    err.context.reply(
+      `An error has occured! This incident and proper context has been reported to my dev team. I apologize for the inconvenience.`
+    );
+  });
+  client.on('commandRan', (cmd) => {
+    console.log(
+      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}`
+    );
+  });
   client.onCommandCheck = async (ctx: Context, command: Command) => {
     if (!command.metadata.checks) {
       return true;
