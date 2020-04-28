@@ -2,9 +2,11 @@ import config from './modules/config';
 import commands from './commands/index';
 import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
+import { CommandClient } from 'detritus-client';
+import mysql from 'mysql';
 
-const { CommandClient } = require('detritus-client');
-const mysql = require('mysql');
+//const { CommandClient } = require('detritus-client');
+//const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: config.sql.host,
   user: config.sql.username,

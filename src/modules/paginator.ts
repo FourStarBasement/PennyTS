@@ -1,6 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { Embed, EmbedField } from 'detritus-client/lib/utils';
-import { Message, Reaction } from 'detritus-client/lib/structures';
+import { Message } from 'detritus-client/lib/structures';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 

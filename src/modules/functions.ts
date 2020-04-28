@@ -4,13 +4,14 @@ import { Member, User } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import { Paginator, Page } from './paginator';
+import { Connection, Query } from 'mysql';
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
-    shopAll: Map<string, number>;
     query: (query: string) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined;
     checkImage: (image: string) => Promise<string>;
+    checkGuild: (id: string, callback: Function) => Promise<void>;
     paginate: (
       ctx: Context,
       pages: Array<Page>,
@@ -20,7 +21,7 @@ declare module 'detritus-client/lib/commandclient' {
   }
 }
 
-export default (client: CommandClient, connection: any) => {
+export default (client: CommandClient, connection: Connection) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
     return new Promise((resolve, reject) => {
@@ -56,6 +57,21 @@ export default (client: CommandClient, connection: any) => {
     if (r.statusText !== 'OK') return '';
 
     return image;
+  };
+
+  client.checkGuild = async (id: string, callback: Function) => {
+    let result: any[] = await client
+      .query(
+        `SELECT COUNT(*) AS \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
+      )
+      .catch(console.error);
+
+    if (result[0].count === 0) {
+      await client
+        .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
+        .catch(console.error);
+    }
+    callback();
   };
 
   client.onPrefixCheck = async (context: Context) => {
