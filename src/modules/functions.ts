@@ -1,10 +1,12 @@
 import { Context, Command } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
-import { Member, User } from 'detritus-client/lib/structures';
+import { Member, User, Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import { Paginator, Page } from './paginator';
-import { Connection, Query } from 'mysql';
+import { Connection } from 'mysql';
+import { StarData, StarboardInfo, FetchedStarData } from './starboard';
+import { EventHandler } from './utils';
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
@@ -17,7 +19,12 @@ declare module 'detritus-client/lib/commandclient' {
       pages: Array<Page>,
       footer?: string
     ) => Promise<Paginator>;
+    addEvents: (events: EventHandler[]) => CommandClient;
+    fetchStarData: (message: Message) => Promise<FetchedStarData>;
+
     job: Job;
+    starQueue: any[];
+    starInterval: Job;
   }
 }
 
@@ -59,6 +66,7 @@ export default (client: CommandClient, connection: Connection) => {
     return image;
   };
 
+  // Check if the guild is in the DB before doing anything
   client.checkGuild = async (id: string, callback: Function) => {
     let result: any[] = await client
       .query(
@@ -170,4 +178,35 @@ export default (client: CommandClient, connection: Connection) => {
     }
     return true;
   };
+
+  client.fetchStarData = async (message: Message) => {
+    let starData: StarData[] = await client.query(
+      `SELECT COUNT(*) AS \`count\`, \`msgID\`, \`starID\` FROM \`starboard\` WHERE \`msgID\` = ${message.id} OR \`starID\` = ${message.id}`
+    );
+    let starboardInfo: StarboardInfo[] = await client.query(
+      `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
+        message.guild!.id
+      }`
+    );
+    let ret = {
+      count: starData[0].count,
+      messageID: starData[0].msgID,
+      starID: starData[0].starID,
+      starboard: starboardInfo[0].starboard,
+    };
+
+    return ret;
+  };
+
+  client.addEvents = (events: EventHandler[]) => {
+    events.forEach((el) => {
+      client.client.addListener(el.event, async (payload) =>
+        el.listener(client, payload)
+      );
+      console.log('Added Event Handler', el.event);
+    });
+    return client;
+  };
+
+  client.starQueue = [];
 };

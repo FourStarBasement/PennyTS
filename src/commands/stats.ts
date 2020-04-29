@@ -1,4 +1,4 @@
-import { CommandOptions, Context } from 'detritus-client/lib/command';
+import { Context } from 'detritus-client/lib/command';
 
 export const stats = {
   name: 'stats',

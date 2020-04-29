@@ -1,4 +1,4 @@
-import { CommandOptions, Context } from 'detritus-client/lib/command';
+import { Context } from 'detritus-client/lib/command';
 import moment from 'moment';
 import { humanize } from '../modules/utils';
 

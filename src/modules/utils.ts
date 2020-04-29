@@ -2,6 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import { ItemInfo } from './shop';
 import { Page } from './paginator';
 import { Duration } from 'moment';
+import { CommandClient } from 'detritus-client';
 
 export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
   return {
@@ -49,4 +50,9 @@ export function humanize(duration: Duration) {
   }
 
   return ret.join(', ');
+}
+
+export interface EventHandler {
+  event: string;
+  listener: (client: CommandClient, payload: any) => void;
 }

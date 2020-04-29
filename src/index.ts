@@ -4,6 +4,8 @@ import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 import { CommandClient } from 'detritus-client';
 import mysql from 'mysql';
+import events from './events';
+import { Range } from 'node-schedule';
 
 //const { CommandClient } = require('detritus-client');
 //const mysql = require('mysql');
@@ -34,6 +36,7 @@ const cmdClient = new CommandClient(config.token, {
 
 functions(cmdClient, connection);
 //cmdClient.addMultipleIn('../src/commands');
+cmdClient.addEvents(events);
 cmdClient.addMultiple(commands);
 
 (async () => {
@@ -47,4 +50,14 @@ cmdClient.addMultiple(commands);
     cmdClient.query('UPDATE `User` SET `CT` = 1');
     cmdClient.query('UPDATE `User` SET `DailyTime` = 1');
   });
+
+  cmdClient.starInterval = s.scheduleJob(
+    { second: new Range(0, 59, 2) },
+    () => {
+      console.log(cmdClient.starQueue);
+      if (cmdClient.starQueue.length < 1) return;
+      cmdClient.starQueue[0]();
+      cmdClient.starQueue.splice(0, 1);
+    }
+  );
 })();
