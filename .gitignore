@@ -40,3 +40,6 @@ out/**/*
 
 # ignore yarn.lock
 yarn.lock
+
+# ignore config.ts
+config.ts

@@ -54,5 +54,5 @@ export function humanize(duration: Duration) {
 
 export interface EventHandler {
   event: string;
-  listener: (client: CommandClient, payload: any) => void;
+  listener: (client: CommandClient, payload: any) => Promise<void>;
 }

@@ -10,7 +10,6 @@ export const random = {
   run: async (ctx: Context) => {
     let users: Array<User> = ctx.client.users.toArray();
     let user: User = users[Math.floor(Math.random() * users.length)];
-    console.log(ctx.member?.color);
     ctx.reply({
       embed: {
         title: `Random avatar from ${user.username}`,

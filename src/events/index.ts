@@ -1,3 +1,4 @@
 import { messageReactionAdd } from './messageReactionAdd';
+import { messageReactionRemove } from './messageReactionRemove';
 
-export default [messageReactionAdd];
+export default [messageReactionAdd, messageReactionRemove];

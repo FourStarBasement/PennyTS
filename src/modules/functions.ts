@@ -1,4 +1,4 @@
-import { Context, Command } from 'detritus-client/lib/command';
+import { Context, Command, CommandOptions } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User, Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
@@ -7,6 +7,8 @@ import { Paginator, Page } from './paginator';
 import { Connection } from 'mysql';
 import { StarData, StarboardInfo, FetchedStarData } from './starboard';
 import { EventHandler } from './utils';
+
+const chanReg = /<#(\d+)>/;
 
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
@@ -59,7 +61,6 @@ export default (client: CommandClient, connection: Connection) => {
   };
 
   client.checkImage = async (image: string) => {
-    //console.log(image)
     let r = await fetch(image);
     if (r.statusText !== 'OK') return '';
 
@@ -188,22 +189,42 @@ export default (client: CommandClient, connection: Connection) => {
         message.guild!.id
       }`
     );
-    let ret = {
-      count: starData[0].count,
-      messageID: starData[0].msgID,
-      starID: starData[0].starID,
-      starboard: starboardInfo[0].starboard,
-    };
 
-    return ret;
+    let channels = message.guild!.channels;
+    let starboard = channels.get(starboardInfo[0].starboard);
+
+    let starMessage;
+    let starredMessage;
+    if (starData[0].count) {
+      starMessage = await starboard?.fetchMessage(starData[0].starID);
+      starredMessage = await channels
+        .get(chanReg.exec(starMessage.content)![1])
+        ?.fetchMessage(starData[0].msgID);
+    }
+
+    return {
+      original: starredMessage,
+      starred: starMessage,
+      starboard: starboard,
+    };
+  };
+
+  client.addMultiple = (commands?: CommandOptions[]) => {
+    commands?.forEach((command) => {
+      client.add(command);
+      console.log('Loaded Command', command.name);
+    });
+    return client;
   };
 
   client.addEvents = (events: EventHandler[]) => {
     events.forEach((el) => {
-      client.client.addListener(el.event, async (payload) =>
-        el.listener(client, payload)
+      client.client.addListener(
+        el.event,
+        async (payload) =>
+          await el.listener(client, payload).catch((r) => console.log(r))
       );
-      console.log('Added Event Handler', el.event);
+      console.log('Loaded Event Handler', el.event);
     });
     return client;
   };

@@ -2,11 +2,9 @@ import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { ShardClient } from 'detritus-client';
-import { Message, User } from 'detritus-client/lib/structures';
+import { Message, User, Reaction } from 'detritus-client/lib/structures';
 import { Page } from '../modules/paginator';
-
-const urlReg = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
-const chanReg = /<#(\d+)>/;
+import { convertEmbed } from '../modules/starboard';
 
 export const messageReactionAdd = {
   event: ClientEvents.MESSAGE_REACTION_ADD,
@@ -14,20 +12,18 @@ export const messageReactionAdd = {
     client: CommandClient,
     payload: GatewayClientEvents.MessageReactionAdd
   ) => {
-    console.log(payload);
     const shardClient = client.client as ShardClient;
 
     let channel = shardClient.channels.get(payload.channelId)!;
     let message: Message =
       payload.message || (await channel.fetchMessage(payload.messageId));
     let author = message.author;
-    let me = channel.guild!.me!;
 
     if (
       !payload.guildId ||
       payload.reaction.emoji.name !== '⭐' ||
       channel.nsfw ||
-      author.bot
+      payload.member!.bot
     ) {
       return;
     }
@@ -40,31 +36,8 @@ export const messageReactionAdd = {
     };
 
     await client.checkGuild(payload.guildId, () => {
-      if (payload.userId === me.id && message.embeds.length > 0) {
-        let msgEmbed = message.embeds.get(0)!;
-        embed.image = msgEmbed.image; // Can be Respective Object OR undefined
-        embed.description = msgEmbed.description;
-        embed.thumbnail = msgEmbed.thumbnail;
-      } else {
-        if (urlReg.test(message.content)) {
-          embed.image = {
-            url: message.content.match(urlReg)![0],
-          };
-        } else if (message.attachments.size > 0) {
-          embed.image = {
-            url: message.attachments.first()!.url!,
-          };
-        }
-        if (message.content.length > 0) {
-          embed.description = message.content;
-        }
-      }
-
-      try {
-        client.starQueue.push(wrap(client, message, payload.user!, embed));
-      } catch (error) {
-        console.error('ReactionAdd/Starboard Error:', error);
-      }
+      embed = convertEmbed(channel.guild!.me!, message, embed);
+      client.starQueue.push(wrap(client, message, payload.user!, embed));
     });
   },
 };
@@ -75,7 +48,18 @@ function wrap(
   reacted: User,
   embed: Page
 ) {
-  return async () => await prepare(client, message, reacted, embed);
+  return async () => {
+    console.log(`ReactionAdd/Starboard G#${message.guildId}: Running.`);
+    try {
+      await prepare(client, message, reacted, embed);
+    } catch (error) {
+      return console.log(
+        `ReactionAdd/Starboard G#${message.guildId}: Error:`,
+        error
+      );
+    }
+    console.log(`ReactionAdd/Starboard G#${message.guildId}: Complete.`);
+  };
 }
 
 async function prepare(
@@ -84,65 +68,74 @@ async function prepare(
   reacted: User,
   embed: Page
 ) {
-  console.log('ReactionAdd/Starboard: Running.');
-  let channels = message.guild?.channels!;
-  let data = await client.fetchStarData(message);
+  let r = await client.fetchStarData(message);
 
-  if (data.count === 1) {
-    // Message in starboard
-    let m: Message = await channels
-      .get('657753047585390593') // data.starboard
-      ?.fetchMessage(data.starID);
-
-    // Original Message
-    let ms: Message = await channels
-      .get(chanReg.exec(m.content)![1])
-      ?.fetchMessage(data.messageID);
-
-    if (reacted.id === ms.author.id) {
-      await m.reactions.get('⭐')?.delete(reacted.id);
-      await ms.reactions.get('⭐')?.delete(reacted.id);
+  if (r.original && r.starred) {
+    if (reacted.id === r.original.author.id) {
+      await r.original.reactions.get('⭐')?.delete(reacted.id);
+      await r.starred.reactions.get('⭐')?.delete(reacted.id);
+      console.log(
+        `ReactionAdd/Starboard G#${message.guildId}: Self-star: M#${r.original.id} U#${reacted.id}`
+      );
       return;
     }
 
-    if (message.content.startsWith('⭐') && message.id == data.starID) {
-      for (let reaction of ms.reactions.values()) {
+    // Starboard message
+    if (message.content.startsWith('⭐') && message.id == r.starred.id) {
+      for (let reaction of r.original.reactions.values()) {
         if ((await reaction.fetchUsers()).has(reacted.id)) {
+          console.log(
+            `ReactionAdd/Starboard G#${message.guildId}: Dupe-star: M#${r.starred.id} U#${reacted.id}`
+          );
           return;
         }
       }
 
-      embed.title = ms.author.username;
+      embed.title = r.original.author.username;
       embed.thumbnail = {
-        url: ms.author.avatarUrl,
+        url: r.original.author.avatarUrl,
       };
     }
 
-    let g = m.reactions.find((v, k) => v.emoji.name === '⭐')?.count || 0;
+    let rs: Reaction[] = Array.from(r.original.reactions.cache.values()).concat(
+      Array.from(r.starred.reactions.cache.values())
+    ); // Join reaction lists
+
+    let uniqueReactions = new Array<string>();
+
+    for (let reaction of rs) {
+      for (let u of (await reaction.fetchUsers()).values()) {
+        if (!uniqueReactions.includes(u.id)) {
+          uniqueReactions.push(u.id);
+        }
+      }
+    }
+    let count = uniqueReactions.length;
 
     embed.fields = [
       {
         name: 'Jump to this message',
-        value: `[Jump!](${ms.jumpLink})`,
+        value: `[Jump!](${r.original.jumpLink})`,
       },
     ];
 
-    await m.edit({
-      content: `⭐ ${
-        (ms.reactions.find((r) => r.emoji.name === '⭐')?.count || 0) + g
-      } stars in ${ms.channel?.mention}`,
+    await r.starred.edit({
+      content: `⭐ ${count} stars in ${r.original.channel?.mention}`,
       embed: embed,
     });
-  } else if (data.starboard) {
+    console.log(
+      `ReactionAdd/Starboard G#${message.guildId}: Starboard Message Edited: C#${r.starred?.channelId} M#${r.starred.id}`
+    );
+  } else if (r.starboard) {
     for (let reaction of message.reactions.values()) {
       if (reaction.emoji.name !== '⭐') {
-        return;
+        continue;
       }
 
       let stars = (await reaction.fetchUsers()).filter(
         (v, k) => v.id !== message.author.id
       );
-      if (stars.length >= 1) {
+      if (stars.length >= 2) {
         embed.fields = [
           {
             name: 'Jump to this message',
@@ -150,15 +143,17 @@ async function prepare(
           },
         ];
 
-        channels
-          .get('657753047585390593') // data.starboard
-          ?.createMessage({
+        r.starboard
+          .createMessage({
             content: `⭐ ${stars.length} stars in ${message.channel?.mention}`,
             embed: embed,
           })
           .then(async (m) => {
             await client.query(
               `INSERT INTO \`starboard\` (msgID, starID) VALUES (${message.id}, ${m.id})`
+            );
+            console.log(
+              `ReactionAdd/Starboard G#${message.guildId} C#${m.channelId}: New Starred Message: M#${m.id}`
             );
           });
       }

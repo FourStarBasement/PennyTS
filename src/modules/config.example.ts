@@ -11,4 +11,8 @@ export default {
   giphy: {
     key: '',
   },
+
+  youtube: {
+    key: '',
+  },
 };

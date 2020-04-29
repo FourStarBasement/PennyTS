@@ -54,10 +54,8 @@ cmdClient.addMultiple(commands);
   cmdClient.starInterval = s.scheduleJob(
     { second: new Range(0, 59, 2) },
     () => {
-      console.log(cmdClient.starQueue);
       if (cmdClient.starQueue.length < 1) return;
-      cmdClient.starQueue[0]();
-      cmdClient.starQueue.splice(0, 1);
+      cmdClient.starQueue.shift()();
     }
   );
 })();
