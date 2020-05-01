@@ -15,4 +15,7 @@ export default {
   youtube: {
     key: '',
   },
+  osu: {
+    key: '',
+  },
 };

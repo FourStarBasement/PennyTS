@@ -2,13 +2,11 @@ import config from './modules/config';
 import commands from './commands/index';
 import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
+
 import { CommandClient } from 'detritus-client';
 import mysql from 'mysql';
 import events from './events';
 import { Range } from 'node-schedule';
-
-//const { CommandClient } = require('detritus-client');
-//const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: config.sql.host,
   user: config.sql.username,
@@ -17,7 +15,6 @@ const connection = mysql.createConnection({
 });
 
 const cmdClient = new CommandClient(config.token, {
-  prefix: '}}',
   activateOnEdits: true,
   gateway: {
     presence: {
@@ -36,8 +33,8 @@ const cmdClient = new CommandClient(config.token, {
 
 functions(cmdClient, connection);
 //cmdClient.addMultipleIn('../src/commands');
-cmdClient.addEvents(events);
 cmdClient.addMultiple(commands);
+cmdClient.addEvents(events);
 
 (async () => {
   const client = await cmdClient.run();

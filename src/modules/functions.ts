@@ -85,7 +85,18 @@ export default (client: CommandClient, connection: Connection) => {
 
   client.onPrefixCheck = async (context: Context) => {
     if (!context.user.bot && context.guildId) {
-      let prefix = '!!';
+      let prefix: string;
+      if (context.guild?.prefix) {
+        prefix = context.guild.prefix;
+      } else {
+        let data = await client
+          .query(
+            `SELECT \`Prefix\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
+          )
+          .catch(console.error);
+        prefix = data[0].Prefix;
+        context.guild!.prefix = prefix;
+      }
       if (context.message.content.indexOf(prefix) === 0) return prefix;
     }
     return '';

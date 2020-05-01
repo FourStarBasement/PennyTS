@@ -6,6 +6,7 @@ declare module 'detritus-client/lib/structures/guild' {
   interface Guild {
     waifuArr: Array<string>;
     nsfwArr: Array<string>;
+    prefix: string;
   }
 }
 

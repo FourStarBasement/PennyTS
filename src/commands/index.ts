@@ -30,6 +30,10 @@ import { docs } from './docs';
 import { hug } from './hug';
 import { cookie } from './cookie';
 import { weeb } from './weeb';
+import { parrot } from './parrot';
+import { osu } from './osu';
+import { ht } from './ht';
+import { mir } from './mir';
 
 export default [
   avatar,
@@ -64,4 +68,8 @@ export default [
   hug,
   cookie,
   weeb,
+  parrot,
+  osu,
+  ht,
+  mir,
 ];

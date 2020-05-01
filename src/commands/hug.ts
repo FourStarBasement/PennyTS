@@ -2,12 +2,11 @@ import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import images from '../modules/images';
 
-//                      Elferton               Ashurie                Matza	         Batthew's dummy thicc cheeks
 let canHugWiggy = [
-  '407773762814083072',
-  '197850690247327744',
-  '310839399728545792',
-  '600058196249411587',
+  '407773762814083072', // Elferton
+  '197850690247327744', // Ashurie
+  '310839399728545792', // Matza
+  '600058196249411587', // Batthew's dummy thicc cheeks like holy fuck they're so thicc
 ];
 
 export const hug = {
