@@ -7,6 +7,7 @@ declare module 'detritus-client/lib/structures/guild' {
     waifuArr: Array<string>;
     nsfwArr: Array<string>;
     prefix: string;
+    levels: number;
   }
 }
 
