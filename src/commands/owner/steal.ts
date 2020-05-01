@@ -1,6 +1,7 @@
 import { Context, CommandOptions } from 'detritus-client/lib/command';
 import { Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
+import { MessageCollector } from '../../modules/collectors/messageCollector';
 
 const jumpLinkReg = /https?:\/\/discordapp.com\/channels\/(\d+)\/(\d+)\/(\d+)/;
 const em = /<a?:\w+:\d+>/g;
@@ -47,6 +48,12 @@ export const steal: CommandOptions = {
         limit: index + 1,
       });
       message = messages!.toArray()[index]!;
+    } else if (!args.steal) {
+      // get message before
+      let messages = await ctx.channel?.fetchMessages({
+        limit: 2,
+      });
+      message = messages!.toArray()[1];
     } else {
       // :id
       let splitArgs = args.steal.split(' ');
@@ -62,34 +69,78 @@ export const steal: CommandOptions = {
     let emojis = message!.content.match(em)!;
 
     if (r === null) {
-      ctx.reply('What.');
+      ctx.reply('Why are there no names.');
       return;
     }
+    let index = 0;
 
     if (r.length > 1) {
-      ctx.reply(
-        "Uh oh! Can't handle multiple emojis yet because someone forgot to program it!"
-      );
+      let s = '';
+      emojis.forEach((e, i) => {
+        s += `(${i + 1}) ${e}\n`;
+      });
+
+      ctx.reply(`More than one emoji detected! Which emoji do you want?\n${s}`);
+      let filter = (m: Message) => m.author.id === ctx.member!.id;
+      let collector = new MessageCollector(ctx, 120000, filter);
+      collector.on('collect', async (m: Message) => {
+        let content = m.content.toLowerCase();
+
+        if (content === 'all') {
+          collector.destroy();
+          let toSay = [];
+          for (let i of [...Array(r!.length).keys()]) {
+            toSay.push((await createEmoji(ctx, emojis, r!, i, false))!.format);
+          }
+
+          ctx.reply(`I've added ${toSay.join(', ')} now. Now leave me alone!`);
+        } else if (content === 'none') {
+          collector.destroy();
+          ctx.reply("Then why'd you call me here?!");
+        } else {
+          console.log(content);
+          let wantedIndex = parseInt(content) || undefined;
+
+          if (!wantedIndex) {
+            ctx.reply('Dude can you even type a valid number or option??');
+          } else {
+            collector.destroy();
+            await createEmoji(ctx, emojis, r!, wantedIndex - 1, true);
+          }
+        }
+      });
+      collector.on('end', () => {
+        ctx.reply('Why do you type so slow dude.');
+      });
     } else {
-      let id = emojis[0].match(em_id)?.join('');
-      let type = emojis[0].match(animated) !== null ? 'gif' : 'png';
-
-      console.log(id, r[0], type);
-
-      let img = await fetch(
-        `https://cdn.discordapp.com/emojis/${id}.${type}`
-      ).then(async (r) => r.buffer());
-
-      ctx.client.guilds
-        .get('309531752014151690')
-        ?.createEmoji({
-          name: r[0],
-          image: img,
-          reason: 'Admin steal :>',
-        })
-        .then((e) => {
-          ctx.reply(`I've added ${e.format} now. Now leave me alone!`);
-        });
+      await createEmoji(ctx, emojis, r, 0, true);
     }
   },
 };
+
+async function createEmoji(
+  ctx: Context,
+  emojis: RegExpMatchArray,
+  r: RegExpMatchArray,
+  index: number,
+  confirm: boolean = false
+) {
+  let id = emojis[index].match(em_id)?.join('');
+  let type = emojis[index].match(animated) !== null ? 'gif' : 'png';
+
+  let img = await fetch(
+    `https://cdn.discordapp.com/emojis/${id}.${type}`
+  ).then(async (r) => r.buffer());
+
+  return ctx.client.guilds
+    .get('377926829643923458')
+    ?.createEmoji({
+      name: r[index],
+      image: img,
+      reason: 'Admin steal :>',
+    })
+    .then((e) => {
+      if (confirm) ctx.reply(`I've added ${e.format}. Now leave me alone!`);
+      return e;
+    });
+}
