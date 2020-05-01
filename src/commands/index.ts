@@ -34,6 +34,7 @@ import { parrot } from './parrot';
 import { osu } from './osu';
 import { ht } from './ht';
 import { mir } from './mir';
+import { disable } from './disable';
 
 export default [
   avatar,
@@ -72,4 +73,5 @@ export default [
   osu,
   ht,
   mir,
+  disable,
 ];

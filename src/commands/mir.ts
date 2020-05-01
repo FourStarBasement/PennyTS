@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { MessageCollector } from '../modules/messageCollector';
+import { MessageCollector } from '../modules/collectors/messageCollector';
 import { Message } from 'detritus-client/lib/structures';
 
 export const mir = {
@@ -25,7 +25,7 @@ export const mir = {
     );
     let filter = (m: Message) => {
       return (
-        m.author.id === ctx.member!.id &&
+        m.author.id !== ctx.member!.id &&
         m.content.toLowerCase() === `${ctx.prefix}grab`
       );
     };

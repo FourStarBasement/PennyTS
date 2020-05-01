@@ -1,6 +1,11 @@
 export default {
   token: '',
 
+  prefixes: {
+    owner: '', // Owner prefix (p@ on Penny)
+    user: '', // Default user prefix (// on Penny)
+  },
+
   sql: {
     host: '',
     username: '',
@@ -15,7 +20,8 @@ export default {
   youtube: {
     key: '',
   },
+
   osu: {
-    key: '',
+    token: '',
   },
 };

@@ -1,5 +1,7 @@
 import { Context, Command } from 'detritus-client/lib/command';
-import { Page } from '../modules/paginator';
+import { Page } from '../modules/utils';
+import config from '../modules/config';
+import { EmbedPaginator } from '../modules/collectors/embedPaginator';
 
 interface CommandArgs {
   help: string;
@@ -26,7 +28,7 @@ export const help = {
         pages.push(embed(ctx, commands));
       });
 
-      ctx.commandClient.paginate(ctx, pages, 'PennyBot by Lilwiggy');
+      new EmbedPaginator(ctx, pages).start();
       return;
     }
 
@@ -72,8 +74,14 @@ function embed(ctx: Context, commands: Array<Command>): Page {
   };
 
   commands.forEach((c) => {
+    if (
+      c.metadata.owner &&
+      !ctx.client.owners.find((v, k) => v.id === ctx.member!.id)
+    )
+      return; // hide owner only commands
+    let prefix = c.metadata.owner ? config.prefixes.owner : ctx.prefix;
     e.fields?.push({
-      name: ctx.prefix + c.name,
+      name: prefix + c.name,
       value: c.metadata.description ? c.metadata.description : 'Not Found.',
     });
   });

@@ -1,8 +1,35 @@
-import { Context } from 'detritus-client/lib/command';
-import { ItemInfo } from './shop';
-import { Page } from './paginator';
-import { Duration } from 'moment';
 import { CommandClient } from 'detritus-client';
+import { Context } from 'detritus-client/lib/command';
+import { Duration } from 'moment';
+import { ItemInfo } from './shop';
+
+export interface PageField {
+  name: string;
+  value: string;
+}
+
+export interface Page {
+  author?: {
+    iconUrl?: string;
+    name?: string;
+    url?: string;
+  };
+  thumbnail?: {
+    url: string;
+  };
+  description?: string;
+  title?: string;
+  color?: number;
+  image?: {
+    url: string;
+  };
+  fields?: PageField[];
+  footer?: {
+    text: string;
+    iconUrl?: string;
+  };
+  url?: string;
+}
 
 export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
   return {

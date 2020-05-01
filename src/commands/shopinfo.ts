@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { items, ItemInfo } from '../modules/shop';
-import { Page } from '../modules/paginator';
-import { shopEmbed } from '../modules/utils';
+import { Page, shopEmbed } from '../modules/utils';
+import { EmbedPaginator } from '../modules/collectors/embedPaginator';
 
 const validSubcommands = ['all', 'backgrounds', 'emblems'];
 
@@ -45,7 +45,7 @@ export const shopinfo = {
         }
       });
 
-      ctx.commandClient.paginate(ctx, pages);
+      new EmbedPaginator(ctx, pages).start();
     } else {
       let found = false;
       values.forEach((element: ItemInfo) => {

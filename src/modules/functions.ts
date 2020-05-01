@@ -3,7 +3,7 @@ import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User, Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
-import { Paginator, Page } from './paginator';
+import config from './config';
 import { Connection } from 'mysql';
 import { StarData, StarboardInfo, FetchedStarData } from './starboard';
 import { EventHandler } from './utils';
@@ -16,12 +16,8 @@ declare module 'detritus-client/lib/commandclient' {
     fetchGuildMember: (ctx: Context) => Member | User | undefined;
     checkImage: (image: string) => Promise<string>;
     checkGuild: (id: string, callback: Function) => Promise<void>;
-    paginate: (
-      ctx: Context,
-      pages: Array<Page>,
-      footer?: string
-    ) => Promise<Paginator>;
     addEvents: (events: EventHandler[]) => CommandClient;
+    addOwnerOnly: (commands?: CommandOptions[]) => CommandClient;
     fetchStarData: (message: Message) => Promise<FetchedStarData>;
 
     job: Job;
@@ -97,21 +93,14 @@ export default (client: CommandClient, connection: Connection) => {
         prefix = data[0].Prefix;
         context.guild!.prefix = prefix;
       }
-      if (context.message.content.indexOf(prefix) === 0) return prefix;
+      if (context.message.content.startsWith(config.prefixes.user))
+        return config.prefixes.user;
+      if (context.message.content.startsWith(config.prefixes.owner))
+        return config.prefixes.owner;
     }
     return '';
   };
 
-  client.paginate = async (
-    ctx: Context,
-    pages: Array<Page>,
-    footer: string = ''
-  ) => {
-    let p = new Paginator(ctx, pages, footer);
-    await p.start();
-
-    return p;
-  };
   client.on('commandRunError', (err) => {
     err.context.client.channels
       .get('686714427650736133')
@@ -122,18 +111,44 @@ export default (client: CommandClient, connection: Connection) => {
       `An error has occured! This incident and proper context has been reported to my dev team. I apologize for the inconvenience.`
     );
   });
+
   client.on('commandRan', (cmd) => {
     console.log(
       `Ran command ${cmd.command.name} by ${cmd.context.member!.username}`
     );
   });
+
   client.onCommandCheck = async (ctx: Context, command: Command) => {
+    if (command.metadata.disabled) return false;
+
+    if (command.metadata.owner) {
+      if (!ctx.content.startsWith(config.prefixes.owner)) {
+        return false;
+      } else if (!ctx.client.owners.find((v, k) => v.id === ctx.member!.id)) {
+        return false;
+      }
+    } else {
+      if (!ctx.content.startsWith(config.prefixes.user)) {
+        return false;
+      }
+    }
+
     if (!command.metadata.checks) {
       return true;
     }
 
     for (let check of command.metadata.checks) {
       switch (check) {
+        case 'userAdmin':
+          if (
+            !ctx.member?.canAdministrator &&
+            !ctx.client.owners.find((v, k) => v.id === ctx.member!.id)
+          ) {
+            ctx.reply('This command is restricted to server admins.');
+            return false;
+          }
+          break;
+
         case 'embeds':
           if (!ctx.channel?.canEmbedLinks) {
             ctx.reply('I cannot send embeds in this chat.');
@@ -224,6 +239,15 @@ export default (client: CommandClient, connection: Connection) => {
     commands?.forEach((command) => {
       client.add(command);
       console.log('Loaded Command', command.name);
+    });
+    return client;
+  };
+
+  client.addOwnerOnly = (commands?: CommandOptions[]) => {
+    commands?.forEach((command) => {
+      command.metadata!.owner = true;
+      client.add(command);
+      console.log('Loaded Owner Only Command', command.name);
     });
     return client;
   };

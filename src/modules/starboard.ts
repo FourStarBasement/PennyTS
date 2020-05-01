@@ -3,7 +3,7 @@ import {
   ChannelGuildText,
   User,
 } from 'detritus-client/lib/structures';
-import { Page } from './paginator';
+import { Page } from './utils';
 
 // Deserialise some starboard stuff
 export interface StarData {

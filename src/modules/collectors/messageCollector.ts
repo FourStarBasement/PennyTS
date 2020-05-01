@@ -6,13 +6,14 @@ import {
 } from 'detritus-client/lib/structures';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { EventEmitter } from 'events';
+import { GatewayClientEvents } from 'detritus-client';
 
 export class MessageCollector extends EventEmitter {
   ctx: Context;
   timeout: number;
   filter: (...args: Array<Message>) => boolean;
   channel: Channel;
-  listener: (m: Message) => boolean;
+  listener: (m: GatewayClientEvents.MessageCreate) => boolean;
 
   constructor(
     ctx: Context,
@@ -24,11 +25,8 @@ export class MessageCollector extends EventEmitter {
     this.timeout = timeout;
     this.filter = filter;
     (this.channel as ChannelGuildText) = ctx.channel as ChannelGuildText;
-    this.listener = (m: Message) => this.verify(m);
-    this.ctx.commandClient.client.on(
-      ClientEvents.MESSAGE_CREATE,
-      this.listener
-    );
+    this.listener = (m: GatewayClientEvents.MessageCreate) => this.verify(m);
+    this.ctx.client.on(ClientEvents.MESSAGE_CREATE, this.listener);
 
     setTimeout(() => {
       this.emit('end');
@@ -40,13 +38,10 @@ export class MessageCollector extends EventEmitter {
   }
 
   destroy() {
-    this.ctx.commandClient.client.removeListener(
-      ClientEvents.MESSAGE_CREATE,
-      this.listener
-    );
+    this.ctx.client.removeListener(ClientEvents.MESSAGE_CREATE, this.listener);
   }
-  // use any type as it returns an object
-  verify(m: any) {
+
+  verify(m: GatewayClientEvents.MessageCreate) {
     if (this.channel.id !== m.message.channel!.id) return false;
     if (this.filter(m.message)) {
       this.emit('collect', m.message);

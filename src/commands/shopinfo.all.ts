@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
-import { Page } from '../modules/paginator';
 import { items, ItemInfo } from '../modules/shop';
-import { shopEmbed } from '../modules/utils';
+import { Page, shopEmbed } from '../modules/utils';
+import { EmbedPaginator } from '../modules/collectors/embedPaginator';
 
 export const shopinfoAll = {
   name: 'shopinfo all',
@@ -19,6 +19,6 @@ export const shopinfoAll = {
       pages.push(shopEmbed(ctx, currItem));
     });
 
-    ctx.commandClient.paginate(ctx, pages);
+    new EmbedPaginator(ctx, pages).start();
   },
 };

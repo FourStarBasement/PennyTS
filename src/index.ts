@@ -1,5 +1,6 @@
 import config from './modules/config';
 import commands from './commands/index';
+import ownerCommands from './commands/owner/index';
 import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 
@@ -34,6 +35,7 @@ const cmdClient = new CommandClient(config.token, {
 functions(cmdClient, connection);
 //cmdClient.addMultipleIn('../src/commands');
 cmdClient.addMultiple(commands);
+cmdClient.addOwnerOnly(ownerCommands);
 cmdClient.addEvents(events);
 
 (async () => {

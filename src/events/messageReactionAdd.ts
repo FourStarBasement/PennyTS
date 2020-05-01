@@ -3,7 +3,7 @@ import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { ShardClient } from 'detritus-client';
 import { Message, User, Reaction } from 'detritus-client/lib/structures';
-import { Page } from '../modules/paginator';
+import { Page } from '../modules/utils';
 import { convertEmbed } from '../modules/starboard';
 
 export const messageReactionAdd = {

@@ -2,7 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import config from '../modules/config';
 import { Member } from 'detritus-client/lib/structures';
 import search from 'youtube-search';
-import { Page } from '../modules/paginator';
+import { Page } from '../modules/utils';
 
 export const listening = {
   name: 'listening',
