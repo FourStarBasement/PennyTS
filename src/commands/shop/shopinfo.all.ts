@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
-import { items, ItemInfo } from '../modules/shop';
-import { Page, shopEmbed } from '../modules/utils';
-import { EmbedPaginator } from '../modules/collectors/embedPaginator';
+import { items, ItemInfo } from '../../modules/shop';
+import { Page, shopEmbed } from '../../modules/utils';
+import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 
 export const shopinfoAll = {
   name: 'shopinfo all',

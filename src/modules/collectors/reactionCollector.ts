@@ -1,11 +1,6 @@
 import { EventEmitter } from 'events';
 import { Context } from 'detritus-client/lib/command';
-import {
-  Reaction,
-  Channel,
-  Message,
-  User,
-} from 'detritus-client/lib/structures';
+import { Reaction, User } from 'detritus-client/lib/structures';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client';
 
@@ -14,6 +9,7 @@ export class ReactionCollector extends EventEmitter {
   timeout: number;
   filter: (r: Reaction, u: User) => Promise<boolean>;
   listener: (r: GatewayClientEvents.MessageReactionAdd) => boolean;
+  destroyTimeout: NodeJS.Timeout;
 
   constructor(
     ctx: Context,
@@ -30,7 +26,7 @@ export class ReactionCollector extends EventEmitter {
 
     this.ctx.client.on(ClientEvents.MESSAGE_REACTION_ADD, this.listener);
 
-    setTimeout(() => {
+    this.destroyTimeout = setTimeout(() => {
       this.emit('end');
     }, timeout);
 
@@ -44,6 +40,7 @@ export class ReactionCollector extends EventEmitter {
       ClientEvents.MESSAGE_REACTION_ADD,
       this.listener
     );
+    if (this.destroyTimeout) clearTimeout(this.destroyTimeout);
   }
 
   verify(r: GatewayClientEvents.MessageReactionAdd) {

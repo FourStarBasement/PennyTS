@@ -6,9 +6,7 @@ import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
 import { StarData, StarboardInfo, FetchedStarData } from './starboard';
-import { EventHandler } from './utils';
-
-const chanReg = /<#(\d+)>/;
+import { EventHandler, chanReg } from './utils';
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -299,7 +297,7 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Initiates the starboard queue
   client.starQueue = [];
-  
+
   // This is the function that handled adding experience to people. Keeps the prefixCheck clean
   async function xpAdd(ctx: Context, enabled: number, userData: any[]) {
     if (

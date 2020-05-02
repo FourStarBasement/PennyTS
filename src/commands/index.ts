@@ -35,6 +35,7 @@ import { osu } from './standard/osu';
 import { ht } from './profile/ht';
 import { mir } from './profile/mir';
 import { disable } from './guild/disable';
+import { enable } from './guild/enable';
 
 export default [
   avatar,
@@ -74,4 +75,5 @@ export default [
   ht,
   mir,
   disable,
+  enable,
 ];

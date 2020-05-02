@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import moment from 'moment';
-import { humanize } from '../modules/utils';
+import { humanize } from '../../modules/utils';
 
 export const daily = {
   name: 'daily',

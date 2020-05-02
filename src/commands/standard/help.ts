@@ -1,7 +1,7 @@
 import { Context, Command } from 'detritus-client/lib/command';
-import { Page } from '../modules/utils';
-import config from '../modules/config';
-import { EmbedPaginator } from '../modules/collectors/embedPaginator';
+import { Page } from '../../modules/utils';
+import config from '../../modules/config';
+import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 
 interface CommandArgs {
   help: string;

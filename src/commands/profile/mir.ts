@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { MessageCollector } from '../modules/collectors/messageCollector';
+import { MessageCollector } from '../../modules/collectors/messageCollector';
 import { Message } from 'detritus-client/lib/structures';
 
 export const mir = {
@@ -10,7 +10,6 @@ export const mir = {
   },
   run: async (ctx: Context) => {
     const cr = Math.floor(Math.random() * 1000);
-    let grabbed: boolean = false;
     let data = await ctx.commandClient.query(
       `SELECT \`Credits\` from \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
     );
@@ -39,7 +38,6 @@ export const mir = {
     let thing = new MessageCollector(ctx, 30000, filter);
     thing.on('collect', (m: Message) => {
       thing.destroy();
-      grabbed = true;
       ctx.commandClient.query(
         `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
           m.member!.id
@@ -51,14 +49,12 @@ export const mir = {
     });
 
     thing.on('end', () => {
-      if (!grabbed) {
-        ctx.reply('It seems as if no one has picked up the credits. Oh well.');
-        ctx.commandClient.query(
-          `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
-            ctx.member!.id
-          }`
-        );
-      }
+      ctx.reply('It seems as if no one has picked up the credits. Oh well.');
+      ctx.commandClient.query(
+        `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
+          ctx.member!.id
+        }`
+      );
     });
   },
 };

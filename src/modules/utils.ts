@@ -3,6 +3,8 @@ import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
 import { ItemInfo } from './shop';
 
+export const chanReg = /(<#)?(\d+)(>)?/;
+
 export interface PageField {
   name: string;
   value: string;

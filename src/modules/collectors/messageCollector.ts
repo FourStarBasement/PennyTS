@@ -14,6 +14,7 @@ export class MessageCollector extends EventEmitter {
   filter: (...args: Array<Message>) => boolean;
   channel: Channel;
   listener: (m: GatewayClientEvents.MessageCreate) => boolean;
+  destroyTimeout: NodeJS.Timeout;
 
   constructor(
     ctx: Context,
@@ -28,7 +29,7 @@ export class MessageCollector extends EventEmitter {
     this.listener = (m: GatewayClientEvents.MessageCreate) => this.verify(m);
     this.ctx.client.on(ClientEvents.MESSAGE_CREATE, this.listener);
 
-    setTimeout(() => {
+    this.destroyTimeout = setTimeout(() => {
       this.emit('end');
     }, timeout);
 
@@ -39,6 +40,7 @@ export class MessageCollector extends EventEmitter {
 
   destroy() {
     this.ctx.client.removeListener(ClientEvents.MESSAGE_CREATE, this.listener);
+    if (this.destroyTimeout) clearTimeout(this.destroyTimeout);
   }
 
   verify(m: GatewayClientEvents.MessageCreate) {

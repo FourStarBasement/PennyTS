@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { Webhook } from 'detritus-client/lib/structures';
-import text from '../modules/embarrass';
+import text from '../../modules/embarrass';
 
 export const embarrass = {
   name: 'embarrass',

@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import images from '../images';
+import images from '../../images';
 
 export const nsfw = {
   name: 'nsfw',

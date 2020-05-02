@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import images from '../modules/images';
+import images from '../../modules/images';
 
 export const slap = {
   name: 'slap',

@@ -1,4 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
+import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 
 export const backgrounds = {
   name: 'backgrounds',
@@ -24,7 +25,8 @@ export const backgrounds = {
       }
     });
 
-    ctx.commandClient.paginate(ctx, bg);
+    new EmbedPaginator(ctx, bg).start();
+    return;
   },
 };
 

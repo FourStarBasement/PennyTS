@@ -2,6 +2,7 @@ import { Context, CommandOptions } from 'detritus-client/lib/command';
 import { Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { MessageCollector } from '../../modules/collectors/messageCollector';
+import config from '../../modules/config';
 
 const jumpLinkReg = /https?:\/\/discordapp.com\/channels\/(\d+)\/(\d+)\/(\d+)/;
 const em = /<a?:\w+:\d+>/g;
@@ -133,7 +134,7 @@ async function createEmoji(
   ).then(async (r) => r.buffer());
 
   return ctx.client.guilds
-    .get('377926829643923458')
+    .get(config.stealHubID)
     ?.createEmoji({
       name: r[index],
       image: img,

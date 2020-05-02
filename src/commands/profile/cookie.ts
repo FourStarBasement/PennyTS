@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
-import images from '../modules/images';
+import images from '../../modules/images';
 import moment from 'moment';
-import { humanize } from '../modules/utils';
+import { humanize } from '../../modules/utils';
 import fetch from 'node-fetch';
 
 interface CommandArgs {

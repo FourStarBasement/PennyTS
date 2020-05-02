@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import config from '../modules/config';
+import config from '../../modules/config';
 import fetch from 'node-fetch';
 
 export const rabbit = {

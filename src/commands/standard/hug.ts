@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import images from '../modules/images';
+import images from '../../modules/images';
 
 let canHugWiggy = [
   '407773762814083072', // Elferton

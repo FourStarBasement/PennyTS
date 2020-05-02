@@ -1,5 +1,6 @@
 export default {
   token: '',
+  stealHubID: '', // Where to dump all the stolen goods (bot owner stealing emojis)
 
   prefixes: {
     owner: '', // Owner prefix (p@ on Penny)
