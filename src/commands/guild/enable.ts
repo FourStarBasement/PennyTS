@@ -23,7 +23,7 @@ export const enable = {
           `UPDATE \`Servers\` SET \`levels\` = 1 WHERE \`ServerID\` = ${ctx.guildId}`
         )
         .then(() => {
-          ctx.reply('Successfully enabled levels.');
+          ctx.reply('Enabled levels.');
         });
     } else if (args.enable === 'mod logs') {
       ctx.commandClient.query(
@@ -47,7 +47,7 @@ export const enable = {
           `UPDATE \`Servers\` SET \`mod_channel\` = '${channel.id}' WHERE \`ServerID\` = '${ctx.guildId}'`
         );
         ctx.reply(
-          `Turned on mod logs and set ${channel.mention} as the mod channel.`
+          `Enabled mod logs and set ${channel.mention} as the mod channel.`
         );
         collector.destroy();
       });
@@ -62,6 +62,8 @@ export const enable = {
         `UPDATE \`Servers\` SET \`edits\` = 1 WHERE \`ServerID\` = '${ctx.guildId}'`
       );
       ctx.reply('Enabled role edits.');
+    } else {
+      ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
     }
   },
 };

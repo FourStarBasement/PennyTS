@@ -7,7 +7,7 @@ interface CommandArgs {
 export const disable = {
   name: 'disable',
   metadata: {
-    description: 'Disables levels or mod logs',
+    description: 'Disables levels or mod logs or role edits',
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
@@ -17,18 +17,21 @@ export const disable = {
     }
 
     let attr;
+    let toSay = '';
 
     switch (args.disable) {
       case 'levels':
-        attr = 'levels';
+        attr = toSay = args.disable;
         break;
 
       case 'mod logs':
         attr = 'mod_log';
+        toSay = 'mod logs';
         break;
 
-      case 'role edits':
+      case 'edits':
         attr = 'edits';
+        toSay = 'role edits';
         break;
 
       default:
@@ -47,7 +50,7 @@ export const disable = {
         `UPDATE \`Servers\` SET \`${attr}\` = 0 WHERE \`ServerID\` = '${ctx.guildId}'`
       )
       .then((v) => {
-        ctx.reply(`Disabled ${args.disable}.`);
+        ctx.reply(`Disabled ${toSay}.`);
       });
   },
 };
