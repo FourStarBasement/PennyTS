@@ -143,6 +143,13 @@ async function prepare(
           },
         ];
 
+        if (!r.starboard.canMessage) {
+          console.log(
+            `ReactionAdd/Starboard G#${message.guildId} C#${r.starboard.id}: Insufficient permissions to post to starboard.`
+          );
+          return; /* Got rejected from writing to starboard */
+        }
+
         r.starboard
           .createMessage({
             content: `⭐ ${stars.length} stars in ${message.channel?.mention}`,

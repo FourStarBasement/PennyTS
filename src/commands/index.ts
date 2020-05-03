@@ -36,6 +36,9 @@ import { ht } from './profile/ht';
 import { mir } from './profile/mir';
 import { disable } from './guild/disable';
 import { enable } from './guild/enable';
+import { welcome } from './guild/welcome';
+import { setWelcome } from './guild/set.welcome';
+import { set } from './guild/set';
 
 export default [
   avatar,
@@ -76,4 +79,6 @@ export default [
   mir,
   disable,
   enable,
+  welcome,
+  setWelcome,
 ];

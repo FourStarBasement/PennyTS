@@ -3,7 +3,8 @@ import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
 import { ItemInfo } from './shop';
 
-export const chanReg = /(<#)?(\d+)(>)?/;
+export const chanReg = /<#(\d+)>/;
+export const roleReg = /<@&(\d+)>/;
 
 export interface PageField {
   name: string;

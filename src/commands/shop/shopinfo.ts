@@ -10,8 +10,8 @@ let categories = new Array<string>();
 let values: ItemInfo[] = Object.values(items);
 
 values.forEach((element: ItemInfo) => {
-  if (!categories.includes(element.meta.c)) {
-    categories.push(element.meta.c);
+  if (!categories.includes(element.meta.c.toLowerCase())) {
+    categories.push(element.meta.c.toLowerCase());
   }
 });
 
@@ -36,11 +36,11 @@ export const shopinfo = {
       return;
     }
 
-    if (categories.includes(arg.shopinfo)) {
+    if (categories.includes(arg.shopinfo.toLowerCase())) {
       let pages = new Array<Page>();
 
       values.forEach((element: ItemInfo) => {
-        if (element.meta.c === arg.shopinfo) {
+        if (element.meta.c === arg.shopinfo.toLowerCase()) {
           pages.push(shopEmbed(ctx, element));
         }
       });
@@ -49,7 +49,7 @@ export const shopinfo = {
     } else {
       let found = false;
       values.forEach((element: ItemInfo) => {
-        if (element.name === arg.shopinfo) {
+        if (element.name.toLowerCase() === arg.shopinfo.toLowerCase()) {
           ctx.reply({ embed: shopEmbed(ctx, element) });
           found = true;
         }

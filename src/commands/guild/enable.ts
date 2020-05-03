@@ -1,8 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { Message } from 'detritus-client/lib/structures';
 import { MessageCollector } from '../../modules/collectors/messageCollector';
-
-let chanReg = /<#(\d+)>/;
+import { chanReg } from '../../modules/utils';
 
 interface CommandArgs {
   enable: string;
