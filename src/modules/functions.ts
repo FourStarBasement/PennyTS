@@ -5,8 +5,8 @@ import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
-import { StarData, StarboardInfo, FetchedStarData } from './starboard';
-import { EventHandler, chanReg } from './utils';
+import { EventHandler, chanReg, FetchedStarData } from './utils';
+import { User as DBUser, Servers, StarData, Count } from './db';
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -65,7 +65,7 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (id: string) => {
-    let result: any[] = await client
+    let result: Count[] = await client
       .query(
         `SELECT COUNT(*) AS \`count\` FROM \`User\` WHERE \`User_ID\` = ${id}`
       )
@@ -79,7 +79,7 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if the guild is in the DB before doing anything
   client.checkGuild = async (id: string) => {
-    let result: any[] = await client
+    let result: Count[] = await client
       .query(
         `SELECT COUNT(*) AS \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
       )
@@ -96,7 +96,7 @@ export default (client: CommandClient, connection: Connection) => {
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
     await client.checkUser(context.user.id);
-    let d = await client
+    let d: DBUser[] = await client
       .query(
         `SELECT *, NOW()-INTERVAL 2 MINUTE > \`xp_cool\` AS xpAdd FROM \`User\` WHERE \`User_ID\` = ${context.user.id}`
       )
@@ -108,7 +108,7 @@ export default (client: CommandClient, connection: Connection) => {
         prefix = context.guild.prefix;
       } else {
         await client.checkGuild(context.guildId);
-        let data = await client
+        let data: Servers[] = await client
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
           )
@@ -239,7 +239,7 @@ export default (client: CommandClient, connection: Connection) => {
     let starData: StarData[] = await client.query(
       `SELECT COUNT(*) AS \`count\`, \`msgID\`, \`starID\` FROM \`starboard\` WHERE \`msgID\` = ${message.id} OR \`starID\` = ${message.id}`
     );
-    let starboardInfo: StarboardInfo[] = await client.query(
+    let starboardInfo: Servers[] = await client.query(
       `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
         message.guild!.id
       }`

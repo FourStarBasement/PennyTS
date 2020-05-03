@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import moment from 'moment';
 import { humanize } from '../../modules/utils';
+import { User } from '../../modules/db';
 
 export const daily = {
   name: 'daily',
@@ -17,7 +18,7 @@ export const daily = {
       return;
     }
 
-    let res = await ctx.commandClient.query(
+    let res: User[] = await ctx.commandClient.query(
       `SELECT \`DailyTime\`, \`patron\` FROM \`User\` WHERE \`User_ID\` = '${user.id}'`
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;

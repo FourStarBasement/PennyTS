@@ -4,6 +4,7 @@ import {
   CommandClient,
   ShardClient,
 } from 'detritus-client';
+import { Servers } from '../modules/db';
 
 export const guildMemberRemove = {
   event: ClientEvents.GUILD_MEMBER_REMOVE,
@@ -17,7 +18,7 @@ export const guildMemberRemove = {
     let guild = shardClient.guilds.get(payload.guildId)!;
 
     client.checkGuild(payload.guildId).then(async () => {
-      let results: any[] = await client.query(
+      let results: Servers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
       );
 

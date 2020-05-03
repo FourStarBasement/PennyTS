@@ -1,5 +1,6 @@
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { CommandClient, GatewayClientEvents } from 'detritus-client';
+import { Servers } from '../modules/db';
 
 export const guildMemberAdd = {
   event: ClientEvents.GUILD_MEMBER_ADD,
@@ -11,7 +12,7 @@ export const guildMemberAdd = {
     let guild = payload.member.guild!;
 
     await client.checkGuild(payload.guildId).then(async () => {
-      let results: any[] = await client.query(
+      let results: Servers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
       );
 

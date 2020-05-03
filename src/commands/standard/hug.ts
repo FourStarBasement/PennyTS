@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import images from '../../modules/images';
+import { User } from '../../modules/db';
 
 let canHugWiggy = [
   '407773762814083072', // Elferton
@@ -49,7 +50,7 @@ export const hug = {
       }
     }
 
-    let data = await ctx.commandClient.query(
+    let data: User[] = await ctx.commandClient.query(
       `SELECT \`weeb\` FROM \`User\` WHERE \`User_ID\` = ${user.id}`
     );
 

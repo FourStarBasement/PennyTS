@@ -7,14 +7,14 @@ import { GatewayClientEvents } from 'detritus-client';
 export class ReactionCollector extends EventEmitter {
   ctx: Context;
   timeout: number;
-  filter: (r: Reaction, u: User) => Promise<boolean>;
+  filter: (r: Reaction, u: User) => boolean;
   listener: (r: GatewayClientEvents.MessageReactionAdd) => boolean;
   destroyTimeout: NodeJS.Timeout;
 
   constructor(
     ctx: Context,
     timeout: number,
-    filter: (r: Reaction, u: User) => Promise<boolean>
+    filter: (r: Reaction, u: User) => boolean
   ) {
     super();
 

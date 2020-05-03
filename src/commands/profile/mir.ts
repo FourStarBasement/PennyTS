@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { MessageCollector } from '../../modules/collectors/messageCollector';
 import { Message } from 'detritus-client/lib/structures';
+import { User } from '../../modules/db';
 
 export const mir = {
   name: 'mir',
@@ -10,7 +11,7 @@ export const mir = {
   },
   run: async (ctx: Context) => {
     const cr = Math.floor(Math.random() * 1000);
-    let data = await ctx.commandClient.query(
+    let data: User[] = await ctx.commandClient.query(
       `SELECT \`Credits\` from \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
     );
     if (data[0].Credits < cr) {

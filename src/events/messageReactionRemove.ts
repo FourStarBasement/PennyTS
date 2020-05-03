@@ -5,8 +5,7 @@ import {
   ShardClient,
 } from 'detritus-client';
 import { Message, User } from 'detritus-client/lib/structures';
-import { Page } from '../modules/utils';
-import { convertEmbed } from '../modules/starboard';
+import { Page, convertEmbed } from '../modules/utils';
 
 export const messageReactionRemove = {
   event: ClientEvents.MESSAGE_REACTION_REMOVE,
