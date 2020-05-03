@@ -9,20 +9,23 @@ export const embarrass = {
     checks: ['webhooks'],
   },
   run: async (ctx: Context) => {
+    let member = ctx.commandClient.fetchGuildMember(ctx) || ctx.member!;
     ctx.channel
-      ?.createWebhook({ name: ctx.member!.name })
+      ?.createWebhook({ name: member.name })
       .then(async (hook) => {
-        sendMessage(hook, ctx.member!.avatarUrl);
-        hook.delete();
+        sendMessage(hook, member.avatarUrl).then(() => {
+          hook.delete();
+        });
       })
       .catch(() => {
         ctx.channel?.fetchWebhooks().then(async (hooks) => {
           hooks[0].delete();
           ctx.channel
-            ?.createWebhook({ name: ctx.member!.name })
+            ?.createWebhook({ name: member.name })
             .then(async (hook) => {
-              sendMessage(hook, ctx.member!.avatarUrl);
-              hook.delete();
+              sendMessage(hook, member.avatarUrl).then(() => {
+                hook.delete();
+              });
             });
         });
       });
