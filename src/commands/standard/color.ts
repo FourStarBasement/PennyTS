@@ -17,6 +17,7 @@ export const color = {
   arg: {
     name: 'color',
   },
+  aliases: ['colour'], // for all you non freedom landers (please don't hurt me NC and seth ily)
   checks: ['attachments'],
   run: async (ctx: Context, args: CommandArgs) => {
     let hex = /^#?[0-9A-F]{6}$/i;
