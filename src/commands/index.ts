@@ -40,6 +40,7 @@ import { welcome } from './guild/welcome';
 import { setWelcome } from './guild/set.welcome';
 import { set } from './guild/set';
 import { color } from './standard/color';
+import { kick } from './standard/kick';
 
 export default [
   avatar,
@@ -83,4 +84,5 @@ export default [
   color,
   welcome,
   setWelcome,
+  kick,
 ];
