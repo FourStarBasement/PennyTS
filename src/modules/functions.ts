@@ -229,6 +229,18 @@ export default (client: CommandClient, connection: Connection) => {
             return false;
           }
           break;
+
+        case 'kick':
+          if (!ctx.member?.canKickMembers) {
+            ctx.reply('This command is restricted to server mods.');
+            return false;
+          }
+
+          if (!ctx.me?.canKickMembers) {
+            ctx.reply('I cannot kick members!');
+            return false;
+          }
+          break;
       }
     }
     return true;
