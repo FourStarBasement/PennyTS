@@ -2,7 +2,7 @@ import { avatar } from './standard/avatar';
 import { daily } from './profile/daily';
 import { stats } from './standard/stats';
 import { test } from './standard/test';
-import { ban } from './standard/ban';
+import { ban } from './guild/ban';
 import { waifu } from './standard/waifu';
 import { random } from './standard/random';
 import { invite } from './standard/invite';
@@ -40,7 +40,7 @@ import { welcome } from './guild/welcome';
 import { setWelcome } from './guild/set.welcome';
 import { set } from './guild/set';
 import { color } from './standard/color';
-import { kick } from './standard/kick';
+import { kick } from './guild/kick';
 
 export default [
   avatar,

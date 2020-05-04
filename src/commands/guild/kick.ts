@@ -9,26 +9,24 @@ export const kick = {
     checks: ['kick'],
   },
   run: async (ctx: Context) => {
-    if (ctx.message.mentions.size < 1) {
-      ctx.reply('Please mention a valid user.');
+    let member: Member = ctx.commandClient.fetchGuildMember(ctx) as Member;
+
+    if (!member) {
+      ctx.reply('Please provide a valid user!');
       return;
     }
 
-    let mention = ctx.message.mentions.first()!;
-
-    if (mention.id == ctx.me?.id) {
+    if (member.id == ctx.me?.id) {
       ctx.reply('I cannot let you do that.');
       return;
     }
 
-    if (mention.id == ctx.member!.id) {
+    if (member.id == ctx.member!.id) {
       ctx.reply('You cannot kick yourself!');
       return;
     }
 
-    if (
-      ctx.me?.highestRole!.position <= (mention as Member).highestRole!.position
-    ) {
+    if (ctx.me?.highestRole!.position <= member.highestRole!.position) {
       ctx.reply('I cannot kick this user.');
       return;
     }
@@ -42,12 +40,12 @@ export const kick = {
       kickImage = { filename: 'kick.gif', data: img };
     }
 
-    ctx.guild?.removeMember(mention.id, {
+    ctx.guild?.removeMember(member.id, {
       reason: `Action done by ${ctx.user.username}.`,
     });
 
     ctx.reply({
-      content: `${mention.username} was kicked by ${ctx.member!.username}`,
+      content: `${member.username} was kicked by ${ctx.member!.username}`,
       file: kickImage,
     });
   },
