@@ -39,6 +39,7 @@ import { enable } from './guild/enable';
 import { welcome } from './guild/welcome';
 import { setWelcome } from './guild/set.welcome';
 import { set } from './guild/set';
+import { color } from './standard/color';
 
 export default [
   avatar,
@@ -79,6 +80,7 @@ export default [
   mir,
   disable,
   enable,
+  color,
   welcome,
   setWelcome,
 ];
