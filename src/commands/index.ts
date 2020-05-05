@@ -41,6 +41,10 @@ import { setWelcome } from './guild/set.welcome';
 import { set } from './guild/set';
 import { color } from './standard/color';
 import { kick } from './guild/kick';
+import { arrest } from './memes/arrest';
+import { wj } from './memes/wolfjob';
+import { top } from './profile/top';
+import { profile } from './profile/profile';
 
 export default [
   avatar,
@@ -85,4 +89,8 @@ export default [
   welcome,
   setWelcome,
   kick,
+  arrest,
+  wj,
+  top,
+  profile,
 ];

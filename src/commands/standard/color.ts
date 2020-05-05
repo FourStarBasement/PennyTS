@@ -36,6 +36,7 @@ export const color = {
         img = await fetch(`${config.imageAPI.url}/color`, {
           headers: {
             color: args.color,
+            authorization: config.imageAPI.password,
           },
         })
           .then((d) => d.json())
