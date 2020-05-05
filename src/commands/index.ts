@@ -45,7 +45,7 @@ import { arrest } from './memes/arrest';
 import { wj } from './memes/wolfjob';
 import { top } from './profile/top';
 import { profile } from './profile/profile';
-
+import { spacehuhn } from './memes/spacehuhn';
 export default [
   avatar,
   daily,
@@ -93,4 +93,5 @@ export default [
   wj,
   top,
   profile,
+  spacehuhn,
 ];
