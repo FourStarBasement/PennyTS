@@ -47,6 +47,8 @@ import { top } from './profile/top';
 import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
 import { edit } from './guild/edit';
+import { modLog } from './guild/modlog';
+
 export default [
   avatar,
   daily,
@@ -96,4 +98,5 @@ export default [
   profile,
   spacehuhn,
   edit,
+  modLog,
 ];
