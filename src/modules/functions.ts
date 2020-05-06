@@ -1,4 +1,9 @@
-import { Context, Command, CommandOptions } from 'detritus-client/lib/command';
+import {
+  Context,
+  Command,
+  CommandOptions,
+  CommandEvents,
+} from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { Member, User, Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
@@ -7,6 +12,7 @@ import config from './config';
 import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
 import { DBUser, Servers, StarData, Count, Tags } from './db';
+import { ClientEvents } from 'detritus-client/lib/constants';
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -135,52 +141,6 @@ export default (client: CommandClient, connection: Connection) => {
       // Add XP to a user if it is needed
       xpAdd(context, context.guild!.levels, d);
       if (context.message.content.indexOf(prefix) === 0) {
-        // Check which command is being said. There is probably a better way to check this.
-        let cmd = context.message.content
-          .toLowerCase()
-          .substr(prefix.length)
-          .split(' ');
-        // Check if the command doesn't exist
-        if (
-          client.commands.filter(
-            (command: Command) => command.name === cmd.join(' ')
-          ).length === 0
-        ) {
-          // If the command doesn't exist we check if it's a tag
-          let tag: Tags[] = await client.query(
-            `SELECT * FROM \`tags\` WHERE \`guild\` = ${
-              context.guildId
-            } AND \`name\` = ${connection.escape(cmd[0])}`
-          );
-          // If the tag doesn't exist we return nothing
-          if (tag.length < 1) return '';
-          // Debugging info
-          console.log(`Ran tag ${cmd[0]} by ${context.user.username}`);
-          // Useful for tag stats
-          await client.query(
-            `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
-              cmd[0]
-            )}`
-          );
-          // This replaces custom bits inside tags like username and mentions.username etc
-          let s: string = tag[0].content.replace(
-            /{username}/g,
-            context.user.username
-          );
-          if (/{mentions.username}/g.test(s)) {
-            if (!client.fetchGuildMember(context)) {
-              context.reply('This tag requires that you mention a user!');
-              return '';
-            }
-            s = s.replace(
-              /mentions.username/g,
-              client.fetchGuildMember(context)!.username
-            );
-          }
-          // Make it so you can't mention @ everyone and @ here but can still mention users in a tag
-          s = s.replace(/@everyone/g, 'everyone').replace(/@here/, 'here');
-          context.reply(s);
-        }
         return prefix;
       }
       // Owner prefix checks
@@ -396,6 +356,60 @@ export default (client: CommandClient, connection: Connection) => {
     );
   };
 
+  // Tag handling should be here as it was too much work inside the prefixCheck event
+  client.on(
+    ClientEvents.COMMAND_NONE,
+    async (payload: CommandEvents.CommandNone) => {
+      if (
+        payload.context.message.content.indexOf(
+          payload.context.guild!.prefix
+        ) !== 0
+      )
+        return;
+      // If the command doesn't exist we check if it's a tag
+      let content = payload.context.message.content.substr(
+        payload.context.guild!.prefix!.length
+      );
+      let tag: Tags[] = await client
+        .query(
+          `SELECT * FROM \`tags\` WHERE \`guild\` = ${
+            payload.context.guildId
+          } AND \`name\` = ${connection.escape(content)}`
+        )
+        .catch((e) => {
+          // Tag doesn't exist
+          if (e === 'Query returned nothing') return;
+          else console.log(e);
+        });
+      if (!tag) return;
+      // Debugging info
+      console.log(`Ran tag ${content} by ${payload.context.user.username}`);
+      // Useful for tag stats
+      await client.query(
+        `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
+          content
+        )}`
+      );
+      // This replaces custom bits inside tags like username and mentions.username etc
+      let s: string = tag[0].content.replace(
+        /{username}/g,
+        payload.context.user.username
+      );
+      if (/{mentions.username}/g.test(s)) {
+        if (!client.fetchGuildMember(payload.context)) {
+          payload.context.reply('This tag requires that you mention a user!');
+          return;
+        }
+        s = s.replace(
+          /mentions.username/g,
+          client.fetchGuildMember(payload.context)!.username
+        );
+      }
+      // Make it so you can't mention @ everyone and @ here but can still mention users in a tag
+      s = s.replace(/@everyone/g, 'everyone').replace(/@here/, 'here');
+      payload.context.reply(s);
+    }
+  );
   // This is the function that handled adding experience to people. Keeps the prefixCheck clean
   async function xpAdd(ctx: Context, enabled: number, userData: any[]) {
     if (
