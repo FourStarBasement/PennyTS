@@ -4,10 +4,12 @@ export default {
   prefixes: {
     owner: '', // Owner prefix (p@ on Penny)
   },
+
   imageAPI: {
     url: '',
     password: '',
   },
+
   sql: {
     host: '',
     username: '',
