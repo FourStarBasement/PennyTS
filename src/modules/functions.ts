@@ -142,8 +142,9 @@ export default (client: CommandClient, connection: Connection) => {
           .split(' ');
         // Check if the command doesn't exist
         if (
-          client.commands.filter((command: Command) => command.name === cmd[0])
-            .length === 0
+          client.commands.filter(
+            (command: Command) => command.name === cmd.join(' ')
+          ).length === 0
         ) {
           // If the command doesn't exist we check if it's a tag
           let tag: Tags[] = await client.query(
