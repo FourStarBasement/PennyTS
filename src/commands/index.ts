@@ -46,6 +46,7 @@ import { wj } from './memes/wolfjob';
 import { top } from './profile/top';
 import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
+import { edit } from './guild/edit';
 export default [
   avatar,
   daily,
@@ -94,4 +95,5 @@ export default [
   top,
   profile,
   spacehuhn,
+  edit,
 ];

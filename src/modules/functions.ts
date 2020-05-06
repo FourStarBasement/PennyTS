@@ -6,7 +6,7 @@ import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { User as DBUser, Servers, StarData, Count } from './db';
+import { DBUser, Servers, StarData, Count } from './db';
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -118,9 +118,8 @@ export default (client: CommandClient, connection: Connection) => {
         context.guild!.prefix = prefix;
       }
       xpAdd(context, context.guild!.levels, d);
-      if (context.message.content.startsWith(config.prefixes.user))
-        return config.prefixes.user;
-      if (context.message.content.startsWith(config.prefixes.owner))
+      if (context.message.content.indexOf(prefix) === 0) return prefix;
+      if (context.message.content.indexOf(config.prefixes.owner))
         return config.prefixes.owner;
     }
     return '';
@@ -150,17 +149,12 @@ export default (client: CommandClient, connection: Connection) => {
     if (command.metadata.disabled) return false;
 
     if (command.metadata.owner) {
-      if (!ctx.content.startsWith(config.prefixes.owner)) {
+      if (ctx.content.indexOf(config.prefixes.owner) !== 0) {
         return false;
       } else if (!ctx.client.owners.find((v, k) => v.id === ctx.member!.id)) {
         return false;
       }
-    } else {
-      if (!ctx.content.startsWith(config.prefixes.user)) {
-        return false;
-      }
     }
-
     if (!command.metadata.checks) {
       return true;
     }
@@ -238,6 +232,13 @@ export default (client: CommandClient, connection: Connection) => {
 
           if (!ctx.me?.canKickMembers) {
             ctx.reply('I cannot kick members!');
+            return false;
+          }
+          break;
+
+        case 'manageRoles':
+          if (!ctx.me?.canManageRoles) {
+            ctx.reply('I cannot edit roles!');
             return false;
           }
           break;
