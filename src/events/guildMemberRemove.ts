@@ -1,10 +1,13 @@
-import { ClientEvents } from 'detritus-client/lib/constants';
+import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import {
   GatewayClientEvents,
   CommandClient,
   ShardClient,
 } from 'detritus-client';
 import { Servers } from '../modules/db';
+import { ModLogActions } from '../modules/modlog';
+import { AuditLog } from 'detritus-client/lib/structures';
+import { RequestTypes } from 'detritus-client-rest/lib/types';
 
 export const guildMemberRemove = {
   event: ClientEvents.GUILD_MEMBER_REMOVE,
@@ -21,6 +24,27 @@ export const guildMemberRemove = {
       let results: Servers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
       );
+
+      let channel = guild.channels.get(results[0].mod_channel);
+      if (channel) {
+        if (
+          (ModLogActions.GUILD_MEMBER_REMOVE & guild.modLog) ===
+          ModLogActions.GUILD_MEMBER_REMOVE
+        ) {
+          guild
+            .fetchAuditLogs({
+              actionType: AuditLogActions.MEMBER_KICK,
+            })
+            .then((audit) => {
+              channel!.createMessage(
+                makeEmbed(
+                  audit.find((v, k) => v.targetId === payload.userId)!,
+                  payload
+                )
+              );
+            });
+        }
+      }
 
       if (results[0].Welcome === 1) {
         let channel = shardClient.channels.get(results[0].wc);
@@ -41,3 +65,32 @@ export const guildMemberRemove = {
     });
   },
 };
+
+function makeEmbed(
+  audit: AuditLog,
+  payload: GatewayClientEvents.GuildMemberRemove
+): RequestTypes.CreateMessage {
+  return {
+    embed: {
+      author: {
+        iconUrl: payload.user.avatarUrl,
+        name: `${payload.user.username}#${payload.user.discriminator} (${payload.userId})`,
+      },
+      color: 13369344,
+      title: 'Member Kicked',
+      fields: [
+        {
+          name: 'Kicked by',
+          value: `${audit.user!.username}#${audit.user!.discriminator} (${
+            audit.userId
+          })`,
+        },
+        {
+          name: 'Reason',
+          value: audit.reason ? audit.reason : 'None Given',
+        },
+      ],
+      timestamp: new Date().toISOString(),
+    },
+  };
+}
