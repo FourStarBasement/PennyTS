@@ -105,9 +105,11 @@ export default (client: CommandClient, connection: Connection) => {
     if (d[0].Blacklisted === 1) return '';
     if (context.guildId) {
       let prefix: string;
+      // Check if the prefix is cached
       if (context.guild?.prefix) {
         prefix = context.guild.prefix;
       } else {
+        // If the prefix is not cached we cache it
         await client.checkGuild(context.guildId);
         let data: Servers[] = await client
           .query(
@@ -118,6 +120,7 @@ export default (client: CommandClient, connection: Connection) => {
         prefix = data[0].Prefix;
         context.guild!.prefix = prefix;
       }
+      // This grabs the emote stats
       let em = /<a?:\w+:\d+>/g;
       if (em.test(context.message.content)) {
         let em_id = /[0-9]/g;
@@ -129,28 +132,36 @@ export default (client: CommandClient, connection: Connection) => {
           client.emoteCheck(r, context.guildId);
         }
       }
+      // Add XP to a user if it is needed
       xpAdd(context, context.guild!.levels, d);
       if (context.message.content.indexOf(prefix) === 0) {
+        // Check which command is being said. There is probably a better way to check this.
         let cmd = context.message.content
           .toLowerCase()
           .substr(prefix.length)
           .split(' ');
+        // Check if the command doesn't exist
         if (
           client.commands.filter((command: Command) => command.name === cmd[0])
             .length === 0
         ) {
+          // If the command doesn't exist we check if it's a tag
           let tag: Tags[] = await client.query(
             `SELECT * FROM \`tags\` WHERE \`guild\` = ${
               context.guildId
             } AND \`name\` = ${connection.escape(cmd[0])}`
           );
+          // If the tag doesn't exist we return nothing
           if (tag.length < 1) return '';
+          // Debugging info
           console.log(`Ran tag ${cmd[0]} by ${context.user.username}`);
+          // Useful for tag stats
           await client.query(
             `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
               cmd[0]
             )}`
           );
+          // This replaces custom bits inside tags like username and mentions.username etc
           let s: string = tag[0].content.replace(
             /{username}/g,
             context.user.username
@@ -165,11 +176,13 @@ export default (client: CommandClient, connection: Connection) => {
               client.fetchGuildMember(context)!.username
             );
           }
+          // Make it so you can't mention @ everyone and @ here but can still mention users in a tag
           s = s.replace(/@everyone/g, 'everyone').replace(/@here/, 'here');
           context.reply(s);
         }
         return prefix;
       }
+      // Owner prefix checks
       if (context.message.content.indexOf(config.prefixes.owner))
         return config.prefixes.owner;
     }
@@ -288,6 +301,8 @@ export default (client: CommandClient, connection: Connection) => {
           break;
 
         case 'manageRoles':
+          // I wanted to check here as well if the highest role position of the user was higher than the highest role position of the bot
+          // but I realized that was a per command check as the role needing to be edited is different per command
           if (!ctx.me?.canManageRoles) {
             ctx.reply('I cannot edit roles!');
             return false;
@@ -337,6 +352,7 @@ export default (client: CommandClient, connection: Connection) => {
     return client;
   };
 
+  // Adds all owner commands
   client.addOwnerOnly = (commands?: CommandOptions[]) => {
     commands?.forEach((command) => {
       command.metadata!.owner = true;
@@ -362,6 +378,7 @@ export default (client: CommandClient, connection: Connection) => {
   // Initiates the starboard queue
   client.starQueue = [];
 
+  // Checks and handles the emote stats
   client.emoteCheck = async (emoteID: string, serverID: string) => {
     let data = await client
       .query(
