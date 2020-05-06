@@ -19,6 +19,7 @@ declare module 'detritus-client/lib/commandclient' {
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
+    emoteCheck: (emoteID: string, serverID: string) => Promise<void>; // Checks if an emote is in the database before checking stats
     job: Job; // Resets everyone's daily/cookie count at midnight on the server host
     starQueue: any[]; // A queue of starboard data to process
     starInterval: Job; // An interval of when to process starboard data
@@ -116,6 +117,17 @@ export default (client: CommandClient, connection: Connection) => {
         context.guild!.levels = data[0].levels;
         prefix = data[0].Prefix;
         context.guild!.prefix = prefix;
+      }
+      let em = /<a?:\w+:\d+>/g;
+      if (em.test(context.message.content)) {
+        let em_id = /[0-9]/g;
+        let r = context.message.content.match(em_id)!.join('');
+        if (r.length > 18) {
+          if (context.guild!.emojis.get(r.substr(0, 18)))
+            client.emoteCheck(r.substr(0, 18), context.guildId);
+        } else if (context.guild!.emojis.get(r)) {
+          client.emoteCheck(r, context.guildId);
+        }
       }
       xpAdd(context, context.guild!.levels, d);
       if (context.message.content.indexOf(prefix) === 0) {
@@ -349,6 +361,22 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Initiates the starboard queue
   client.starQueue = [];
+
+  client.emoteCheck = async (emoteID: string, serverID: string) => {
+    let data = await client
+      .query(
+        `SELECT COUNT(*) AS inD FROM \`emote\` WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+      )
+      .catch(console.error);
+    if (data[0].inD === 0) {
+      await client.query(
+        `INSERT INTO \`emote\` (\`server_id\`, \`emote_id\`) VALUES (${serverID}, ${emoteID})`
+      );
+    }
+    await client.query(
+      `UPDATE \`emote\` SET \`used\` = \`used\` + 1 WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+    );
+  };
 
   // This is the function that handled adding experience to people. Keeps the prefixCheck clean
   async function xpAdd(ctx: Context, enabled: number, userData: any[]) {
