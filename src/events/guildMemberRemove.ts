@@ -26,7 +26,7 @@ export const guildMemberRemove = {
         let channel = shardClient.channels.get(results[0].wc);
         if (channel) {
           if (results[0].LMessage) {
-            let unsyntaxed = results[0].WMessage.replace(
+            let unsyntaxed = results[0].LMessage.replace(
               '{user}',
               member.username
             ).replace('{guild}', guild.name);
