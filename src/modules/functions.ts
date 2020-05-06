@@ -6,7 +6,7 @@ import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { DBUser, Servers, StarData, Count } from './db';
+import { DBUser, Servers, StarData, Count, Tags } from './db';
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -118,7 +118,46 @@ export default (client: CommandClient, connection: Connection) => {
         context.guild!.prefix = prefix;
       }
       xpAdd(context, context.guild!.levels, d);
-      if (context.message.content.indexOf(prefix) === 0) return prefix;
+      if (context.message.content.indexOf(prefix) === 0) {
+        let cmd = context.message.content
+          .toLowerCase()
+          .substr(prefix.length)
+          .split(' ');
+        if (
+          client.commands.filter((command: Command) => command.name === cmd[0])
+            .length === 0
+        ) {
+          let tag: Tags[] = await client.query(
+            `SELECT * FROM \`tags\` WHERE \`guild\` = ${
+              context.guildId
+            } AND \`name\` = ${connection.escape(cmd[0])}`
+          );
+          if (tag.length < 1) return '';
+          console.log(`Ran tag ${cmd[0]} by ${context.user.username}`);
+          await client.query(
+            `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
+              cmd[0]
+            )}`
+          );
+          let s: string = tag[0].content.replace(
+            /{username}/g,
+            context.user.username
+          );
+          if (/{mentions.username}/g.test(s)) {
+            if (!client.fetchGuildMember(context)) {
+              context.reply('This tag requires that you mention a user!');
+              return '';
+            }
+            s = s.replace(
+              /mentions.username/g,
+              client.fetchGuildMember(context)!.username
+            );
+          }
+          s = s.replace(/@everyone/g, 'everyone').replace(/@here/, 'here');
+          context.reply(s);
+        }
+        return prefix;
+      }
       if (context.message.content.indexOf(config.prefixes.owner))
         return config.prefixes.owner;
     }
