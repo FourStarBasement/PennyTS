@@ -43,7 +43,7 @@ import { color } from './standard/color';
 import { kick } from './guild/kick';
 import { arrest } from './memes/arrest';
 import { wj } from './memes/wolfjob';
-import { top } from './profile/top';
+import { top } from './standard/top';
 import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
 import { edit } from './guild/edit';
