@@ -30,6 +30,7 @@ export interface Roles {
 }
 
 export interface Servers {
+  count?: number;
   ServerID: string;
   ServerIcon: string;
   ServerName: string;
@@ -46,6 +47,7 @@ export interface Servers {
   edits: number;
   starboard: string;
   WRole: string;
+  ModLogPerm: string;
 }
 
 export interface Starboard {

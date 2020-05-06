@@ -2,15 +2,6 @@ import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import images from '../../images';
 
-declare module 'detritus-client/lib/structures/guild' {
-  interface Guild {
-    waifuArr: Array<string>;
-    nsfwArr: Array<string>;
-    prefix: string;
-    levels: number;
-  }
-}
-
 export const waifu = {
   name: 'waifu',
   metadata: {

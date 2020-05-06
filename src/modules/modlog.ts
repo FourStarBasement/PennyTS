@@ -1,0 +1,40 @@
+export enum ModLogActions {
+  UNSET = 0,
+  CHANNEL_CREATE = 1 << 0,
+  CHANNEL_UPDATE = 1 << 1,
+  CHANNEL_DELETE = 1 << 2,
+  GUILD_ROLE_CREATE = 1 << 3,
+  GUILD_ROLE_UPDATE = 1 << 4,
+  GUILD_ROLE_DELETE = 1 << 5,
+  CHANNEL_PINS_UPDATE = 1 << 6,
+  GUILD_MEMBER_ADD = 1 << 7,
+  GUILD_MEMBER_UPDATE = 1 << 8,
+  GUILD_MEMBER_REMOVE = 1 << 9,
+  GUILD_BAN_ADD = 1 << 10,
+  GUILD_BAN_REMOVE = 1 << 11,
+  GUILD_EMOJIS_UPDATE = 1 << 12,
+  INVITE_CREATE = 1 << 13,
+  INVITE_DELETE = 1 << 14,
+  MESSAGE_DELETE = 1 << 15,
+  MESSAGE_DELETE_BULK = 1 << 16,
+}
+
+export const ModLogReactions: Record<string, ModLogActions[]> = {
+  '0️⃣': [
+    ModLogActions.CHANNEL_CREATE,
+    ModLogActions.CHANNEL_UPDATE,
+    ModLogActions.CHANNEL_DELETE,
+  ],
+  '1️⃣': [
+    ModLogActions.GUILD_ROLE_CREATE,
+    ModLogActions.GUILD_ROLE_UPDATE,
+    ModLogActions.GUILD_ROLE_DELETE,
+  ],
+  '2️⃣': [ModLogActions.CHANNEL_PINS_UPDATE],
+  '3️⃣': [ModLogActions.GUILD_MEMBER_ADD, ModLogActions.GUILD_MEMBER_REMOVE],
+  '4️⃣': [ModLogActions.GUILD_MEMBER_UPDATE],
+  '5️⃣': [ModLogActions.GUILD_BAN_ADD, ModLogActions.GUILD_BAN_REMOVE],
+  '6️⃣': [ModLogActions.GUILD_EMOJIS_UPDATE],
+  '7️⃣': [ModLogActions.INVITE_CREATE, ModLogActions.INVITE_DELETE],
+  '8️⃣': [ModLogActions.MESSAGE_DELETE, ModLogActions.MESSAGE_DELETE_BULK],
+};

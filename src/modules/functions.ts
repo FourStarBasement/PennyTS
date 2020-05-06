@@ -11,8 +11,21 @@ import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { DBUser, Servers, StarData, Count, Tags } from './db';
+import { User as DBUser, Servers, StarData, Count, Tags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
+import { ShardClient } from 'detritus-client';
+import { ModLogActions } from './modlog';
+
+// Additional properties/functions to access on the Guild
+declare module 'detritus-client/lib/structures/guild' {
+  interface Guild {
+    waifuArr: Array<string>;
+    nsfwArr: Array<string>;
+    prefix: string;
+    levels: number;
+    modLog: ModLogActions;
+  }
+}
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
@@ -86,16 +99,23 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if the guild is in the DB before doing anything
   client.checkGuild = async (id: string) => {
-    let result: Count[] = await client
-      .query(
-        `SELECT COUNT(*) AS \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
-      )
+    let guild = (client.client as ShardClient).guilds.get(id);
+
+    let result: Servers[] = await client
+      .query(`SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${id}'`)
       .catch(console.error);
 
     if (result[0].count === 0) {
       await client
         .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
         .catch(console.error);
+      if (!guild?.modLog) {
+        guild!.modLog = 0;
+      }
+    } else {
+      if (!guild?.modLog) {
+        guild!.modLog = parseInt(result[0].ModLogPerm);
+      }
     }
   };
 
