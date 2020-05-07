@@ -79,7 +79,7 @@ export const color = {
                 let filter = (r: Reaction, u: User) => {
                   return r.emoji.name === '📝' && u.id === ctx.member!.id;
                 };
-                let collector = new ReactionCollector(ctx, 30000, filter);
+                let collector = new ReactionCollector(ctx, 30000, m, filter);
                 let old = ctx.member!.colorRole?.color.toString(16);
                 collector.on('collect', (r: Reaction, u: User) => {
                   ctx

@@ -15,7 +15,7 @@ export class EmbedPaginator {
   constructor(ctx: Context, pages: Page[]) {
     this.ctx = ctx;
     this.pages = pages;
-    this.collector = new ReactionCollector(ctx, 30000, (r, u) =>
+    this.collector = new ReactionCollector(ctx, 30000, this.message, (r, u) =>
       this.filter(r, u)
     );
 

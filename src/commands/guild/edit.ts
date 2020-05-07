@@ -97,7 +97,7 @@ export const edit = {
             u.id === ctx.user.id
           );
         };
-        let collector = new ReactionCollector(ctx, 30000, filter);
+        let collector = new ReactionCollector(ctx, 30000, m, filter);
         let old = rte!.color.toString(16);
         collector.on('collect', (re: Reaction) => {
           if (re.emoji.name === '🇳') {

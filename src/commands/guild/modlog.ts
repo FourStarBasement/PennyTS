@@ -22,7 +22,7 @@ export const modLog = {
 
     let filter = (r: Reaction, u: User) =>
       ctx.member!.id === u.id && message.id === r.messageId;
-    let collector = new ReactionCollector(ctx, 30_0000, filter);
+    let collector = new ReactionCollector(ctx, 30_0000, message, filter);
 
     collector.on('collect', (r: Reaction, u: User) => {
       r.delete(u.id);
