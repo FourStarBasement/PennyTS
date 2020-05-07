@@ -8,6 +8,7 @@ import { Servers } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
+import { Page } from '../modules/utils';
 
 export const guildMemberRemove = {
   event: ClientEvents.GUILD_MEMBER_REMOVE,
@@ -36,12 +37,12 @@ export const guildMemberRemove = {
               actionType: AuditLogActions.MEMBER_KICK,
             })
             .then((audit) => {
-              channel!.createMessage(
-                makeEmbed(
-                  audit.find((v, k) => v.targetId === payload.userId)!,
-                  payload
-                )
-              );
+              let action = audit.find((v, k) => v.targetId === payload.userId);
+              if (!action) {
+                return;
+              }
+
+              channel!.createMessage({ embed: makeEmbed(action, payload) });
             });
         }
       }
@@ -69,28 +70,26 @@ export const guildMemberRemove = {
 function makeEmbed(
   audit: AuditLog,
   payload: GatewayClientEvents.GuildMemberRemove
-): RequestTypes.CreateMessage {
+): Page {
   return {
-    embed: {
-      author: {
-        iconUrl: payload.user.avatarUrl,
-        name: `${payload.user.username}#${payload.user.discriminator} (${payload.userId})`,
-      },
-      color: 13369344,
-      title: 'Member Kicked',
-      fields: [
-        {
-          name: 'Kicked by',
-          value: `${audit.user!.username}#${audit.user!.discriminator} (${
-            audit.userId
-          })`,
-        },
-        {
-          name: 'Reason',
-          value: audit.reason ? audit.reason : 'None Given',
-        },
-      ],
-      timestamp: new Date().toISOString(),
+    author: {
+      iconUrl: payload.user.avatarUrl,
+      name: `${payload.user.username}#${payload.user.discriminator} (${payload.userId})`,
     },
+    color: 13369344,
+    title: 'Member Kicked',
+    fields: [
+      {
+        name: 'Kicked by',
+        value: `${audit.user!.username}#${audit.user!.discriminator} (${
+          audit.userId
+        })`,
+      },
+      {
+        name: 'Reason',
+        value: audit.reason ? audit.reason : 'None Given',
+      },
+    ],
+    timestamp: new Date().toISOString(),
   };
 }

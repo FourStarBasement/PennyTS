@@ -4,6 +4,7 @@ import { Servers } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
+import { Page } from '../modules/utils';
 
 export const guildMemberAdd = {
   event: ClientEvents.GUILD_MEMBER_ADD,
@@ -31,12 +32,12 @@ export const guildMemberAdd = {
                 actionType: AuditLogActions.BOT_ADD,
               })
               .then((audit) => {
-                channel!.createMessage(
-                  makeEmbed(
+                channel!.createMessage({
+                  embed: makeEmbed(
                     audit.find((v, k) => v.targetId === payload.userId)!,
                     payload
-                  )
-                );
+                  ),
+                });
               });
           }
         }
@@ -72,24 +73,22 @@ export const guildMemberAdd = {
 function makeEmbed(
   audit: AuditLog,
   payload: GatewayClientEvents.GuildMemberAdd
-): RequestTypes.CreateMessage {
+): Page {
   return {
-    embed: {
-      author: {
-        iconUrl: payload.member.avatarUrl,
-        name: `${payload.member.username}#${payload.member.discriminator} (${payload.userId})`,
-      },
-      color: 39219,
-      title: 'Bot Added',
-      fields: [
-        {
-          name: 'Added by',
-          value: `${audit.user!.username}#${audit.user!.discriminator} (${
-            audit.userId
-          })`,
-        },
-      ],
-      timestamp: new Date().toISOString(),
+    author: {
+      iconUrl: payload.member.avatarUrl,
+      name: `${payload.member.username}#${payload.member.discriminator} (${payload.userId})`,
     },
+    color: 39219,
+    title: 'Bot Added',
+    fields: [
+      {
+        name: 'Added by',
+        value: `${audit.user!.username}#${audit.user!.discriminator} (${
+          audit.userId
+        })`,
+      },
+    ],
+    timestamp: new Date().toISOString(),
   };
 }
