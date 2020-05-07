@@ -37,6 +37,7 @@ export interface Page {
     iconUrl?: string;
   };
   url?: string;
+  timestamp?: string;
 }
 
 export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
