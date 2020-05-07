@@ -37,7 +37,6 @@ export interface Page {
     iconUrl?: string;
   };
   url?: string;
-  timestamp?: string;
 }
 
 export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
@@ -100,7 +99,7 @@ export interface FetchedStarData {
   starboard?: ChannelGuildText;
 }
 
-const URL_REG = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+const urlReg = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
 export function convertEmbed(me: User, message: Message, embed: Page) {
   if (message.author.id === me.id && message.embeds.size > 0) {
@@ -109,9 +108,9 @@ export function convertEmbed(me: User, message: Message, embed: Page) {
     embed.description = msgEmbed.description;
     embed.thumbnail = msgEmbed.thumbnail;
   } else {
-    if (URL_REG.test(message.content)) {
+    if (urlReg.test(message.content)) {
       embed.image = {
-        url: message.content.match(URL_REG)![0],
+        url: message.content.match(urlReg)![0],
       };
     } else if (message.attachments.size > 0) {
       embed.image = {
@@ -129,4 +128,26 @@ const ESCAPE_MARKDOWN = /([_\\~|\*`]|>(?:>>)?\s)/g;
 
 export function escapeMarkdown(text: string): string {
   return text.replace(ESCAPE_MARKDOWN, '\\$1');
+}
+
+export function stringExtractor(str: string): string[] {
+  let final: string[] = [];
+  let current: string = '';
+  let quotes: string[] = ['"', "'"];
+  let indexing: boolean = false;
+  str.split('').forEach((s: string, i: number) => {
+    s = s.replace(/‘|’/g, "'").replace(/”|“/g, '"');
+    if (quotes.includes(s)) {
+      if (indexing) {
+        indexing = false;
+        // substr so you don't add a " to the string
+        final.push(current.substr(1));
+        current = '';
+      } else {
+        indexing = true;
+      }
+    }
+    if (indexing) current += s;
+  });
+  return final;
 }

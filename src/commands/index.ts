@@ -11,7 +11,7 @@ import { define } from './standard/define';
 import { complain } from './standard/complain';
 import { inspire } from './standard/inspire';
 import { embarrass } from './standard/embarrass';
-import { delete_cmd } from './guild/delete';
+import { delete_cmd } from './standard/delete';
 import { rabbit } from './standard/rabbit';
 import { slap } from './standard/slap';
 import { sam } from './memes/sam';
@@ -47,9 +47,12 @@ import { top } from './profile/top';
 import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
 import { edit } from './guild/edit';
-import { modLog } from './guild/modlog';
-import { gamble } from './profile/gamble';
-
+import { tag } from './guild/tag';
+import { tagCreate } from './guild/tag.create';
+import { tagDelete } from './guild/tag.delete';
+import { tagInfo } from './guild/tag.info';
+import { tagEdit } from './guild/tag.edit';
+import { tagClaim } from './guild/tag.claim';
 export default [
   avatar,
   daily,
@@ -99,6 +102,10 @@ export default [
   profile,
   spacehuhn,
   edit,
-  modLog,
-  gamble,
+  tagCreate,
+  tagDelete,
+  tagInfo,
+  tagEdit,
+  tagClaim,
+  tag,
 ];
