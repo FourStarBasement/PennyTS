@@ -11,7 +11,7 @@ import { define } from './standard/define';
 import { complain } from './standard/complain';
 import { inspire } from './standard/inspire';
 import { embarrass } from './standard/embarrass';
-import { delete_cmd } from './standard/delete';
+import { delete_cmd } from './guild/delete';
 import { rabbit } from './standard/rabbit';
 import { slap } from './standard/slap';
 import { sam } from './memes/sam';
@@ -53,6 +53,8 @@ import { tagDelete } from './guild/tag.delete';
 import { tagInfo } from './guild/tag.info';
 import { tagEdit } from './guild/tag.edit';
 import { tagClaim } from './guild/tag.claim';
+import { modLog } from './guild/modlog';
+import { gamble } from './profile/gamble';
 export default [
   avatar,
   daily,
@@ -108,4 +110,6 @@ export default [
   tagEdit,
   tagClaim,
   tag,
+  modLog,
+  gamble,
 ];

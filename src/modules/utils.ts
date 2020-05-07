@@ -100,7 +100,7 @@ export interface FetchedStarData {
   starboard?: ChannelGuildText;
 }
 
-const urlReg = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
+const URL_REG = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
 export function convertEmbed(me: User, message: Message, embed: Page) {
   if (message.author.id === me.id && message.embeds.size > 0) {
@@ -109,9 +109,9 @@ export function convertEmbed(me: User, message: Message, embed: Page) {
     embed.description = msgEmbed.description;
     embed.thumbnail = msgEmbed.thumbnail;
   } else {
-    if (urlReg.test(message.content)) {
+    if (URL_REG.test(message.content)) {
       embed.image = {
-        url: message.content.match(urlReg)![0],
+        url: message.content.match(URL_REG)![0],
       };
     } else if (message.attachments.size > 0) {
       embed.image = {
