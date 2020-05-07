@@ -3,7 +3,7 @@ import images from '../../modules/images';
 import moment from 'moment';
 import { humanize } from '../../modules/utils';
 import fetch from 'node-fetch';
-import { User } from '../../modules/db';
+import { DBUser } from '../../modules/db';
 
 interface CommandArgs {
   cookie: string;
@@ -24,7 +24,7 @@ export const cookie = {
     }
 
     if (!mention) {
-      let data: User[] = await ctx.commandClient.query(
+      let data: DBUser[] = await ctx.commandClient.query(
         `SELECT CT FROM \`User\` WHERE \`User_ID\`=${ctx.member!.id}`
       );
       if (data[0].CT === 0) {
@@ -41,7 +41,7 @@ export const cookie = {
       } else if (mention.bot) {
         ctx.reply("You can't give bots cookies!");
       } else {
-        let data: User[] = await ctx.commandClient.query(
+        let data: DBUser[] = await ctx.commandClient.query(
           `SELECT \`CT\` FROM \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
         );
         if (data[0].CT) {

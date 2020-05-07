@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
-import { UserB } from '../../modules/db';
+import { DBUserB } from '../../modules/db';
 
 export const backgrounds = {
   name: 'backgrounds',
@@ -20,7 +20,7 @@ export const backgrounds = {
         }
       });
 
-    data.forEach((element: UserB) => {
+    data.forEach((element: DBUserB) => {
       if (element.name !== 'default') {
         bg.push(embed(element.name));
       }

@@ -11,7 +11,7 @@ import { Job } from 'node-schedule';
 import config from './config';
 import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { User as DBUser, Servers, StarData, Count, Tags } from './db';
+import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ShardClient } from 'detritus-client';
 import { ModLogActions } from './modlog';
@@ -85,7 +85,7 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (id: string) => {
-    let result: Count[] = await client
+    let result: DBCount[] = await client
       .query(
         `SELECT COUNT(*) AS \`count\` FROM \`User\` WHERE \`User_ID\` = ${id}`
       )
@@ -101,7 +101,7 @@ export default (client: CommandClient, connection: Connection) => {
   client.checkGuild = async (id: string) => {
     let guild = (client.client as ShardClient).guilds.get(id);
 
-    let result: Servers[] = await client
+    let result: DBServers[] = await client
       .query(`SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${id}'`)
       .catch(console.error);
 
@@ -137,7 +137,7 @@ export default (client: CommandClient, connection: Connection) => {
       } else {
         // If the prefix is not cached we cache it
         await client.checkGuild(context.guildId);
-        let data: Servers[] = await client
+        let data: DBServers[] = await client
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
           )
@@ -299,7 +299,7 @@ export default (client: CommandClient, connection: Connection) => {
     let starData: StarData[] = await client.query(
       `SELECT COUNT(*) AS \`count\`, \`msgID\`, \`starID\` FROM \`starboard\` WHERE \`msgID\` = ${message.id} OR \`starID\` = ${message.id}`
     );
-    let starboardInfo: Servers[] = await client.query(
+    let starboardInfo: DBServers[] = await client.query(
       `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
         message.guild!.id
       }`
@@ -390,7 +390,7 @@ export default (client: CommandClient, connection: Connection) => {
       let content = payload.context.message.content.substr(
         payload.context.guild!.prefix!.length
       );
-      let tag: Tags[] = await client
+      let tag: DBTags[] = await client
         .query(
           `SELECT * FROM \`tags\` WHERE \`guild\` = ${
             payload.context.guildId

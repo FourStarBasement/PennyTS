@@ -1,6 +1,6 @@
 import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { CommandClient, GatewayClientEvents } from 'detritus-client';
-import { Servers } from '../modules/db';
+import { DBServers } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
@@ -16,7 +16,7 @@ export const guildMemberAdd = {
     let guild = payload.member.guild!;
 
     await client.checkGuild(payload.guildId).then(async () => {
-      let results: Servers[] = await client.query(
+      let results: DBServers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
       );
 

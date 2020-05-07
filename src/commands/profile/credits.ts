@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { User } from '../../modules/db';
+import { DBUser } from '../../modules/db';
 
 export const credits = {
   name: 'credits',
@@ -12,7 +12,7 @@ export const credits = {
       ctx.reply('Silly you! Bots have no use for money.');
       return;
     }
-    let data: User[] = await ctx.commandClient.query(
+    let data: DBUser[] = await ctx.commandClient.query(
       `SELECT \`credits\` FROM \`User\` WHERE \`User_ID\` = ${user!.id}`
     );
     ctx.reply(`💸 ${user?.username} has ${data[0].Credits} credits. 💸`);

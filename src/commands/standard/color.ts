@@ -2,7 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import { Member, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
-import { Servers } from '../../modules/db';
+import { DBServers } from '../../modules/db';
 import config from '../../modules/config';
 
 interface CommandArgs {
@@ -57,7 +57,7 @@ export const color = {
               !ctx.me?.canManageRoles
             )
               return;
-            let data: [Servers] = await ctx.commandClient
+            let data: [DBServers] = await ctx.commandClient
               .query(
                 `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${ctx.guildId}'`
               )

@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import config from '../../modules/config';
-import { Servers, Roles } from '../../modules/db';
+import { DBServers, DBRoles } from '../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
 
@@ -20,7 +20,7 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    let guild: Servers[] = await ctx.commandClient.query(
+    let guild: DBServers[] = await ctx.commandClient.query(
       `SELECT \`edits\` FROM \`Servers\` WHERE \`ServerID\` = ${ctx.guildId}`
     );
     if (guild[0].edits !== 1) {
@@ -28,7 +28,7 @@ export const edit = {
       return;
     }
 
-    let roles: Roles[] = await ctx.commandClient.query(
+    let roles: DBRoles[] = await ctx.commandClient.query(
       `SELECT * FROM \`roles\` WHERE \`guild\` = ${ctx.guildId}`
     );
 

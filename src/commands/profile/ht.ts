@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import { User } from '../../modules/db';
+import { DBUser } from '../../modules/db';
 
 interface CommandArgs {
   ht: string;
@@ -26,7 +26,7 @@ export const ht = {
       return;
     }
 
-    let data: User[] = await ctx.commandClient.query(
+    let data: DBUser[] = await ctx.commandClient.query(
       `SELECT \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
     );
     if (data[0].Credits < 1) {

@@ -1,35 +1,35 @@
 /// Interfaces for all tables in the database
 
-export interface Backgrounds {
+export interface DBBackgrounds {
   name: string;
 }
 
-export interface Colors {
+export interface DBColors {
   Color_Name: string;
   Color_Code: string;
 }
 
-export interface Cooldowns {
+export interface DBCooldowns {
   command: string;
 }
 
-export interface Emotes {
+export interface DBEmotes {
   server_id: string;
   emote_id: string;
   used: number;
 }
 
-export interface Exposed {
+export interface DBExposed {
   user_id: number;
   name: string;
 }
 
-export interface Roles {
+export interface DBRoles {
   guild: string;
   role: string;
 }
 
-export interface Servers {
+export interface DBServers {
   count?: number;
   ServerID: string;
   ServerIcon: string;
@@ -50,12 +50,12 @@ export interface Servers {
   ModLogPerm: string;
 }
 
-export interface Starboard {
+export interface DBStarboard {
   msgID: string;
   starID: string;
 }
 
-export interface Tags {
+export interface DBTags {
   ID: string;
   name: string;
   owner: string;
@@ -64,7 +64,7 @@ export interface Tags {
   used: number;
 }
 
-export interface User {
+export interface DBUser {
   User_ID: string;
   UserAvatar: string;
   Credits: number;
@@ -87,33 +87,33 @@ export interface User {
   token: string;
 }
 
-export interface UserColors {
+export interface DBUserColors {
   User_ID: string;
   Color_Name: string;
 }
 
-export interface UserB {
+export interface DBUserB {
   User_ID: string;
   name: string;
 }
 
-export interface UserCool {
+export interface DBUserCool {
   User_ID: string;
   command: string;
   cool: Date;
 }
 
-export interface UserE {
+export interface DBUserE {
   emblem: string;
   userID: string;
 }
 
-export interface Warns {
+export interface DBWarns {
   ID: string;
   warns: number;
 }
 
-export interface Count {
+export interface DBCount {
   count: number;
 }
 

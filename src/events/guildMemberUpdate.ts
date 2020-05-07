@@ -3,7 +3,7 @@ import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
 import { PageField, escapeMarkdown } from '../modules/utils';
-import { Servers } from '../modules/db';
+import { DBServers } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 
 export const guildMemberUpdate = {
@@ -17,7 +17,7 @@ export const guildMemberUpdate = {
     console.log(payload);
 
     client.checkGuild(payload.guildId).then(async () => {
-      let results: Servers[] = await client.query(
+      let results: DBServers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
       );
 
