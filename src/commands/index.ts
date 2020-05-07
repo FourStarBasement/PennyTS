@@ -57,6 +57,7 @@ import { modLog } from './guild/modlog';
 import { gamble } from './profile/gamble';
 import { emote } from './guild/emote';
 import { suggest } from './standard/suggest';
+import { setPrefix } from './guild/set.prefix';
 export default [
   avatar,
   daily,
@@ -99,6 +100,7 @@ export default [
   color,
   welcome,
   setWelcome,
+  setPrefix,
   kick,
   arrest,
   wj,
