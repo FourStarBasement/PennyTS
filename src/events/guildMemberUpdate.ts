@@ -14,8 +14,6 @@ export const guildMemberUpdate = {
   ) => {
     let guild = payload.member.guild!;
 
-    console.log(payload);
-
     client.checkGuild(payload.guildId).then(async () => {
       let results: DBServers[] = await client.query(
         `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
@@ -58,7 +56,7 @@ function makeEmbed(
 ): RequestTypes.CreateMessage {
   let field: PageField;
   let change = audit.changes.first();
-  console.log(change);
+
   if (audit.actionType === AuditLogActions.MEMBER_ROLE_UPDATE) {
     field = {
       name: `Role ${change.key === '$add' ? 'Added' : 'Removed'}`,
