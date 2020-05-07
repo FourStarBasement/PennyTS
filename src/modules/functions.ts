@@ -164,7 +164,7 @@ export default (client: CommandClient, connection: Connection) => {
         return prefix;
       }
       // Owner prefix checks
-      if (context.message.content.indexOf(config.prefixes.owner))
+      if (context.message.content.indexOf(config.prefixes.owner) === 0)
         return config.prefixes.owner;
     }
     return '';
