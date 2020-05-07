@@ -55,6 +55,7 @@ import { tagEdit } from './guild/tag.edit';
 import { tagClaim } from './guild/tag.claim';
 import { modLog } from './guild/modlog';
 import { gamble } from './profile/gamble';
+import { emote } from './guild/emote';
 export default [
   avatar,
   daily,
@@ -112,4 +113,5 @@ export default [
   tag,
   modLog,
   gamble,
+  emote,
 ];
