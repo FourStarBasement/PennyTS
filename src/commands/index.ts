@@ -11,7 +11,7 @@ import { define } from './standard/define';
 import { complain } from './standard/complain';
 import { inspire } from './standard/inspire';
 import { embarrass } from './standard/embarrass';
-import { delete_cmd } from './standard/delete';
+import { delete_cmd } from './guild/delete';
 import { rabbit } from './standard/rabbit';
 import { slap } from './standard/slap';
 import { sam } from './memes/sam';
@@ -43,11 +43,12 @@ import { color } from './standard/color';
 import { kick } from './guild/kick';
 import { arrest } from './memes/arrest';
 import { wj } from './memes/wolfjob';
-import { top } from './standard/top';
+import { top } from './profile/top';
 import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
 import { edit } from './guild/edit';
 import { modLog } from './guild/modlog';
+import { gamble } from './profile/gamble';
 
 export default [
   avatar,
@@ -99,4 +100,5 @@ export default [
   spacehuhn,
   edit,
   modLog,
+  gamble,
 ];
