@@ -1,6 +1,11 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import images from '../../images';
+interface images {
+  waifu: string[];
+  nsfw: string[];
+}
+
+import * as images from '../../images.json';
 
 export const waifu = {
   name: 'waifu',
