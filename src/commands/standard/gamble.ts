@@ -19,7 +19,7 @@ export const gamble = {
   run: async (ctx: Context, args: CommandArgs) => {
     const member = ctx.member as Member;
 
-    let credits = args.gamble ? Number(args.gamble) : 100;
+    let credits = args.gamble ? Math.round(Number(args.gamble)) : 100;
     if (isNaN(credits)) {
       ctx.reply('You must provide me with a valid number!');
       return;
