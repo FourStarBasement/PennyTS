@@ -52,7 +52,7 @@ import { tagDelete } from './guild/tag.delete';
 import { tagInfo } from './guild/tag.info';
 import { tagEdit } from './guild/tag.edit';
 import { tagClaim } from './guild/tag.claim';
-import { modLog } from './guild/modlog';
+import { setModLog } from './guild/set.mod.log';
 import { gamble } from './profile/gamble';
 import { emote } from './guild/emote';
 import { suggest } from './standard/suggest';
@@ -102,6 +102,7 @@ export default [
   color,
   setWelcome,
   setPrefix,
+  setModLog,
   setBackground,
   setLeave,
   setEmblem,
@@ -119,7 +120,6 @@ export default [
   tagEdit,
   tagClaim,
   tag,
-  modLog,
   gamble,
   emote,
   suggest,
