@@ -10,6 +10,7 @@
     "experimentalDecorators": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
-    "incremental": true
+    "incremental": true,
+    "resolveJsonModule": true
   }
 }
