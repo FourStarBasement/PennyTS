@@ -58,6 +58,7 @@ import { gamble } from './profile/gamble';
 import { emote } from './guild/emote';
 import { suggest } from './standard/suggest';
 import { setPrefix } from './guild/set.prefix';
+import { setBackground } from './profile/set.background';
 export default [
   avatar,
   daily,
@@ -101,6 +102,7 @@ export default [
   welcome,
   setWelcome,
   setPrefix,
+  setBackground,
   kick,
   arrest,
   wj,
