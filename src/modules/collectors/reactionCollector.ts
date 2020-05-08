@@ -47,7 +47,7 @@ export class ReactionCollector extends EventEmitter {
   }
 
   verify(r: GatewayClientEvents.MessageReactionAdd) {
-    if (this.message.id !== r.messageId) return false;
+    if (this.message && this.message.id !== r.messageId) return false;
     if (this.ctx.me!.id === r.userId) return false;
     if (this.filter(r.reaction, r.user!)) {
       this.emit('collect', r.reaction, r.user!);
