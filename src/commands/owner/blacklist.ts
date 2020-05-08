@@ -21,36 +21,45 @@ export const blacklist = {
       return;
     }
     let blacklistArgs = args.blacklist.split(' ');
-    let data = await ctx.commandClient.query(
-      `SELECT * FROM \`User\` WHERE \`User_ID\` = '${blacklistArgs[0]}'`
-    );
-    if (data[0].Blacklisted === 1) {
+
+    let mentioned = ctx.users.get(blacklistArgs[0]);
+
+    if (mentioned!.blacklisted === undefined) {
+      let data = await ctx.commandClient.query(
+        `SELECT * FROM \`User\` WHERE \`User_ID\` = '${blacklistArgs[0]}'`
+      );
+      mentioned!.blacklisted = Boolean(data[0].Blacklisted);
+    }
+
+    if (mentioned?.blacklisted) {
       await ctx.commandClient.query(
         `UPDATE \`User\` SET \`Blacklisted\` = 0 WHERE \`User_ID\` = '${blacklistArgs[0]}'`
       );
-      ctx.reply(`${ctx.users.get(blacklistArgs[0])} has been unblacklisted`);
+
+      ctx.reply(`${mentioned} has been unblacklisted`);
+      mentioned!.blacklisted = false;
+
       ctx.client.channels
         .get('708062124160581683')
-        ?.createMessage(
-          `${ctx.users.get(blacklistArgs[0])?.username} was unblacklisted.`
-        );
+        ?.createMessage(`${mentioned?.username} was unblacklisted.`);
     } else {
       let reason = stringExtractor(args.blacklist)[0];
+
       await ctx.commandClient.query(
         `UPDATE \`User\` SET \`Blacklisted\` = 1 WHERE \`User_ID\` = '${blacklistArgs[0]}'`
       );
-      ctx.reply(`${ctx.users.get(blacklistArgs[0])} has been blacklisted`);
-      ctx.client.users
-        .get(blacklistArgs[0])
-        ?.createMessage(
-          'I have come to inform you that you have been blacklisted from penny. You can find out more here: https://discord.gg/kwcd9dq'
-        );
+
+      ctx.reply(`${mentioned} has been blacklisted`);
+      mentioned!.blacklisted = true;
+
+      mentioned?.createMessage(
+        'I have come to inform you that you have been blacklisted from penny. You can find out more here: https://discord.gg/kwcd9dq'
+      );
+
       ctx.client.channels
         .get('708062124160581683')
         ?.createMessage(
-          `${
-            ctx.users.get(blacklistArgs[0])?.username
-          } was just blacklisted for the following reason:\n${reason}`
+          `${mentioned?.username} was just blacklisted for the following reason:\n${reason}`
         );
     }
   },

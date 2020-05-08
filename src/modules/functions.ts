@@ -13,7 +13,6 @@ import { Connection } from 'mysql';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
 import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
-import { ShardClient } from 'detritus-client';
 import { ModLogActions } from './modlog';
 
 // Additional properties/functions to access on the Guild
@@ -31,6 +30,7 @@ declare module 'detritus-client/lib/structures/guild' {
 declare module 'detritus-client/lib/structures/user' {
   interface User {
     checked: boolean;
+    blacklisted: boolean;
   }
 }
 
@@ -92,17 +92,18 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (ctx: Context, id: string) => {
-    let result: DBCount[] = await client
-      .query(
-        `SELECT COUNT(*) AS \`count\` FROM \`User\` WHERE \`User_ID\` = ${id}`
-      )
+    let result: DBUser[] = await client
+      .query(`SELECT * FROM \`User\` WHERE \`User_ID\` = ${id}`)
       .catch(console.error);
-    if (result[0].count === 0) {
+
+    if (!result[0]) {
       await client
         .query(`INSERT INTO \`User\`(\`User_ID\`) VALUES ('${id}')`)
         .catch(console.error);
     }
+    console.log('checked');
     ctx.user.checked = true;
+    ctx.user.blacklisted = Boolean(result[0].Blacklisted);
   };
 
   // Check if the guild is in the DB before doing anything
@@ -133,12 +134,7 @@ export default (client: CommandClient, connection: Connection) => {
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
     if (!context.user.checked) await client.checkUser(context, context.user.id);
-    let d: DBUser[] = await client
-      .query(
-        `SELECT *, NOW()-INTERVAL 2 MINUTE > \`xp_cool\` AS xpAdd FROM \`User\` WHERE \`User_ID\` = ${context.user.id}`
-      )
-      .catch(console.error);
-    if (d[0].Blacklisted === 1) return '';
+    if (context.user.blacklisted) return '';
     if (context.guild && context.guildId) {
       let prefix: string;
       // Check if the prefix is cached
@@ -169,7 +165,7 @@ export default (client: CommandClient, connection: Connection) => {
         }
       }
       // Add XP to a user if it is needed
-      xpAdd(context, context.guild!.levels, d);
+      //xpAdd(context, context.guild!.levels, d);
       if (context.message.content.indexOf(prefix) === 0) {
         return prefix;
       }
