@@ -37,7 +37,12 @@ export const guildMemberRemove = {
               actionType: AuditLogActions.MEMBER_KICK,
             })
             .then((audit) => {
-              let action = audit.find((v, k) => v.targetId === payload.userId);
+              let now = new Date();
+              let action = audit.find(
+                (v, k) =>
+                  v.targetId === payload.userId &&
+                  new Date().getTime() - v.createdAt.getTime() <= 60_0000
+              );
               if (!action) {
                 return;
               }
