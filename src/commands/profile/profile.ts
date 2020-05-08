@@ -17,6 +17,7 @@ export const profile = {
         user_id: member!.id,
         user_avatar: member!.avatarUrl,
         color: `#${member!.color.toString(16)}`,
+        authorization: config.imageAPI.password,
       },
     })
       .then((d) => d.json())
