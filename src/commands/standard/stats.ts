@@ -36,7 +36,7 @@ export const stats = {
               value: `**Uptime:** ${days} days ${hours} hours, ${minutes} minutes, and ${seconds} seconds.
             \n**Ping:** ${ping.gateway}ms
             \n**Total Servers:** ${ctx.client.guilds.cache.size}
-            \n**Server Prefix:** TBA
+            \n**Server Prefix:** ${ctx.prefix}
             \n**FrameWork:** Detritus-client
             \n**NodeJS version:** ${process.version.substr(1)}`,
             },
