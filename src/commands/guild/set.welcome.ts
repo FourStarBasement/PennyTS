@@ -4,37 +4,6 @@ import parser from 'yargs';
 import { escape } from 'mysql';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
 
-const argsParser = parser
-  .option('message', {
-    alias: 'm',
-    describe: `set the welcome message format
-      To refer to the user's name, use \`{user}\`.
-      To refer to the guild's name, use \`{guild}\`.`,
-    array: true,
-    type: 'string',
-    demandOption: false,
-  })
-  .option('channel', {
-    alias: 'c',
-    describe: 'set the welcome channel',
-    type: 'string',
-    demandOption: false,
-  })
-  .option('role', {
-    alias: 'r',
-    describe: 'set the welcome role',
-    type: 'string',
-    demandOption: false,
-  })
-  .option('help', {
-    alias: ['h', '?'],
-    describe: 'help',
-    default: true,
-    hidden: true,
-  })
-  .exitProcess(false)
-  .version(false);
-
 export const setWelcome = {
   name: 'set welcome',
   metadata: {
@@ -42,25 +11,51 @@ export const setWelcome = {
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: Record<string, string>) => {
-    let parsed = argsParser.parse(args['set welcome']);
+    if (!args['set welcome']) {
+      ctx.reply(
+        `Usage: ${ctx.prefix}set welcome {message/role/channel/off/on} [value]`
+      );
+      return;
+    }
+    let splitArgs = args['set welcome'].split(' ');
+    let attr = splitArgs.shift();
+    let value = splitArgs.join(' ');
 
-    let messages: string[] = [];
-
-    if (parsed.help && !parsed.channel && !parsed.message && !parsed.role) {
-      let help = '';
-      argsParser.showHelp((s: string) => (help = s));
-
-      messages.push(`\`\`\`\n${help}\`\`\``);
+    if (attr === 'on') {
+      ctx.commandClient
+        .query(
+          `UPDATE \`Servers\` SET \`Welcome\` = 1 WHERE \`ServerID\` = '${ctx.guildId}'`
+        )
+        .then(() => {
+          ctx.reply('Successfully turned on welcome messages.');
+        });
+      return;
     }
 
-    if (parsed.message) {
-      let welcome_message = parsed.message.join(' ');
+    if (attr === 'off') {
+      ctx.commandClient
+        .query(
+          `UPDATE \`Servers\` SET \`Welcome\` = 0 WHERE \`ServerID\` = '${ctx.guildId}'`
+        )
+        .then(() => {
+          ctx.reply('Successfully turned off welcome messages.');
+        });
+      return;
+    }
+
+    if (!value) {
+      ctx.reply(`Please provide a value!`);
+      return;
+    }
+
+    if (attr === 'message') {
+      let welcome_message = value;
       if (
         welcome_message.includes('@everyone') &&
         welcome_message.includes('@here')
       ) {
-        messages.push(
-          "Message: I'm sorry but I can't add an everyone mention."
+        ctx.reply(
+          "Welcome Message: I'm sorry but I can't add an everyone mention."
         );
       } else {
         await ctx.commandClient
@@ -70,28 +65,29 @@ export const setWelcome = {
             )} WHERE \`ServerID\` = '${ctx.guildId}'`
           )
           .then(() => {
-            messages.push('Welcome Message: Successfully Set!');
+            ctx.reply('Welcome Message: Successfully set!');
           });
       }
+      return;
     }
 
-    if (parsed.channel) {
+    if (attr === 'channel') {
       let channel: ChannelGuildText | undefined;
 
-      if (parsed.channel.startsWith('<#') && parsed.channel.endsWith('>')) {
+      if (value.startsWith('<#') && value.endsWith('>')) {
         // Channel Mention
-        var channelID = chanReg.exec(parsed.channel)![1];
+        var channelID = chanReg.exec(value)![1];
         channel = ctx.guild!.channels.get(channelID);
-      } else if (isNaN(Number(parsed.channel))) {
+      } else if (isNaN(Number(value))) {
         // Channel Name
-        channel = ctx.guild!.channels.find((v, k) => v.name === parsed.channel);
+        channel = ctx.guild!.channels.find((v, k) => v.name === value);
       } else {
         // Channel ID (Last Resort)
-        channel = ctx.guild!.channels.get(parsed.channel);
+        channel = ctx.guild!.channels.get(value);
       }
 
       if (!channel) {
-        messages.push(
+        ctx.reply(
           "Welcome Channel: Sorry, I couldn't find the channel you provided!"
         );
       } else {
@@ -100,20 +96,19 @@ export const setWelcome = {
             `UPDATE \`Servers\` SET \`wc\` = ${channel.id} WHERE \`ServerID\` = '${ctx.guildId}'`
           )
           .then(() =>
-            messages.push(
+            ctx.reply(
               `Welcome Channel: Successfully set as ${channel!.mention}!`
             )
           );
       }
+      return;
     }
 
-    if (parsed.role) {
+    if (attr === 'role') {
       let role: Role | undefined;
       let unset = false;
 
-      console.log(role, unset);
-
-      if (parsed.role === '$none') {
+      if (value === '$none') {
         await ctx.commandClient
           .query(
             `UPDATE \`Servers\` SET \`WelcomeR\` = NULL WHERE \`ServerID\` = '${ctx.guildId}'`
@@ -121,22 +116,20 @@ export const setWelcome = {
           .then(() => {
             unset = true;
           });
-      } else if (parsed.role.startsWith('<@&') && parsed.role.startsWith('>')) {
+      } else if (value.startsWith('<@&') && value.startsWith('>')) {
         // Role Mention
-        var roleID = roleReg.exec(parsed.role)![1];
+        var roleID = roleReg.exec(value)![1];
         role = ctx.guild!.roles.get(roleID);
-      } else if (isNaN(Number(parsed.role))) {
+      } else if (isNaN(Number(value))) {
         // Role Name
-        role = ctx.guild!.roles.find((v, k) => v.name === parsed.role);
+        role = ctx.guild!.roles.find((v, k) => v.name === value);
       } else {
         // Role ID (Last Resort)
-        role = ctx.guild!.roles.get(parsed.role);
+        role = ctx.guild!.roles.get(value);
       }
 
-      console.log(role, unset);
-
       if (!role && !unset) {
-        messages.push(
+        ctx.reply(
           "Welcome Role: Sorry, I couldn't find the role you provided!"
         );
       } else if (role && !unset) {
@@ -145,15 +138,14 @@ export const setWelcome = {
             `UPDATE \`Servers\` SET \`WRole\` = '${role.id}' WHERE \`ServerID\` = '${ctx.guildId}'`
           )
           .then(() =>
-            messages.push(
+            ctx.reply(
               `Welcome Role: Successfully set as \`\`${role!.name}\`\`!`
             )
           );
       } else {
-        messages.push('Welcome Role: Successfully unset!');
+        ctx.reply('Welcome Role: Successfully unset!');
       }
+      return;
     }
-
-    await ctx.reply(messages.join('\n'));
   },
 };
