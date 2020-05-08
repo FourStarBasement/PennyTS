@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import config from '../../modules/config';
+import { Member } from 'detritus-client/lib/structures';
 
 export const profile = {
   name: 'profile',
@@ -9,11 +10,13 @@ export const profile = {
   },
   checks: ['attachments'],
   run: async (ctx: Context) => {
-    let member = ctx.commandClient.fetchGuildMember(ctx) || ctx.member;
+    let member =
+      (ctx.commandClient.fetchGuildMember(ctx) as Member) || ctx.member;
     let img = await fetch(`${config.imageAPI.url}/profile`, {
       headers: {
         user_id: member!.id,
         user_avatar: member!.avatarUrl,
+        color: `#${member!.color.toString(16)}`,
       },
     })
       .then((d) => d.json())
