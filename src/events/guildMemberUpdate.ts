@@ -35,7 +35,9 @@ export const guildMemberUpdate = {
             .then((audit) =>
               audit.find(
                 (v, k) =>
-                  v.targetId === payload.userId && v.userId !== payload.userId
+                  v.targetId === payload.userId &&
+                  v.userId !== payload.userId &&
+                  new Date().getTime() - v.createdAt.getTime() <= 60_0000
               )
             );
 

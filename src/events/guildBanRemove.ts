@@ -30,7 +30,11 @@ export const guildBanRemove = {
               actionType: AuditLogActions.MEMBER_BAN_REMOVE,
             })
             .then((audit) =>
-              audit.find((v, k) => v.target!.id === payload.user!.id)
+              audit.find(
+                (v, k) =>
+                  v.target!.id === payload.user!.id &&
+                  new Date().getTime() - v.createdAt.getTime() <= 60_0000
+              )
             );
 
           if (!auditLog) {
