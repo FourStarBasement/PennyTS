@@ -36,7 +36,6 @@ import { ht } from './profile/ht';
 import { mir } from './profile/mir';
 import { disable } from './guild/disable';
 import { enable } from './guild/enable';
-import { welcome } from './guild/welcome';
 import { setWelcome } from './guild/set.welcome';
 import { set } from './guild/set';
 import { color } from './standard/color';
@@ -59,8 +58,8 @@ import { emote } from './guild/emote';
 import { suggest } from './standard/suggest';
 import { setPrefix } from './guild/set.prefix';
 import { setBackground } from './profile/set.background';
+import { setEmblem } from './profile/set.emblem';
 import { setLeave } from './guild/set.leave';
-
 export default [
   avatar,
   daily,
@@ -101,11 +100,11 @@ export default [
   disable,
   enable,
   color,
-  welcome,
   setWelcome,
   setPrefix,
   setBackground,
   setLeave,
+  setEmblem,
   set,
   kick,
   arrest,
