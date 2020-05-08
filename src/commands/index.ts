@@ -58,8 +58,8 @@ import { emote } from './guild/emote';
 import { suggest } from './standard/suggest';
 import { setPrefix } from './guild/set.prefix';
 import { setBackground } from './profile/set.background';
+import { setEmblem } from './profile/set.emblem';
 import { setLeave } from './guild/set.leave';
-
 export default [
   avatar,
   daily,
@@ -104,6 +104,7 @@ export default [
   setPrefix,
   setBackground,
   setLeave,
+  setEmblem,
   set,
   kick,
   arrest,
