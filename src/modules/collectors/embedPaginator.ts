@@ -101,7 +101,6 @@ export class EmbedPaginator {
   }
 
   filter(r: Reaction, u: User) {
-    if (this.message.id !== r.messageId) return false;
     if (this.ctx.member!.id !== u.id) return false;
     return true;
   }
