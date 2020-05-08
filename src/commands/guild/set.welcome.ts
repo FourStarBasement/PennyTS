@@ -1,6 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
 import { chanReg, roleReg } from '../../modules/utils';
-import parser from 'yargs';
 import { escape } from 'mysql';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
 
@@ -147,5 +146,9 @@ export const setWelcome = {
       }
       return;
     }
+
+    ctx.reply(
+      `Usage: ${ctx.prefix}set welcome {message/role/channel/off/on} [value]`
+    );
   },
 };
