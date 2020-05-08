@@ -8,6 +8,8 @@ export const set = {
     checks: ['userAdmin'],
   },
   run: async (ctx: Context) => {
-    /* TODO */
+    ctx.reply(
+      `Usage: ${ctx.prefix}set {welcome/prefix/leave/mod log/background/emblem}`
+    );
   },
 };
