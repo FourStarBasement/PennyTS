@@ -20,7 +20,7 @@ const cmdClient = new CommandClient(config.token, {
   gateway: {
     presence: {
       activity: {
-        name: 'Testing hard!',
+        name: 'Penny.ts up and running!',
         type: ActivityTypes.PLAYING,
       },
       status: PresenceStatuses.ONLINE,

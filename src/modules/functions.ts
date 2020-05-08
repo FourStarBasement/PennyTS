@@ -24,6 +24,13 @@ declare module 'detritus-client/lib/structures/guild' {
     prefix: string;
     levels: number;
     modLog: ModLogActions;
+    checked: boolean;
+  }
+}
+
+declare module 'detritus-client/lib/structures/user' {
+  interface User {
+    checked: boolean;
   }
 }
 
@@ -33,8 +40,8 @@ declare module 'detritus-client/lib/commandclient' {
     query: (query: string) => Promise<any>; // Promise based queries
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
-    checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
-    checkUser: (id: string) => Promise<void>; // Checks if a user is in the database before making SQL calls
+    checkGuild: (context: Context, id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
+    checkUser: (context: Context, id: string) => Promise<void>; // Checks if a user is in the database before making SQL calls
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -84,7 +91,7 @@ export default (client: CommandClient, connection: Connection) => {
   };
 
   // Check if user is in the DB before doing anything
-  client.checkUser = async (id: string) => {
+  client.checkUser = async (ctx: Context, id: string) => {
     let result: DBCount[] = await client
       .query(
         `SELECT COUNT(*) AS \`count\` FROM \`User\` WHERE \`User_ID\` = ${id}`
@@ -95,48 +102,51 @@ export default (client: CommandClient, connection: Connection) => {
         .query(`INSERT INTO \`User\`(\`User_ID\`) VALUES ('${id}')`)
         .catch(console.error);
     }
+    ctx.user.checked = true;
   };
 
   // Check if the guild is in the DB before doing anything
-  client.checkGuild = async (id: string) => {
-    let guild = (client.client as ShardClient).guilds.get(id);
-
+  client.checkGuild = async (ctx: Context, id: string) => {
+    if (!ctx.guild) return;
     let result: DBServers[] = await client
-      .query(`SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${id}'`)
+      .query(
+        `SELECT COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
+      )
       .catch(console.error);
 
     if (result[0].count === 0) {
       await client
         .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
         .catch(console.error);
-      if (!guild?.modLog) {
-        guild!.modLog = 0;
+      if (!ctx.guild?.modLog) {
+        ctx.guild!.modLog = 0;
       }
     } else {
-      if (!guild?.modLog) {
-        guild!.modLog = parseInt(result[0].ModLogPerm);
+      if (!ctx.guild?.modLog) {
+        ctx.guild!.modLog = parseInt(result[0].ModLogPerm);
       }
     }
+    ctx.guild!.checked = true;
   };
 
   // This handles all the stuff like levels and custom prefixes
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
-    await client.checkUser(context.user.id);
+    if (!context.user.checked) await client.checkUser(context, context.user.id);
     let d: DBUser[] = await client
       .query(
         `SELECT *, NOW()-INTERVAL 2 MINUTE > \`xp_cool\` AS xpAdd FROM \`User\` WHERE \`User_ID\` = ${context.user.id}`
       )
       .catch(console.error);
     if (d[0].Blacklisted === 1) return '';
-    if (context.guildId) {
+    if (context.guild && context.guildId) {
       let prefix: string;
       // Check if the prefix is cached
       if (context.guild?.prefix) {
         prefix = context.guild.prefix;
       } else {
         // If the prefix is not cached we cache it
-        await client.checkGuild(context.guildId);
+        await client.checkGuild(context, context.guildId);
         let data: DBServers[] = await client
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
