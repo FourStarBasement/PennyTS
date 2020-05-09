@@ -19,7 +19,7 @@ export const daily = {
     }
 
     let res: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`DailyTime\`, \`patron\` FROM \`User\` WHERE \`User_ID\` = '${user.id}'`
+      `SELECT \`DailyTime\`, \`patron\` FROM \`User\` WHERE \`User_ID\` = '${ctx.member!.id}'`
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;
 
