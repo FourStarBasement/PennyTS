@@ -14,6 +14,7 @@ import { EventHandler, chanReg, FetchedStarData } from './utils';
 import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
+import { ShardClient } from 'detritus-client/lib/client';
 
 // Additional properties/functions to access on the Guild
 declare module 'detritus-client/lib/structures/guild' {
@@ -40,7 +41,7 @@ declare module 'detritus-client/lib/commandclient' {
     query: (query: string) => Promise<any>; // Promise based queries
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
-    checkGuild: (context: Context, id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
+    checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
     checkUser: (context: Context, id: string) => Promise<void>; // Checks if a user is in the database before making SQL calls
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
@@ -107,8 +108,10 @@ export default (client: CommandClient, connection: Connection) => {
   };
 
   // Check if the guild is in the DB before doing anything
-  client.checkGuild = async (ctx: Context, id: string) => {
-    if (!ctx.guild) return;
+  client.checkGuild = async (id: string) => {
+    const guild = (client.client as ShardClient).guilds.get(id);
+
+    if (!guild) return;
     let result: DBServers[] = await client
       .query(
         `SELECT COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
@@ -119,15 +122,15 @@ export default (client: CommandClient, connection: Connection) => {
       await client
         .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
         .catch(console.error);
-      if (!ctx.guild?.modLog) {
-        ctx.guild!.modLog = 0;
+      if (!guild?.modLog) {
+        guild!.modLog = 0;
       }
     } else {
-      if (!ctx.guild?.modLog) {
-        ctx.guild!.modLog = parseInt(result[0].ModLogPerm);
+      if (!guild?.modLog) {
+        guild!.modLog = parseInt(result[0].ModLogPerm);
       }
     }
-    ctx.guild!.checked = true;
+    guild!.checked = true;
   };
 
   // This handles all the stuff like levels and custom prefixes
@@ -142,7 +145,7 @@ export default (client: CommandClient, connection: Connection) => {
         prefix = context.guild.prefix;
       } else {
         // If the prefix is not cached we cache it
-        await client.checkGuild(context, context.guildId);
+        await client.checkGuild(context.guildId);
         let data: DBServers[] = await client
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
