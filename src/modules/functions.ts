@@ -401,15 +401,20 @@ export default (client: CommandClient, connection: Connection) => {
   client.on(
     ClientEvents.COMMAND_NONE,
     async (payload: CommandEvents.CommandNone) => {
+      /**
+       * Check if the guild is set since this doesn't seem
+       * to run through onPrefixCheck in the library.
+       */
+      if (!payload.context.guild) return;
       if (
         payload.context.message.content.indexOf(
-          payload.context.guild!.prefix
+          payload.context.guild.prefix
         ) !== 0
       )
         return;
       // If the command doesn't exist we check if it's a tag
       let content = payload.context.message.content.substr(
-        payload.context.guild!.prefix!.length
+        payload.context.guild.prefix!.length
       );
       let tag: DBTags[] = await client
         .query(
