@@ -87,7 +87,7 @@ export const suggest = {
         let col = new ReactionCollector(ctx, 8.64e7, m, filter);
         col.on('collect', (r: Reaction, u: User) => {
           if (r.emoji.name === '✅') {
-            if (images[waifu ? 'waifu' : 'nsfw'].includes(suggestImage[1])) {
+            if ((images[waifu ? 'waifu' : 'nsfw'] as string[]).includes(suggestImage[1])) {
               m.edit({
                 embed: {
                   title: 'Duplicate entry',
@@ -111,7 +111,7 @@ export const suggest = {
                   );
                 });
             } else {
-              images[waifu ? 'waifu' : 'nsfw'].push(suggestImage[1]);
+              (images[waifu ? 'waifu' : 'nsfw'] as string[]).push(suggestImage[1]);
               fs.writeFile(
                 './images.json',
                 JSON.stringify(images, null, 2),
