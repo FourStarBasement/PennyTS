@@ -35,7 +35,7 @@ export const messageReactionAdd = {
     };
 
     await client.checkGuild(payload.guildId).then(() => {
-      embed = convertEmbed(channel.guild!.me!, message, embed);
+      embed = convertEmbed(author, message, embed);
       client.starQueue.push(wrap(client, message, payload.user!, embed));
     });
   },
