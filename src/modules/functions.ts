@@ -95,14 +95,17 @@ export default (client: CommandClient, connection: Connection) => {
   client.checkUser = async (ctx: Context, id: string) => {
     let result: DBUser[] = await client
       .query(`SELECT * FROM \`User\` WHERE \`User_ID\` = ${id}`)
-      .catch(console.error);
+      .catch(error => {
+        if (error !== 'Query returned nothing')
+          console.error(error);
+      });
 
-    if (!result[0]) {
+    if (!result || !result[0]) {
       await client
         .query(`INSERT INTO \`User\`(\`User_ID\`) VALUES ('${id}')`)
         .catch(console.error);
     }
-    console.log('checked');
+
     ctx.user.checked = true;
     ctx.user.blacklisted = Boolean(result[0].Blacklisted);
   };
@@ -116,7 +119,10 @@ export default (client: CommandClient, connection: Connection) => {
       .query(
         `SELECT COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
       )
-      .catch(console.error);
+      .catch(error => {
+        if (error !== 'Query returned nothing')
+          console.error(error);
+      });
 
     if (result[0].count === 0) {
       await client
@@ -150,7 +156,10 @@ export default (client: CommandClient, connection: Connection) => {
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
           )
-          .catch(console.error);
+          .catch(error => {
+            if (error !== 'Query returned nothing')
+              console.error(error);
+          });
         context.guild!.levels = data[0].levels;
         prefix = data[0].Prefix;
         context.guild!.prefix = prefix;
@@ -374,7 +383,10 @@ export default (client: CommandClient, connection: Connection) => {
       .query(
         `SELECT COUNT(*) AS inD FROM \`emote\` WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
       )
-      .catch(console.error);
+      .catch(error => {
+        if (error !== 'Query returned nothing')
+          console.error(error);
+      });
     if (data[0].inD === 0) {
       await client.query(
         `INSERT INTO \`emote\` (\`server_id\`, \`emote_id\`) VALUES (${serverID}, ${emoteID})`
