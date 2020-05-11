@@ -203,7 +203,7 @@ export default (client: CommandClient, connection: Connection) => {
   // This tells me when someone runs a command. Useful for debugging
   client.on('commandRan', (cmd) => {
     console.log(
-      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}`
+      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}\n${cmd.context.user.id}`
     );
   });
 
@@ -319,7 +319,7 @@ export default (client: CommandClient, connection: Connection) => {
     );
     let starboardInfo: DBServers[] = await client.query(
       `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
-        message.guild!.id
+      message.guild!.id
       }`
     );
 
@@ -419,7 +419,7 @@ export default (client: CommandClient, connection: Connection) => {
       let tag: DBTags[] = await client
         .query(
           `SELECT * FROM \`tags\` WHERE \`guild\` = ${
-            payload.context.guildId
+          payload.context.guildId
           } AND \`name\` = ${connection.escape(content)}`
         )
         .catch((e) => {
@@ -429,7 +429,7 @@ export default (client: CommandClient, connection: Connection) => {
         });
       if (!tag) return;
       // Debugging info
-      console.log(`Ran tag ${content} by ${payload.context.user.username}`);
+      console.log(`Ran tag ${content} by ${payload.context.user.username}\n${payload.context.user.id}`);
       // Useful for tag stats
       await client.query(
         `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
@@ -470,7 +470,7 @@ export default (client: CommandClient, connection: Connection) => {
       if (userData[0].XP > userData[0].Next && enabled === 1) {
         ctx.reply(
           `Congrats ${ctx.user.username}! You just leveled up to level ${
-            userData[0].Level + 1
+          userData[0].Level + 1
           }`
         );
         await client.query(
