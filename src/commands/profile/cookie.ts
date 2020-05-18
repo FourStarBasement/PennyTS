@@ -29,7 +29,7 @@ export const cookie = {
       );
       if (data[0].CT === 0) {
         // Typing is incorrect, it returns a CronDate, not Date.
-        let nextInvocation = ctx.commandClient.job.nextInvocation();
+        let nextInvocation = ctx.commandClient.job.nextInvocation() as any;
         let dur = moment.duration(nextInvocation.toDate() - Date.now());
         ctx.reply(`You can give someone a cookie in ${humanize(dur)}.`);
       } else {

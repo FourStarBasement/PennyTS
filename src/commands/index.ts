@@ -47,6 +47,7 @@ import { profile } from './profile/profile';
 import { spacehuhn } from './memes/spacehuhn';
 import { edit } from './guild/edit';
 import { tag } from './guild/tag';
+import { tags } from './guild/tags';
 import { tagCreate } from './guild/tag.create';
 import { tagDelete } from './guild/tag.delete';
 import { tagInfo } from './guild/tag.info';
@@ -60,6 +61,7 @@ import { setPrefix } from './guild/set.prefix';
 import { setBackground } from './profile/set.background';
 import { setEmblem } from './profile/set.emblem';
 import { setLeave } from './guild/set.leave';
+import { serverinfo } from './guild/serverinfo';
 export default [
   avatar,
   daily,
@@ -119,8 +121,10 @@ export default [
   tagInfo,
   tagEdit,
   tagClaim,
+  tags,
   tag,
   gamble,
   emote,
   suggest,
+  serverinfo,
 ];

@@ -22,6 +22,7 @@ export const nsfw = {
     }
     let split = rand.split('.');
     let ext = split[split.length - 1];
+    console.log(rand);
     let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
       file: {

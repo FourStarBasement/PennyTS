@@ -32,6 +32,7 @@ export const waifu = {
       return; // this should ideally only happen after 3 retries
     }
 
+    console.log(rand);
     let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
       content: `I approve ${emote}`,
