@@ -14,6 +14,7 @@ export const roleReg = /<@&(\d+)>/;
 export interface PageField {
   name: string;
   value: string;
+  inline?: boolean;
 }
 
 export interface Page {

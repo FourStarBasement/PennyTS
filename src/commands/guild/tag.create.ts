@@ -45,15 +45,6 @@ export const tagCreate = {
       ctx.reply('You need to include content in a tag.');
       return;
     }
-    let tags = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS \`tags\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`owner\` = ${ctx.userId}`
-    );
-    if (tags[0].tags >= 10) {
-      ctx.reply(
-        'You have reached the max amount of tags for this server. Try deleting some of your tags so you can make more.'
-      );
-      return;
-    }
     await ctx.commandClient.query(
       `INSERT INTO \`tags\` (\`guild\`, \`ID\`, \`owner\`, \`name\`, \`content\`) VALUES (${
         ctx.guildId
