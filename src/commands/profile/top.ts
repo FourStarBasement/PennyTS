@@ -3,7 +3,6 @@ import fetch from 'node-fetch';
 import config from '../../modules/config';
 import { DBUser } from '../../modules/db';
 import { User } from 'detritus-client/lib/structures';
-
 export const top = {
   name: 'top',
   metadata: {
@@ -19,13 +18,16 @@ export const top = {
     for (let i = 0; i < 10; i++) {
       users.push(ctx.client.users.get(res[i].User_ID) || 'Unknown');
     }
-
+    let thing = {
+      query: res,
+      users: users,
+    };
     let img = await fetch(`${config.imageAPI.url}/leaderboard`, {
+      method: 'POST',
+      body: JSON.stringify(thing),
       headers: {
-        json: JSON.stringify({
-          query: res,
-          users: users,
-        }),
+        'content-type': 'application/json',
+        authorization: config.imageAPI.password,
       },
     })
       .then((d) => d.json())
