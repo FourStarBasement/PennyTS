@@ -23,7 +23,7 @@ export const stats = {
           title: "Penny's Website",
           author: {
             name: 'PennyBot',
-            iconUrl: ctx.user.avatarUrl,
+            iconUrl: ctx.me!.avatarUrl,
           },
           color: 9043849,
           footer: {
