@@ -12,5 +12,5 @@ Drop a star if you enjoy.
 
 
 # Support
-Join the support server if the bot is acting up and ask for help!
+<p>Join the support server if the bot is acting up and ask for help!</p>
 <a href = "https://discord.gg/kwcd9dq"><img src="https://discordapp.com/api/guilds/309531752014151690/embed.png?style=banner1">
