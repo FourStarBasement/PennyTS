@@ -3,6 +3,7 @@ import {
   Message,
   ChannelGuildText,
   User,
+  Member,
 } from 'detritus-client/lib/structures';
 import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
@@ -103,7 +104,7 @@ export interface FetchedStarData {
 
 const URL_REG = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
-export function convertEmbed(me: User, message: Message, embed: Page) {
+export function convertEmbed(me: User | Member, message: Message, embed: Page) {
   if (message.author.id === me.id && message.embeds.size > 0) {
     let msgEmbed = message.embeds.get(0)!;
     embed.image = msgEmbed.image; // Can be Respective Object OR undefined
