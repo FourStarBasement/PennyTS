@@ -38,6 +38,7 @@ export const wj = {
       headers: {
         image: member!,
         user_avatar: ctx.member!.avatarUrl,
+        authorization: config.imageAPI.password,
       },
     })
       .then((d) => d.json())
