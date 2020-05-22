@@ -5,7 +5,7 @@ import {
   CommandEvents,
 } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
-import { Member, User, Message } from 'detritus-client/lib/structures';
+import { Member, User, Message, Guild } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
@@ -15,6 +15,7 @@ import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
+import { type } from 'os';
 
 // Additional properties/functions to access on the Guild
 declare module 'detritus-client/lib/structures/guild' {
@@ -25,6 +26,7 @@ declare module 'detritus-client/lib/structures/guild' {
     levels: number;
     modLog: ModLogActions;
     checked: boolean;
+    avgColor: number;
   }
 }
 
@@ -32,6 +34,7 @@ declare module 'detritus-client/lib/structures/user' {
   interface User {
     checked: boolean;
     blacklisted: boolean;
+    avgColor: number;
   }
 }
 
@@ -47,6 +50,7 @@ declare module 'detritus-client/lib/commandclient' {
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
     emoteCheck: (emoteID: string, serverID: string) => Promise<void>; // Checks if an emote is in the database before checking stats
+    fetchAverageColor: (image: string) => Promise<number>; // Fetches an image's average color
     job: Job; // Resets everyone's daily/cookie count at midnight on the server host
     starQueue: any[]; // A queue of starboard data to process
     starInterval: Job; // An interval of when to process starboard data
@@ -95,9 +99,8 @@ export default (client: CommandClient, connection: Connection) => {
   client.checkUser = async (ctx: Context, id: string) => {
     let result: DBUser[] = await client
       .query(`SELECT * FROM \`User\` WHERE \`User_ID\` = ${id}`)
-      .catch(error => {
-        if (error !== 'Query returned nothing')
-          console.error(error);
+      .catch((error) => {
+        if (error !== 'Query returned nothing') console.error(error);
       });
 
     if (!result || !result[0]) {
@@ -119,9 +122,8 @@ export default (client: CommandClient, connection: Connection) => {
       .query(
         `SELECT COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
       )
-      .catch(error => {
-        if (error !== 'Query returned nothing')
-          console.error(error);
+      .catch((error) => {
+        if (error !== 'Query returned nothing') console.error(error);
       });
 
     if (result[0].count === 0) {
@@ -156,9 +158,8 @@ export default (client: CommandClient, connection: Connection) => {
           .query(
             `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
           )
-          .catch(error => {
-            if (error !== 'Query returned nothing')
-              console.error(error);
+          .catch((error) => {
+            if (error !== 'Query returned nothing') console.error(error);
           });
         context.guild!.levels = data[0].levels;
         prefix = data[0].Prefix;
@@ -198,12 +199,15 @@ export default (client: CommandClient, connection: Connection) => {
     err.context.reply(
       `An error has occured! This incident and proper context has been reported to my dev team. I apologize for the inconvenience.`
     );
+    console.log(err.error.stack);
   });
 
   // This tells me when someone runs a command. Useful for debugging
   client.on('commandRan', (cmd) => {
     console.log(
-      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}\n${cmd.context.user.id}`
+      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}\n${
+        cmd.context.user.id
+      }`
     );
   });
 
@@ -319,7 +323,7 @@ export default (client: CommandClient, connection: Connection) => {
     );
     let starboardInfo: DBServers[] = await client.query(
       `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
-      message.guild!.id
+        message.guild!.id
       }`
     );
 
@@ -383,9 +387,8 @@ export default (client: CommandClient, connection: Connection) => {
       .query(
         `SELECT COUNT(*) AS inD FROM \`emote\` WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
       )
-      .catch(error => {
-        if (error !== 'Query returned nothing')
-          console.error(error);
+      .catch((error) => {
+        if (error !== 'Query returned nothing') console.error(error);
       });
     if (data[0].inD === 0) {
       await client.query(
@@ -419,7 +422,7 @@ export default (client: CommandClient, connection: Connection) => {
       let tag: DBTags[] = await client
         .query(
           `SELECT * FROM \`tags\` WHERE \`guild\` = ${
-          payload.context.guildId
+            payload.context.guildId
           } AND \`name\` = ${connection.escape(content)}`
         )
         .catch((e) => {
@@ -429,7 +432,9 @@ export default (client: CommandClient, connection: Connection) => {
         });
       if (!tag) return;
       // Debugging info
-      console.log(`Ran tag ${content} by ${payload.context.user.username}\n${payload.context.user.id}`);
+      console.log(
+        `Ran tag ${content} by ${payload.context.user.username}\n${payload.context.user.id}`
+      );
       // Useful for tag stats
       await client.query(
         `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
@@ -470,7 +475,7 @@ export default (client: CommandClient, connection: Connection) => {
       if (userData[0].XP > userData[0].Next && enabled === 1) {
         ctx.reply(
           `Congrats ${ctx.user.username}! You just leveled up to level ${
-          userData[0].Level + 1
+            userData[0].Level + 1
           }`
         );
         await client.query(
@@ -479,4 +484,15 @@ export default (client: CommandClient, connection: Connection) => {
       }
     }
   }
+
+  // This function fetches an image's average color.
+  client.fetchAverageColor = async (input: string): Promise<number> => {
+    let img = await fetch(`${config.imageAPI.url}/averagecolor`, {
+      headers: {
+        authorization: config.imageAPI.password,
+        image: input,
+      },
+    }).then((d) => d.json());
+    return img.color;
+  };
 };
