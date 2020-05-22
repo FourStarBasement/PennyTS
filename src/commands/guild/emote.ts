@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
-import { DBEmotes } from '../../modules/db';
+import { DBEmotes, DBTags } from '../../modules/db';
 
 interface CommandArgs {
   emote: string;
@@ -61,6 +61,7 @@ export const emote = {
       let data = await ctx.commandClient.query(
         `SELECT * FROM \`emote\` WHERE \`server_id\` = ${ctx.guildId}`
       );
+      data.sort((a: DBTags, b: DBTags) => b.used - a.used);
       let pages = new Array<Page>();
       let emotes = new Array<Array<DBEmotes>>();
       for (let i = 0; i < data.length; i += 5) {
