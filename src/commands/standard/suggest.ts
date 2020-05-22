@@ -1,14 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
-
 interface CommandArgs {
   suggest: string;
 }
-interface images {
-  waifu: string[];
-  nsfw: string[];
-}
-
-import * as images from '../../images.json';
 import {
   Reaction,
   User,
@@ -43,7 +36,9 @@ export const suggest = {
       );
       return;
     }
-
+    let images = JSON.parse(
+      await fs.promises.readFile('./images.json', 'utf-8')
+    );
     if (suggestImage[0].toLowerCase() === 'nsfw') waifu = false;
 
     ctx.reply(
@@ -86,8 +81,13 @@ export const suggest = {
         };
         let col = new ReactionCollector(ctx, 8.64e7, m, filter);
         col.on('collect', (r: Reaction, u: User) => {
+          console.log(images.waifu);
           if (r.emoji.name === '✅') {
-            if ((images[waifu ? 'waifu' : 'nsfw'] as string[]).includes(suggestImage[1])) {
+            if (
+              (images[waifu ? 'waifu' : 'nsfw'] as string[]).includes(
+                suggestImage[1]
+              )
+            ) {
               m.edit({
                 embed: {
                   title: 'Duplicate entry',
@@ -111,7 +111,10 @@ export const suggest = {
                   );
                 });
             } else {
-              (images[waifu ? 'waifu' : 'nsfw'] as string[]).push(suggestImage[1]);
+              console.log(JSON.stringify(images, null, 2));
+              (images[waifu ? 'waifu' : 'nsfw'] as string[]).push(
+                suggestImage[1]
+              );
               fs.writeFile(
                 './images.json',
                 JSON.stringify(images, null, 2),

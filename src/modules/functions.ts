@@ -90,7 +90,7 @@ export default (client: CommandClient, connection: Connection) => {
   // Is the image OK?
   client.checkImage = async (image: string) => {
     let r = await fetch(image);
-    if (r.statusText !== 'OK') return '';
+    if (r.statusText !== 'OK') return 'failed';
 
     return image;
   };

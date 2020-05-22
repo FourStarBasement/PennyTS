@@ -1,11 +1,11 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-interface images {
+import fs from 'fs';
+interface imgs {
   waifu: string[];
   nsfw: string[];
 }
 
-import * as images from '../../images.json';
 export const nsfw = {
   name: 'nsfw',
   metadata: {
@@ -16,18 +16,26 @@ export const nsfw = {
     if (!ctx.guild?.nsfwArr) ctx.guild!.nsfwArr = [];
 
     // console.log(ctx.client.commandClient!.checkImage('https://distribution.faceit-cdn.net/images/617b5e63-b8a7-468c-b60a-131ad21ad34b.jpeg'))
-    let rand = await randomImage(ctx.guild!.nsfwArr, images.nsfw, 0, ctx);
-    if (rand === undefined) {
+    let images = JSON.parse(
+      await fs.promises.readFile('./images.json', 'utf-8')
+    );
+    let rand = await randomImage(
+      ctx.guild!.nsfwArr,
+      images.nsfw,
+      0,
+      ctx,
+      images
+    );
+    if (rand === 'failed') {
       return; // this should ideally only happen after 3 retries
     }
     let split = rand.split('.');
     let ext = split[split.length - 1];
-    console.log(rand);
     let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
       file: {
         data: img,
-        filename: `nsfw.${ext}`,
+        filename: `nsfw.${ext.substr(0, 3)}`,
       },
     });
   },
@@ -37,34 +45,30 @@ async function randomImage(
   arr: Array<string>,
   images: Array<string>,
   failed: number,
-  ctx: Context
-) {
-  let ran = await ctx.client.commandClient!.checkImage(
-    images[Math.floor(Math.random() * images.length)]
-  );
-  if (ran === '') {
-    if (failed === 3) {
-      ctx.reply(
-        "I failed to get an image 3 times in a row. I'm sorry <:sadness:405061263362752523>"
-      );
-      return;
-    }
+  ctx: Context,
+  file: imgs
+): Promise<string> {
+  if (arr.length === 0) {
+    ctx.guild!.nsfwArr = file.nsfw;
+    arr = file.nsfw;
+  }
+  shuffle(arr);
+  let rand = arr[Math.floor(Math.random() * arr.length)];
+  let ran = await ctx.commandClient!.checkImage(rand);
+  if (failed === 3) {
+    ctx.reply(
+      "I failed to get an image 3 times in a row. I'm sorry <:sadness:405061263362752523>"
+    );
+    return 'failed';
+  }
+  if (ran === 'failed') {
     failed++;
-    randomImage(arr, images, failed, ctx);
+    file.nsfw.splice(images.indexOf(rand), 1);
+    await fs.promises.writeFile('./images.json', JSON.stringify(file, null, 2));
+    return randomImage(arr, images, failed, ctx, file);
   }
-  if (arr.length === images.length) {
-    ctx.guild!.nsfwArr = [];
-    return ran;
-  } else {
-    shuffle(arr);
-    if (arr.includes(ran)) {
-      randomImage(arr, images, failed, ctx);
-    } else {
-      arr.push(ran);
-      return ran;
-    }
-  }
-  return '';
+  ctx.guild?.nsfwArr.splice(ctx.guild!.nsfwArr.indexOf(ran), 1);
+  return ran;
 }
 
 // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
