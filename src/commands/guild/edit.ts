@@ -20,17 +20,19 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    let guild: DBServers[] = await ctx.commandClient.query(
-      `SELECT \`edits\` FROM \`Servers\` WHERE \`ServerID\` = ${ctx.guildId}`
-    );
+    let guild: DBServers[] = await ctx.commandClient
+      .query(
+        `SELECT \`edits\` FROM \`Servers\` WHERE \`ServerID\` = ${ctx.guildId}`
+      )
+      .catch(() => console.log('Line 25'));
     if (guild[0].edits !== 1) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
     }
 
-    let roles: DBRoles[] = await ctx.commandClient.query(
-      `SELECT * FROM \`roles\` WHERE \`guild\` = ${ctx.guildId}`
-    );
+    let roles: DBRoles[] = await ctx.commandClient
+      .query(`SELECT * FROM \`roles\` WHERE \`guild\` = ${ctx.guildId}`)
+      .catch(() => (blacklist = [])); // There are no blacklisted roles. Catch to keep continuing code
 
     let r_id: string = '';
     let edit: boolean = true;
