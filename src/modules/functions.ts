@@ -416,14 +416,14 @@ export default (client: CommandClient, connection: Connection) => {
       )
         return;
       // If the command doesn't exist we check if it's a tag
-      let content = payload.context.message.content.substr(
-        payload.context.guild.prefix!.length
-      );
+      let content = payload.context.message.content
+        .substr(payload.context.guild.prefix!.length)
+        .split(/<@!?(\d+)>/);
       let tag: DBTags[] = await client
         .query(
           `SELECT * FROM \`tags\` WHERE \`guild\` = ${
             payload.context.guildId
-          } AND \`name\` = ${connection.escape(content)}`
+          } AND \`name\` = ${connection.escape(content[0].trim())}`
         )
         .catch((e) => {
           // Tag doesn't exist
@@ -433,12 +433,14 @@ export default (client: CommandClient, connection: Connection) => {
       if (!tag) return;
       // Debugging info
       console.log(
-        `Ran tag ${content} by ${payload.context.user.username}\n${payload.context.user.id}`
+        `Ran tag ${content[0].trim()} by ${payload.context.user.username}\n${
+          payload.context.user.id
+        }`
       );
       // Useful for tag stats
       await client.query(
         `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
-          content
+          content[0].trim()
         )}`
       );
       // This replaces custom bits inside tags like username and mentions.username etc
@@ -452,7 +454,7 @@ export default (client: CommandClient, connection: Connection) => {
           return;
         }
         s = s.replace(
-          /mentions.username/g,
+          /{mentions.username}/g,
           client.fetchGuildMember(payload.context)!.username
         );
       }
