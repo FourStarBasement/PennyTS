@@ -9,7 +9,7 @@ import { Member, User, Message, Guild } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
-import { Connection } from 'mysql';
+import pgPromise from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
 import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
@@ -57,15 +57,10 @@ declare module 'detritus-client/lib/commandclient' {
   }
 }
 
-export default (client: CommandClient, connection: Connection) => {
+export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
-    return new Promise((resolve, reject) => {
-      connection.query(query, (err: any, res: any) => {
-        if (err || res.length < 1) reject(err || 'Query returned nothing');
-        resolve(res);
-      });
-    });
+    return connection.query(query);
   };
 
   // Used for fetching guild member objects easier.
