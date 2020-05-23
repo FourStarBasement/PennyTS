@@ -53,20 +53,20 @@ export const color = {
             if (
               !ctx.member!.colorRole ||
               ctx.member!.colorRole!.position >=
-                ctx.me?.highestRole!.position ||
+              ctx.me?.highestRole!.position ||
               !ctx.me?.canManageRoles
             )
               return;
             let data: [DBServers] = await ctx.commandClient
               .query(
-                `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${ctx.guildId}'`
+                `SELECT * FROM Servers WHERE ServerID = '${ctx.guildId}'`
               )
               .catch(console.error);
             await ctx.commandClient
               .query(
-                `SELECT * FROM \`roles\` WHERE \`guild\` = ${
-                  ctx.guildId
-                } AND \`role\` = ${ctx.member!.colorRole!.id}`
+                `SELECT * FROM roles WHERE guild = ${
+                ctx.guildId
+                } AND role = ${ctx.member!.colorRole!.id}`
               )
               .catch((err) => {
                 if (err !== 'Query returned nothing') {
@@ -87,7 +87,7 @@ export const color = {
                       color: parseInt(`0x${args.color.replace('#', '')}`),
                       reason: `Requested change by ${
                         ctx.member!.username
-                      }. Used to be ${old}.`,
+                        }. Used to be ${old}.`,
                     })
                     .catch(console.error);
                   ctx.reply(`Your role color is now ${args.color}. Enjoy!`);

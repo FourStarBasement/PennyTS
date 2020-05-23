@@ -27,7 +27,7 @@ export const tagInfo = {
       name = stringExtractor(args['tag info'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`ID\`, \`used\`, \`owner\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `SELECT COUNT(*) AS inD, ID, used, owner FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     if (data[0].inD === 0) {
       ctx.reply('This tag does not exist.');

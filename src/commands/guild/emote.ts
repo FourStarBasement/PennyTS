@@ -28,9 +28,9 @@ export const emote = {
       if (ctx.guild?.emojis.get(r.substr(0, 18))) {
         data = await ctx.commandClient
           .query(
-            `SELECT * FROM \`emote\` WHERE \`server_id\` = ${
-              ctx.guildId
-            } AND \`emote_id\` = ${r.substr(0, 18)}`
+            `SELECT * FROM emote WHERE server_id = ${
+            ctx.guildId
+            } AND emote_id = ${r.substr(0, 18)}`
           )
           .catch((e) => {
             if (e === 'Query returned nothing') {
@@ -41,7 +41,7 @@ export const emote = {
       } else if (ctx.guild?.emojis.get(r)) {
         data = await ctx.commandClient
           .query(
-            `SELECT * FROM \`emote\` WHERE \`server_id\` = ${ctx.guildId} AND \`emote_id\` = ${r}`
+            `SELECT * FROM emote WHERE server_id = ${ctx.guildId} AND emote_id = ${r}`
           )
           .catch((e) => {
             if (e === 'Query returned nothing') {
@@ -59,7 +59,7 @@ export const emote = {
       ctx.reply(`That emote has been used ${data[0].used} times.`);
     } else if (args.emote.toLowerCase() === 'all') {
       let data = await ctx.commandClient.query(
-        `SELECT * FROM \`emote\` WHERE \`server_id\` = ${ctx.guildId}`
+        `SELECT * FROM emote WHERE server_id = ${ctx.guildId}`
       );
       data.sort((a: DBTags, b: DBTags) => b.used - a.used);
       let pages = new Array<Page>();
@@ -92,14 +92,14 @@ function embed(ctx: Context, emotes: Array<DBEmotes>): Page {
   emotes.forEach(async (em) => {
     if (!ctx.guild?.emojis.get(em.emote_id)) {
       await ctx.commandClient.query(
-        `DELETE FROM \`emote\` WHERE \`emote_id\` = ${em.emote_id}`
+        `DELETE FROM emote WHERE emote_id = ${em.emote_id}`
       );
       return;
     }
     e.fields?.push({
       name: `${
         ctx.guild?.emojis.get(em.emote_id)?.name
-      }: ${ctx.guild?.emojis.get(em.emote_id)}`,
+        }: ${ctx.guild?.emojis.get(em.emote_id)}`,
       value: `Used: ${em.used}`,
     });
   });

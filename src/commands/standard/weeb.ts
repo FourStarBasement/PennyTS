@@ -23,15 +23,15 @@ export const weeb = {
 
     if (args.weeb.toLowerCase() === 'on') {
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`weeb\` = 'on' WHERE \`User_ID\` = ${
-          ctx.member!.id
+        `UPDATE User SET weeb = 'on' WHERE User_ID = ${
+        ctx.member!.id
         }`
       );
       ctx.reply('You will now receive anime images from the hug command.');
     } else {
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`weeb\` = 'off' WHERE \`User_ID\` = ${
-          ctx.member!.id
+        `UPDATE User SET weeb = 'off' WHERE User_ID = ${
+        ctx.member!.id
         }`
       );
       ctx.reply(

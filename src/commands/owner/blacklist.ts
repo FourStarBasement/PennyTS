@@ -26,14 +26,14 @@ export const blacklist = {
 
     if (mentioned!.blacklisted === undefined) {
       let data = await ctx.commandClient.query(
-        `SELECT * FROM \`User\` WHERE \`User_ID\` = '${blacklistArgs[0]}'`
+        `SELECT * FROM User WHERE User_ID = '${blacklistArgs[0]}'`
       );
       mentioned!.blacklisted = Boolean(data[0].Blacklisted);
     }
 
     if (mentioned?.blacklisted) {
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Blacklisted\` = 0 WHERE \`User_ID\` = '${blacklistArgs[0]}'`
+        `UPDATE User SET Blacklisted = 0 WHERE User_ID = '${blacklistArgs[0]}'`
       );
 
       ctx.reply(`${mentioned} has been unblacklisted`);
@@ -46,7 +46,7 @@ export const blacklist = {
       let reason = stringExtractor(args.blacklist)[0];
 
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Blacklisted\` = 1 WHERE \`User_ID\` = '${blacklistArgs[0]}'`
+        `UPDATE User SET Blacklisted = 1 WHERE User_ID = '${blacklistArgs[0]}'`
       );
 
       ctx.reply(`${mentioned} has been blacklisted`);

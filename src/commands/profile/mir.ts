@@ -12,15 +12,15 @@ export const mir = {
   run: async (ctx: Context) => {
     const cr = Math.floor(Math.random() * 1000);
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` from \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
+      `SELECT Credits from User WHERE User_ID = ${ctx.member!.id}`
     );
     if (data[0].Credits < cr) {
       ctx.reply('You do not have enough credits to perform this command.');
       return;
     }
     ctx.commandClient.query(
-      `UPDATE \`User\` SET \`Credits\` = \`Credits\` - ${cr} WHERE \`User_ID\` = ${
-        ctx.member!.id
+      `UPDATE User SET Credits = Credits - ${cr} WHERE User_ID = ${
+      ctx.member!.id
       }`
     );
     let filter = (m: Message) => {
@@ -31,17 +31,17 @@ export const mir = {
     };
     ctx.reply(
       `${
-        ctx.member!.username
+      ctx.member!.username
       } has just thrown ${cr} credits in the air! The first person to grab them by saying "${
-        ctx.prefix
+      ctx.prefix
       }grab" gets to keep them!`
     );
     let thing = new MessageCollector(ctx, 30000, filter);
     thing.on('collect', (m: Message) => {
       thing.destroy();
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
-          m.member!.id
+        `UPDATE User SET Credits = Credits + ${cr} WHERE User_ID = ${
+        m.member!.id
         }`
       );
       ctx.reply(
@@ -52,8 +52,8 @@ export const mir = {
     thing.on('end', () => {
       ctx.reply('It seems as if no one has picked up the credits. Oh well.');
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
-          ctx.member!.id
+        `UPDATE User SET Credits = Credits + ${cr} WHERE User_ID = ${
+        ctx.member!.id
         }`
       );
     });

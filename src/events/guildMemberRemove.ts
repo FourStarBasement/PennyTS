@@ -23,7 +23,7 @@ export const guildMemberRemove = {
 
     client.checkGuild(payload.guildId).then(async () => {
       let results: DBServers[] = await client.query(
-        `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
+        `SELECT * FROM Servers WHERE ServerID = '${payload.guildId}'`
       );
 
       let channel = guild.channels.get(results[0].mod_channel);
@@ -88,7 +88,7 @@ function makeEmbed(
         name: 'Kicked by',
         value: `${audit.user!.username}#${audit.user!.discriminator} (${
           audit.userId
-        })`,
+          })`,
       },
       {
         name: 'Reason',

@@ -20,19 +20,17 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    let guild: DBServers[] = await ctx.commandClient
-      .query(
-        `SELECT \`edits\` FROM \`Servers\` WHERE \`ServerID\` = ${ctx.guildId}`
-      )
-      .catch(() => console.log('Line 25'));
+    let guild: DBServers[] = await ctx.commandClient.query(
+      `SELECT edits FROM Servers WHERE ServerID = ${ctx.guildId}`
+    );
     if (guild[0].edits !== 1) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
     }
 
-    let roles: DBRoles[] = await ctx.commandClient
-      .query(`SELECT * FROM \`roles\` WHERE \`guild\` = ${ctx.guildId}`)
-      .catch(() => (blacklist = [])); // There are no blacklisted roles. Catch to keep continuing code
+    let roles: DBRoles[] = await ctx.commandClient.query(
+      `SELECT * FROM roles WHERE guild = ${ctx.guildId}`
+    ).catch(() => (blacklist = []));
 
     let r_id: string = '';
     let edit: boolean = true;
@@ -109,7 +107,7 @@ export const edit = {
               color: parseInt(`0x${role[1].replace('#', '')}`),
               reason: `Requested change by ${
                 ctx.member!.username
-              }. Used to be ${old}.`,
+                }. Used to be ${old}.`,
             });
             ctx.reply(`Your role color is now ${role[1]}. Enjoy!`);
             collector.destroy();

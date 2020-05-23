@@ -53,7 +53,7 @@ export const hug = {
     }
 
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`weeb\` FROM \`User\` WHERE \`User_ID\` = ${user.id}`
+      `SELECT weeb FROM User WHERE User_ID = ${user.id}`
     );
 
     if (user.id === '232614905533038593') {
@@ -62,7 +62,7 @@ export const hug = {
         ctx.reply({
           content: `${
             ctx.member!.username
-          } just tried to hug Lilwiggy. Yeah that didn't work.`,
+            } just tried to hug Lilwiggy. Yeah that didn't work.`,
           file: {
             data: await fetch(image).then((d) => d.buffer()),
             filename: 'hug.gif',

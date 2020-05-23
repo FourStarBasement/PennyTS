@@ -19,7 +19,7 @@ export const setPrefix = {
     }
 
     await ctx.commandClient.query(
-      `UPDATE \`Servers\` SET \`Prefix\` = '${args['set prefix']}' WHERE \`ServerID\` = '${ctx.guildId}'`
+      `UPDATE Servers SET Prefix = '${args['set prefix']}' WHERE ServerID = '${ctx.guildId}'`
     );
     ctx.guild!.prefix = args['set prefix'];
     ctx.reply(`This server's prefix is now ${args['set prefix']}`);

@@ -26,7 +26,7 @@ export const tagEdit = {
       name = stringExtractor(args['tag edit'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`owner\`, \`content\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `SELECT COUNT(*) AS inD, owner, content FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     if (data[0].inD === 0) {
       ctx.reply('This tag does not exist.');
@@ -42,7 +42,7 @@ export const tagEdit = {
       return;
     }
     await ctx.commandClient.query(
-      `UPDATE \`tags\` SET \`content\` = '${content}' WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `UPDATE tags SET content = '${content}' WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} edited succesfully.`);
   },

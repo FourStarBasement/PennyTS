@@ -26,7 +26,7 @@ export const tagCreate = {
       name = stringExtractor(args['tag create'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `SELECT COUNT(*) AS inD FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     if (data[0].inD !== 0) {
       ctx.reply('This tag already exists.');
@@ -45,8 +45,8 @@ export const tagCreate = {
       return;
     }
     await ctx.commandClient.query(
-      `INSERT INTO \`tags\` (\`guild\`, \`ID\`, \`owner\`, \`name\`, \`content\`) VALUES (${
-        ctx.guildId
+      `INSERT INTO tags (guild, ID, owner, name, content) VALUES (${
+      ctx.guildId
       }, '${Date.now().toString(16)}', ${ctx.user.id}, '${name}', '${content}')`
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} created succesfully.`);

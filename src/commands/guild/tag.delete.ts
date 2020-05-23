@@ -26,7 +26,7 @@ export const tagDelete = {
       name = stringExtractor(args['tag delete'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`owner\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     if (data[0].inD !== 1) {
       ctx.reply('This tag does not exist.');
@@ -38,7 +38,7 @@ export const tagDelete = {
       return;
     }
     await ctx.commandClient.query(
-      `DELETE FROM \`tags\` WHERE \`name\` = '${name}' AND \`guild\` = ${ctx.guildId}`
+      `DELETE FROM tags WHERE name = '${name}' AND guild = ${ctx.guildId}`
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} deleted.`);
   },

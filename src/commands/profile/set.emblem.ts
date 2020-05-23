@@ -18,10 +18,10 @@ export const setEmblem = {
     }
 
     let emblems = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS hasB FROM \`userE\` WHERE \`userID\` = ${ctx.userId} AND \`emblem\` = '${args['set emblem']}'`
+      `SELECT COUNT(*) AS hasB FROM userE WHERE userID = ${ctx.userId} AND emblem = '${args['set emblem']}'`
     );
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${ctx.userId}`
+      `SELECT Credits FROM User WHERE User_ID = ${ctx.userId}`
     );
     if (
       items[args['set emblem']] &&
@@ -33,11 +33,11 @@ export const setEmblem = {
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`emblem\` = '${bg.name}', \`Credits\`=\`Credits\` - ${bg.price} WHERE \`User_ID\` = ${ctx.userId}`
+        `UPDATE User SET emblem = '${bg.name}', Credits=Credits - ${bg.price} WHERE User_ID = ${ctx.userId}`
       );
       if (emblems.hasB === 0)
         await ctx.commandClient.query(
-          `INSERT INTO \`userE\` (\`userID\`, \`emblem\`) VALUES (${ctx.user}, '${bg}')`
+          `INSERT INTO userE (userID, emblem) VALUES (${ctx.user}, '${bg}')`
         );
       ctx.reply(`Equipped ${bg.name} as your profile emblem!`);
     } else {

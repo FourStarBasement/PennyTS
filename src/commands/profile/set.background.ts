@@ -19,7 +19,7 @@ export const setBackground = {
     if (args['set background'] === 'default') {
       await ctx.commandClient
         .query(
-          `UPDATE \`User\` SET \`background\` = 'default' WHERE \`User_ID\` = ${ctx.userId}`
+          `UPDATE User SET background = 'default' WHERE User_ID = ${ctx.userId}`
         )
         .catch(console.error);
       ctx.reply(
@@ -29,10 +29,10 @@ export const setBackground = {
     }
 
     let backgrounds = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS hasB FROM \`userB\` WHERE \`User_ID\` = ${ctx.userId} AND \`name\` = '${args['set background']}'`
+      `SELECT COUNT(*) AS hasB FROM userB WHERE User_ID = ${ctx.userId} AND name = '${args['set background']}'`
     );
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`patron\`, \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${ctx.userId}`
+      `SELECT patron, Credits FROM User WHERE User_ID = ${ctx.userId}`
     );
     if (args['set background'] === 'patreon') {
       if (data[0].patron !== 1) {
@@ -42,7 +42,7 @@ export const setBackground = {
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`background\` = 'patreon' WHERE \`User_ID\` = ${ctx.userId}`
+        `UPDATE User SET background = 'patreon' WHERE User_ID = ${ctx.userId}`
       );
       ctx.reply(
         'Your background is now the patreon background! Thanks a ton for your support <3'
@@ -60,11 +60,11 @@ export const setBackground = {
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`background\` = '${bg.name}', \`Credits\`=\`Credits\` - ${bg.price} WHERE \`User_ID\` = ${ctx.userId}`
+        `UPDATE User SET background = '${bg.name}', Credits=Credits - ${bg.price} WHERE User_ID = ${ctx.userId}`
       );
       if (backgrounds.hasB === 0)
         await ctx.commandClient.query(
-          `INSERT INTO \`userB\` (\`User_ID\`, \`name\`) VALUES (${ctx.user}, '${bg}')`
+          `INSERT INTO userB (User_ID, name) VALUES (${ctx.user}, '${bg}')`
         );
       ctx.reply(`Equipped ${bg.name} as your profile background!`);
     } else {

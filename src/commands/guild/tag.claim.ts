@@ -26,7 +26,7 @@ export const tagClaim = {
       name = stringExtractor(args['tag claim'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`owner\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+      `SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );
     if (data[0].inD !== 1) {
       ctx.reply('This tag does not exist.');
@@ -38,7 +38,7 @@ export const tagClaim = {
       return;
     }
     await ctx.commandClient.query(
-      `UPDATE \`tags\` SET \`owner\` = ${ctx.user.id} WHERE \`name\` = '${name}' AND \`guild\` = ${ctx.guildId}`
+      `UPDATE tags SET owner = ${ctx.user.id} WHERE name = '${name}' AND guild = ${ctx.guildId}`
     );
     ctx.reply(
       `You are now the "proud" owner of ${name.replace(/@/g, '')}. Congrats.`

@@ -156,7 +156,7 @@ async function prepare(
           })
           .then(async (m) => {
             await client.query(
-              `INSERT INTO \`starboard\` (msgID, starID) VALUES (${message.id}, ${m.id})`
+              `INSERT INTO starboard (msgID, starID) VALUES (${message.id}, ${m.id})`
             );
             console.log(
               `ReactionAdd/Starboard G#${message.guildId} C#${m.channelId}: New Starred Message: M#${m.id}`

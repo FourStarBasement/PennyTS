@@ -23,7 +23,7 @@ export const setWelcome = {
     if (attr === 'on') {
       ctx.commandClient
         .query(
-          `UPDATE \`Servers\` SET \`Welcome\` = 1 WHERE \`ServerID\` = '${ctx.guildId}'`
+          `UPDATE Servers SET Welcome = 1 WHERE ServerID = '${ctx.guildId}'`
         )
         .then(() => {
           ctx.reply('Successfully turned on welcome messages.');
@@ -34,7 +34,7 @@ export const setWelcome = {
     if (attr === 'off') {
       ctx.commandClient
         .query(
-          `UPDATE \`Servers\` SET \`Welcome\` = 0 WHERE \`ServerID\` = '${ctx.guildId}'`
+          `UPDATE Servers SET Welcome = 0 WHERE ServerID = '${ctx.guildId}'`
         )
         .then(() => {
           ctx.reply('Successfully turned off welcome messages.');
@@ -92,7 +92,7 @@ export const setWelcome = {
       } else {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`wc\` = ${channel.id} WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE Servers SET wc = ${channel.id} WHERE ServerID = '${ctx.guildId}'`
           )
           .then(() =>
             ctx.reply(
@@ -110,7 +110,7 @@ export const setWelcome = {
       if (value === '$none') {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`WelcomeR\` = NULL WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE Servers SET WelcomeR = NULL WHERE ServerID = '${ctx.guildId}'`
           )
           .then(() => {
             unset = true;

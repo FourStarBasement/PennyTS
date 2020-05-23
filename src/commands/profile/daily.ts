@@ -19,7 +19,7 @@ export const daily = {
     }
 
     let res: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`DailyTime\`, \`patron\` FROM \`User\` WHERE \`User_ID\` = '${ctx.member!.id}'`
+      `SELECT DailyTime, patron FROM User WHERE User_ID = '${ctx.member!.id}'`
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;
 
@@ -28,18 +28,18 @@ export const daily = {
     if (res[0].DailyTime === 1) {
       if (user.id === ctx.member!.id) {
         await ctx.commandClient.query(
-          `UPDATE \`User\` SET \`DailyTime\` = 0,\`Credits\`=\`Credits\` + ${amount} WHERE \`User_ID\` = '${user.id}'`
+          `UPDATE User SET DailyTime = 0,Credits=Credits + ${amount} WHERE User_ID = '${user.id}'`
         );
         ctx.reply(`💸 Here's your ${amount} credits 💸`);
       } else {
         amount = Math.floor(Math.random() * (2000 - 1000)) + 1000;
 
         await ctx.commandClient.query(
-          `UPDATE \`User\` SET \`Credits\`=\`Credits\` + ${amount} WHERE \`User_ID\` = '${user.id}'`
+          `UPDATE User SET Credits=Credits + ${amount} WHERE User_ID = '${user.id}'`
         );
         await ctx.commandClient.query(
-          `UPDATE \`User\` SET \`DailyTime\` = 0 WHERE \`User_ID\` = '${
-            ctx.member!.id
+          `UPDATE User SET DailyTime = 0 WHERE User_ID = '${
+          ctx.member!.id
           }'`
         );
         ctx.reply(

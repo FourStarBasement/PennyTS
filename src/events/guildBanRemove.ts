@@ -16,7 +16,7 @@ export const guildBanRemove = {
 
     client.checkGuild(payload.guildId).then(async () => {
       let results: DBServers[] = await client.query(
-        `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.guildId}'`
+        `SELECT * FROM Servers WHERE ServerID = '${payload.guildId}'`
       );
 
       let channel = guild.channels.get(results[0].mod_channel);
@@ -58,7 +58,7 @@ function makeEmbed(
         iconUrl: payload.user.avatarUrl,
         name: `${payload.user.username}#${payload.user.discriminator} (${
           payload.user!.id
-        })`,
+          })`,
       },
       color: 13369344,
       title: 'Member Unbanned',
@@ -67,13 +67,13 @@ function makeEmbed(
           name: 'Member Unbanned',
           value: `${audit.target!.name}#${audit.target!.discriminator} (${
             audit.targetId
-          })`,
+            })`,
         },
         {
           name: 'Unbanned by',
           value: `${audit.user!.username}#${audit.user!.discriminator} (${
             audit.userId
-          })`,
+            })`,
         },
         {
           name: 'Reason',

@@ -98,14 +98,14 @@ export default (client: CommandClient, connection: Connection) => {
   // Check if user is in the DB before doing anything
   client.checkUser = async (ctx: Context, id: string) => {
     let result: DBUser[] = await client
-      .query(`SELECT * FROM \`User\` WHERE \`User_ID\` = ${id}`)
+      .query(`SELECT * FROM User WHERE User_ID = ${id}`)
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
       });
 
     if (!result || !result[0]) {
       await client
-        .query(`INSERT INTO \`User\`(\`User_ID\`) VALUES ('${id}')`)
+        .query(`INSERT INTO User(User_ID) VALUES ('${id}')`)
         .catch(console.error);
     }
 
@@ -120,7 +120,7 @@ export default (client: CommandClient, connection: Connection) => {
     if (!guild) return;
     let result: DBServers[] = await client
       .query(
-        `SELECT \`ModLogPerm\`, COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
+        `SELECT modlog_perm, COUNT(*) as count FROM Servers WHERE ServerID = '${id}'`
       )
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
@@ -128,7 +128,7 @@ export default (client: CommandClient, connection: Connection) => {
 
     if (result[0].count === 0) {
       await client
-        .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
+        .query(`INSERT INTO Servers (ServerID) VALUES ('${id}')`)
         .catch(console.error);
       if (!guild?.modLog) {
         guild!.modLog = 0;
@@ -156,7 +156,7 @@ export default (client: CommandClient, connection: Connection) => {
         await client.checkGuild(context.guildId);
         let data: DBServers[] = await client
           .query(
-            `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
+            `SELECT Prefix, levels FROM Servers WHERE ServerID = ${context.guildId}`
           )
           .catch((error) => {
             if (error !== 'Query returned nothing') console.error(error);
@@ -319,11 +319,11 @@ export default (client: CommandClient, connection: Connection) => {
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
     let starData: StarData[] = await client.query(
-      `SELECT COUNT(*) AS \`count\`, \`msgID\`, \`starID\` FROM \`starboard\` WHERE \`msgID\` = ${message.id} OR \`starID\` = ${message.id}`
+      `SELECT COUNT(*) AS count, msgID, starID FROM starboard WHERE msgID = ${message.id} OR starID = ${message.id}`
     );
     let starboardInfo: DBServers[] = await client.query(
-      `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
-        message.guild!.id
+      `SELECT starboard FROM Servers WHERE ServerID = ${
+      message.guild!.id
       }`
     );
 
@@ -385,18 +385,18 @@ export default (client: CommandClient, connection: Connection) => {
   client.emoteCheck = async (emoteID: string, serverID: string) => {
     let data = await client
       .query(
-        `SELECT COUNT(*) AS inD FROM \`emote\` WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+        `SELECT COUNT(*) AS inD FROM emote WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
       )
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
       });
     if (data[0].inD === 0) {
       await client.query(
-        `INSERT INTO \`emote\` (\`server_id\`, \`emote_id\`) VALUES (${serverID}, ${emoteID})`
+        `INSERT INTO emote (server_id, emote_id) VALUES (${serverID}, ${emoteID})`
       );
     }
     await client.query(
-      `UPDATE \`emote\` SET \`used\` = \`used\` + 1 WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+      `UPDATE emote SET used = used + 1 WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
     );
   };
 
@@ -472,16 +472,16 @@ export default (client: CommandClient, connection: Connection) => {
     ) {
       let xp: number = Math.floor(Math.random() * 50); // 50 xp max at random. Just to make leveling up hard as pee pee
       await client.query(
-        `UPDATE \`User\` SET \`xp_cool\`=NOW(), \`XP\`=\`XP\` + '${xp}' WHERE \`User_ID\` = ${ctx.user.id}`
+        `UPDATE User SET xp_cool=NOW(), XP=XP + '${xp}' WHERE User_ID = ${ctx.user.id}`
       );
       if (userData[0].XP > userData[0].Next && enabled === 1) {
         ctx.reply(
           `Congrats ${ctx.user.username}! You just leveled up to level ${
-            userData[0].Level + 1
+          userData[0].Level + 1
           }`
         );
         await client.query(
-          `UPDATE \`User\` SET \`Level\` = \`Level\` + 1, \`Next\` = \`Next\` + 500, \`xp\` = 0 WHERE \`User_ID\` = ${ctx.user.id}`
+          `UPDATE User SET Level = Level + 1, Next = Next + 500, xp = 0 WHERE User_ID = ${ctx.user.id}`
         );
       }
     }

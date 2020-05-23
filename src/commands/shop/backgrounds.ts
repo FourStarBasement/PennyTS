@@ -13,7 +13,7 @@ export const backgrounds = {
     let bg: Array<any> = [];
     let i = 0;
     let data = await ctx.commandClient
-      .query(`SELECT * FROM \`userB\` WHERE User_ID = '${ctx.member!.id}'`)
+      .query(`SELECT * FROM userB WHERE User_ID = '${ctx.member!.id}'`)
       .catch((r) => {
         if (r == 'Query returned nothing') {
           ctx.reply('You do not own any backgrounds.');

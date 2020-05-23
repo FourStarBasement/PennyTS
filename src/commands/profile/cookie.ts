@@ -42,16 +42,16 @@ export const cookie = {
         ctx.reply("You can't give bots cookies!");
       } else {
         let data: DBUser[] = await ctx.commandClient.query(
-          `SELECT \`CT\` FROM \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
+          `SELECT CT FROM User WHERE User_ID = ${ctx.member!.id}`
         );
         if (data[0].CT) {
           await ctx.commandClient.query(
-            `UPDATE \`User\` SET \`CT\`= 0 WHERE \`User_ID\` = ${
-              ctx.member!.id
+            `UPDATE User SET CT= 0 WHERE User_ID = ${
+            ctx.member!.id
             }`
           );
           await ctx.commandClient.query(
-            `UPDATE \`User\` SET \`Cookie\`=\`Cookie\`+1 WHERE \`User_ID\` = ${mention.id}`
+            `UPDATE User SET Cookie=Cookie+1 WHERE User_ID = ${mention.id}`
           );
 
           let cookieImage = undefined;

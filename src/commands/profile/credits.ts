@@ -13,7 +13,7 @@ export const credits = {
       return;
     }
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${user!.id}`
+      `SELECT Credits FROM User WHERE User_ID = ${user!.id}`
     );
     ctx.reply(`💸 ${user?.username} has ${data[0].Credits} credits. 💸`);
   },
