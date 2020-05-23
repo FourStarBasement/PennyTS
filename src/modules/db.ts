@@ -1,18 +1,5 @@
 /// Interfaces for all tables in the database
 
-export interface DBBackgrounds {
-  name: string;
-}
-
-export interface DBColors {
-  Color_Name: string;
-  Color_Code: string;
-}
-
-export interface DBCooldowns {
-  command: string;
-}
-
 export interface DBEmotes {
   server_id: string;
   emote_id: string;
@@ -29,15 +16,14 @@ export interface DBRoles {
   role: string;
 }
 
-export interface DBServers {
-  count?: number;
-  ServerID: string;
-  ServerIcon: string;
-  ServerName: string;
-  Welcome: number;
-  WMessage: string;
-  LMessage: string;
-  Prefix: string;
+export interface DBServer {
+  server_id: string;
+  server_icon: string;
+  server_name: string;
+  welcome: number;
+  welcome_message: string;
+  leave_message: string;
+  prefix: string;
   wc: string;
   mod_log: number;
   mod_channel: string;
@@ -46,8 +32,8 @@ export interface DBServers {
   levels: number;
   edits: number;
   starboard: string;
-  WRole: string;
-  ModLogPerm: string;
+  welcome_role: string;
+  modlog_perm: string;
 }
 
 export interface DBStarboard {
@@ -56,7 +42,7 @@ export interface DBStarboard {
 }
 
 export interface DBTags {
-  ID: string;
+  id: string;
   name: string;
   owner: string;
   content: string;
@@ -65,21 +51,21 @@ export interface DBTags {
 }
 
 export interface DBUser {
-  User_ID: string;
-  UserAvatar: string;
-  Credits: number;
-  DailyTime: number;
-  Used: number;
-  HighFives: number;
-  UserColor: string;
-  Blacklisted: number;
-  XP: number;
-  Level: number;
+  user_id: string;
+  user_avatar: string;
+  credits: number;
+  daily_time: number;
+  used: number;
+  highfives: number;
+  user_color: string;
+  blacklisted: number;
+  xp: number;
+  level: number;
   xp_cool: Date;
-  Next: number;
-  Warns: number;
-  CT: number;
-  Cookie: number;
+  next: number;
+  warns: number;
+  cookie_time: number;
+  cookie: number;
   background: string;
   patron: number;
   emblem: string;
@@ -87,39 +73,19 @@ export interface DBUser {
   token: string;
 }
 
-export interface DBUserColors {
-  User_ID: string;
-  Color_Name: string;
-}
-
-export interface DBUserB {
-  User_ID: string;
+export interface DBUserBackgrounds {
+  user_id: string;
   name: string;
 }
 
-export interface DBUserCool {
-  User_ID: string;
-  command: string;
-  cool: Date;
-}
-
-export interface DBUserE {
+export interface DBUserEmblems {
   emblem: string;
-  userID: string;
-}
-
-export interface DBWarns {
-  ID: string;
-  warns: number;
-}
-
-export interface DBCount {
-  count: number;
+  user_id: string;
 }
 
 // Deserialise some starboard stuff
 export interface StarData {
   count: number;
-  msgID: string;
-  starID: string;
+  message_id: string;
+  star_id: string;
 }
