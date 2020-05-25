@@ -1,44 +1,35 @@
 /// Interfaces for all tables in the database
 
 export interface DBEmotes {
-  server_id: string;
+  server_id: BigInt;
   emote_id: string;
   used: number;
 }
 
-export interface DBExposed {
-  user_id: number;
-  name: string;
-}
-
 export interface DBRoles {
-  guild: string;
-  role: string;
+  guild: bigint;
+  role: bigint;
 }
 
 export interface DBServer {
-  server_id: string;
-  server_icon: string;
-  server_name: string;
+  server_id: BigInt;
   welcome: number;
   welcome_message: string;
+  welcome_role: BigInt;
+  welcome_channel: BigInt;
   leave_message: string;
   prefix: string;
-  wc: string;
-  mod_log: number;
-  mod_channel: string;
-  ar: number;
-  role: string;
   levels: number;
   edits: number;
-  starboard: string;
-  welcome_role: string;
+  starboard_channel: BigInt;
+  mod_log: number;
+  mod_channel: BigInt;
   modlog_perm: string;
 }
 
 export interface DBStarboard {
-  msgID: string;
-  starID: string;
+  message_id: BigInt;
+  star_id: BigInt;
 }
 
 export interface DBTags {
@@ -51,36 +42,34 @@ export interface DBTags {
 }
 
 export interface DBUser {
-  user_id: string;
-  user_avatar: string;
+  user_id: BigInt;
   credits: number;
   daily_time: number;
   used: number;
   highfives: number;
-  user_color: string;
-  blacklisted: number;
+  blacklisted: boolean;
   xp: number;
   level: number;
   xp_cool: Date;
   next: number;
   warns: number;
   cookie_time: number;
-  cookie: number;
+  cookies: number;
   background: string;
-  patron: number;
+  patron: boolean;
   emblem: string;
   weeb: string;
   token: string;
 }
 
 export interface DBUserBackgrounds {
-  user_id: string;
+  user_id: BigInt;
   name: string;
 }
 
 export interface DBUserEmblems {
   emblem: string;
-  user_id: string;
+  user_id: BigInt;
 }
 
 // Deserialise some starboard stuff
