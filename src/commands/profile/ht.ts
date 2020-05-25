@@ -26,16 +26,16 @@ export const ht = {
       return;
     }
 
-    let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT Credits FROM User WHERE User_ID = ${ctx.member!.id}`
+    let user: DBUser = await ctx.commandClient.queryOne(
+      `SELECT credits FROM user WHERE user_id = ${ctx.member!.id}`
     );
-    if (data[0].Credits < 1) {
+    if (user.credits < 1) {
       ctx.reply('You do not have enough credits to perform this command.');
       return;
     }
     if (ht.startsWith(args.ht.toLowerCase())) {
       ctx.commandClient.query(
-        `UPDATE User SET Credits=Credits+2 WHERE User_ID = ${
+        `UPDATE users SET credits=credits+2 WHERE user_id = ${
         ctx.member!.id
         }`
       );

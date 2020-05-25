@@ -47,7 +47,7 @@ export const disable = {
 
     ctx.commandClient
       .query(
-        `UPDATE Servers SET ${attr} = 0 WHERE ServerID = '${ctx.guildId}'`
+        `UPDATE servers SET ${attr} = 0 WHERE server_id = ${ctx.guildId}`
       )
       .then((v) => {
         ctx.reply(`Disabled ${toSay}.`);

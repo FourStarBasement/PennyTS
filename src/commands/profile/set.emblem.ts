@@ -17,10 +17,11 @@ export const setEmblem = {
       return;
     }
 
+    // TODO: Do this
     let emblems = await ctx.commandClient.query(
       `SELECT COUNT(*) AS hasB FROM userE WHERE userID = ${ctx.userId} AND emblem = '${args['set emblem']}'`
     );
-    let data: DBUser[] = await ctx.commandClient.query(
+    let data: DBUser = await ctx.commandClient.queryOne(
       `SELECT Credits FROM User WHERE User_ID = ${ctx.userId}`
     );
     if (
@@ -28,7 +29,7 @@ export const setEmblem = {
       items[args['set emblem']].type === 'emblem'
     ) {
       let bg = items[args['set emblem']];
-      if (bg.price > data[0].Credits.toString()) {
+      if (bg.price > data.credits.toString()) {
         ctx.reply('You do not have enough credits for this emblem.');
         return;
       }

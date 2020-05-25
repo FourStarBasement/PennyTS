@@ -4,7 +4,7 @@ import {
   CommandClient,
   ShardClient,
 } from 'detritus-client';
-import { DBServers } from '../modules/db';
+import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
@@ -22,11 +22,11 @@ export const guildMemberRemove = {
     let guild = shardClient.guilds.get(payload.guildId)!;
 
     client.checkGuild(payload.guildId).then(async () => {
-      let results: DBServers[] = await client.query(
-        `SELECT * FROM Servers WHERE ServerID = '${payload.guildId}'`
+      let server: DBServer = await client.queryOne(
+        `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
       );
 
-      let channel = guild.channels.get(results[0].mod_channel);
+      let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
           (ModLogActions.GUILD_MEMBER_REMOVE & guild.modLog) ===
@@ -52,11 +52,11 @@ export const guildMemberRemove = {
         }
       }
 
-      if (results[0].Welcome === 1) {
-        let channel = shardClient.channels.get(results[0].wc);
+      if (server.welcome === 1) {
+        let channel = shardClient.channels.get(server.welcome_channel.toString());
         if (channel) {
-          if (results[0].LMessage) {
-            let unsyntaxed = results[0].LMessage.replace(
+          if (server.leave_message) {
+            let unsyntaxed = server.leave_message.replace(
               '{user}',
               member.username
             ).replace('{guild}', guild.name);

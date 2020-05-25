@@ -1,5 +1,4 @@
 import { Context } from 'detritus-client/lib/command';
-import { escape } from 'mysql';
 
 export const setLeave = {
   name: 'set leave',
@@ -31,11 +30,12 @@ export const setLeave = {
           "Leave Message: I'm sorry but I can't add an everyone mention."
         );
       } else {
+        // TODO: Prepared statement
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`LMessage\` = ${escape(
-              leave_message
-            )} WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE servers SET leave_message = ${
+            leave_message
+            } WHERE server_id = ${ctx.guildId}`
           )
           .then(() => {
             ctx.reply('Leave Message: Successfully set!');

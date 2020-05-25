@@ -1,6 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
 import { chanReg, roleReg } from '../../modules/utils';
-import { escape } from 'mysql';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
 
 export const setWelcome = {
@@ -57,11 +56,12 @@ export const setWelcome = {
           "Welcome Message: I'm sorry but I can't add an everyone mention."
         );
       } else {
+        // TODO: Prepared statement
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`WMessage\` = ${escape(
-              welcome_message
-            )} WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE servers SET welcome_message = ${
+            welcome_message
+            } WHERE server_id = ${ctx.guildId}`
           )
           .then(() => {
             ctx.reply('Welcome Message: Successfully set!');
@@ -92,7 +92,7 @@ export const setWelcome = {
       } else {
         await ctx.commandClient
           .query(
-            `UPDATE Servers SET wc = ${channel.id} WHERE ServerID = '${ctx.guildId}'`
+            `UPDATE servers SET wc = ${channel.id} WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(
@@ -110,7 +110,7 @@ export const setWelcome = {
       if (value === '$none') {
         await ctx.commandClient
           .query(
-            `UPDATE Servers SET WelcomeR = NULL WHERE ServerID = '${ctx.guildId}'`
+            `UPDATE servers SET welcome_role = NULL WHERE server_id = ${ctx.guildId}`
           )
           .then(() => {
             unset = true;
@@ -134,11 +134,11 @@ export const setWelcome = {
       } else if (role && !unset) {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`WRole\` = '${role.id}' WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE Servers SET welcome_role = '${role.id}' WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(
-              `Welcome Role: Successfully set as \`\`${role!.name}\`\`!`
+              `Welcome Role: Successfully set as ${role!.name}!`
             )
           );
       } else {

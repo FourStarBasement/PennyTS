@@ -10,13 +10,14 @@ export const top = {
   },
   aliases: ['leaderboard'],
   checks: ['attachments'],
+  // TODO: Improve this 
   run: async (ctx: Context) => {
     let res: DBUser[] = await ctx.commandClient
-      .query('SELECT * FROM `User` ORDER BY `Level` DESC LIMIT 10')
+      .query('SELECT * FROM users ORDER BY level DESC LIMIT 10')
       .catch(console.error);
     let users: Array<User | string> = [];
     for (let i = 0; i < 10; i++) {
-      users.push(ctx.client.users.get(res[i].User_ID) || 'Unknown');
+      users.push(ctx.client.users.get(res[i].user_id.toString()) || 'Unknown');
     }
     let thing = {
       query: res,

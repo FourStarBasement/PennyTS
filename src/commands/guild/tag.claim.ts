@@ -25,6 +25,7 @@ export const tagClaim = {
     if (quotes.includes(args['tag claim'].charAt(0)))
       name = stringExtractor(args['tag claim'])[0];
     else name = tagArg[0];
+    // TODO: Prepared statement
     let data = await ctx.commandClient.query(
       `SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
     );

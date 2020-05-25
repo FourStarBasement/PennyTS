@@ -3,7 +3,7 @@ import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
 import { PageField } from '../modules/utils';
-import { DBServers } from '../modules/db';
+import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 
 export const guildBanRemove = {
@@ -15,11 +15,11 @@ export const guildBanRemove = {
     let guild = payload.guild!;
 
     client.checkGuild(payload.guildId).then(async () => {
-      let results: DBServers[] = await client.query(
-        `SELECT * FROM Servers WHERE ServerID = '${payload.guildId}'`
+      let server: DBServer = await client.queryOne(
+        `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
       );
 
-      let channel = guild.channels.get(results[0].mod_channel);
+      let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
           (ModLogActions.GUILD_BAN_REMOVE & guild.modLog) ===

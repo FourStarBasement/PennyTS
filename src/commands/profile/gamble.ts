@@ -31,12 +31,11 @@ export const gamble = {
     }
 
     // Check if they have enough credits to proceed.
-    let results: DBUser[] = await ctx.commandClient.query(
-      `SELECT Credits FROM User WHERE User_ID = '${member.id}'`
+    let user: DBUser = await ctx.commandClient.queryOne(
+      `SELECT credits FROM users WHERE user_id = ${member.id}`
     );
-    let dbUser = results[0];
 
-    if (dbUser.Credits < credits) {
+    if (user.credits < credits) {
       ctx.reply(`You do not have ${credits} credits!`);
       return;
     }
@@ -51,20 +50,21 @@ export const gamble = {
     collector.on('collect', (message: Message) => {
       const content = message.content.toLowerCase();
 
+      // TODO: Allow multiple answers
       if (content === 'yes') {
         const rand = Math.floor(Math.random() * 21);
 
         if (rand >= 13) {
-          dbUser.Credits += credits;
+          user.credits += credits;
           ctx.reply(`You won ${credits} credits. Congrats!!`);
         } else {
-          dbUser.Credits -= credits;
+          user.credits -= credits;
           ctx.reply(`It looks like you lost ${credits} credits, Sorry!`);
         }
 
         collector.destroy();
         ctx.commandClient.query(
-          `UPDATE User SET Credits = ${dbUser.Credits} WHERE User_ID = '${member.id}'`
+          `UPDATE users SET credits = ${user.credits} WHERE user_id = ${member.id}`
         );
       } else if (content === 'no') {
         collector.destroy();

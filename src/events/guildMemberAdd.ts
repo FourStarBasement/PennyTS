@@ -1,6 +1,6 @@
 import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { CommandClient, GatewayClientEvents } from 'detritus-client';
-import { DBServers } from '../modules/db';
+import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
@@ -16,11 +16,11 @@ export const guildMemberAdd = {
     let guild = payload.member.guild!;
 
     await client.checkGuild(payload.guildId).then(async () => {
-      let results: DBServers[] = await client.query(
-        `SELECT * FROM Servers WHERE ServerID = '${payload.guildId}'`
+      let server: DBServer = await client.query(
+        `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
       );
 
-      let channel = guild.channels.get(results[0].mod_channel);
+      let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
           (ModLogActions.GUILD_MEMBER_ADD & guild.modLog) ===
@@ -43,12 +43,12 @@ export const guildMemberAdd = {
         }
       }
 
-      if (results[0].Welcome === 1) {
-        const channel = guild.channels.get(results[0].wc);
+      if (server.welcome === 1) {
+        const channel = guild.channels.get(server.welcome_channel.toString());
 
         if (channel) {
-          if (results[0].WMessage) {
-            let unsyntaxed = results[0].WMessage.replace(
+          if (server.welcome_message) {
+            let unsyntaxed = server.welcome_message.replace(
               '{user}',
               member.username
             ).replace('{guild}', guild.name);
@@ -60,7 +60,7 @@ export const guildMemberAdd = {
           }
         }
 
-        const role = guild.roles.get(results[0].WRole);
+        const role = guild.roles.get(server.welcome_role.toString());
 
         if (role) {
           await member.addRole(role.id);
