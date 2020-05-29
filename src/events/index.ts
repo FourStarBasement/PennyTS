@@ -5,6 +5,7 @@ import { guildMemberRemove } from './guildMemberRemove';
 import { guildMemberUpdate } from './guildMemberUpdate';
 import { guildBanAdd } from './guildBanAdd';
 import { guildBanRemove } from './guildBanRemove';
+import { messageDelete } from './messageDelete';
 
 export default [
   messageReactionAdd,
@@ -14,4 +15,5 @@ export default [
   guildMemberUpdate,
   guildBanAdd,
   guildBanRemove,
+  messageDelete,
 ];
