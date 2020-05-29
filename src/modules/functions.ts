@@ -120,7 +120,7 @@ export default (client: CommandClient, connection: Connection) => {
     if (!guild) return;
     let result: DBServers[] = await client
       .query(
-        `SELECT COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
+        `SELECT \`ModLogPerm\`, COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
       )
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
