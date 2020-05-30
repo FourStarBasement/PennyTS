@@ -3,7 +3,7 @@ import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { ShardClient } from 'detritus-client';
 import { Message, User, Reaction } from 'detritus-client/lib/structures';
-import { DBServers } from '../modules/db';
+import { DBServer } from '../modules/db';
 import { RestClient } from 'detritus-client/lib/rest';
 import { ModLogActions } from '../modules/modlog';
 
@@ -18,10 +18,12 @@ export const messageDelete = {
     if (payload.message.author.bot) return;
 
     await client.checkGuild(payload.raw.guild_id);
-    let results: DBServers[] = await client.query(
-      `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${payload.raw.guild_id}'`
+    let results: DBServer = await client.queryOne(
+      `SELECT mod_channel FROM servers WHERE server_id = ${payload.raw.guild_id}`
     );
-    let channel = payload.message.guild!.channels.get(results[0].mod_channel);
+
+    // TODO: BigInt support
+    let channel = payload.message.guild!.channels.get(results.mod_channel.toString());
 
     if (!channel) return;
 
@@ -49,7 +51,7 @@ export const messageDelete = {
           color: 16741749,
           title: `Message sent by ${payload.message!.author.username} deleted ${
             auditLog ? `by ${auditLog.user!.username}` : ''
-          } in ${payload.message!.channel?.name}`,
+            } in ${payload.message!.channel?.name}`,
           thumbnail: {
             url: payload.message!.author.avatarUrl,
           },
