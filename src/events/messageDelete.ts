@@ -18,12 +18,14 @@ export const messageDelete = {
     if (payload.message.author.bot) return;
 
     await client.checkGuild(payload.raw.guild_id);
-    let results: DBServer = await client.queryOne(
+    let server: DBServer = await client.queryOne(
       `SELECT mod_channel FROM servers WHERE server_id = ${payload.raw.guild_id}`
     );
 
+    if (!server.mod_channel) return;
+
     // TODO: BigInt support
-    let channel = payload.message.guild!.channels.get(results.mod_channel.toString());
+    let channel = payload.message.guild!.channels.get(server.mod_channel.toString());
 
     if (!channel) return;
 

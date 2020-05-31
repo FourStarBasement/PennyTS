@@ -26,6 +26,8 @@ export const guildMemberRemove = {
         `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
       );
 
+      if (!server.mod_channel) return;
+
       let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
