@@ -17,6 +17,7 @@ export const backgrounds = {
       .catch((r) => {
         if (r == 'Query returned nothing') {
           ctx.reply('You do not own any backgrounds.');
+          return;
         }
       });
 
