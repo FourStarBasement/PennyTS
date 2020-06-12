@@ -410,26 +410,15 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
       )
         return;
       // If the command doesn't exist we check if it's a tag
-<<<<<<< HEAD
       let content = payload.context.message.content
         .substr(payload.context.guild.prefix!.length)
         .split(/<@!?(\d+)>/);
-      let tag: DBTags[] = await client
-        .query(
-          `SELECT * FROM \`tags\` WHERE \`guild\` = ${
-            payload.context.guildId
-          } AND \`name\` = ${connection.escape(content[0].trim())}`
-=======
-      let content = payload.context.message.content.substr(
-        payload.context.guild.prefix!.length
-      );
       // TODO: Prepared statement
       let tag: DBTags[] = await client
         .query(
           `SELECT * FROM tags WHERE guild_id = ${
           payload.context.guildId
           } AND name = '${content}'`
->>>>>>> 41224c8... Update query strings in files
         )
         .catch(console.error);
 
@@ -444,15 +433,9 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
       // Useful for tag stats
       // TODO: Prepared statement
       await client.query(
-<<<<<<< HEAD
-        `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
-          content[0].trim()
-        )}`
-=======
         `UPDATE tags SET used = used + 1 WHERE name = '${
         content
         }'`
->>>>>>> 41224c8... Update query strings in files
       );
       // This replaces custom bits inside tags like username and mentions.username etc
       let s: string = tag[0].content.replace(
