@@ -23,11 +23,12 @@ export const cookie = {
       return;
     }
 
+    let user: DBUser = await ctx.commandClient.queryOne(
+      `SELECT cookie_time FROM users WHERE user_id=${ctx.member!.id}`
+    );
+
     if (!mention) {
-      let data: DBUser[] = await ctx.commandClient.query(
-        `SELECT CT FROM \`User\` WHERE \`User_ID\`=${ctx.member!.id}`
-      );
-      if (data[0].CT === 0) {
+      if (!user.cookie_time) {
         // Typing is incorrect, it returns a CronDate, not Date.
         let nextInvocation = ctx.commandClient.job.nextInvocation() as any;
         let dur = moment.duration(nextInvocation.toDate() - Date.now());
@@ -41,17 +42,14 @@ export const cookie = {
       } else if (mention.bot) {
         ctx.reply("You can't give bots cookies!");
       } else {
-        let data: DBUser[] = await ctx.commandClient.query(
-          `SELECT CT FROM User WHERE User_ID = ${ctx.member!.id}`
-        );
-        if (data[0].CT) {
+        if (user.cookie_time) {
           await ctx.commandClient.query(
-            `UPDATE User SET CT= 0 WHERE User_ID = ${
+            `UPDATE users SET cookie_time=false WHERE user_id= ${
             ctx.member!.id
             }`
           );
           await ctx.commandClient.query(
-            `UPDATE User SET Cookie=Cookie+1 WHERE User_ID = ${mention.id}`
+            `UPDATE users SET cookies=cookies+1 WHERE user_id = ${mention.id}`
           );
 
           let cookieImage = undefined;
