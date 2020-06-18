@@ -36,8 +36,7 @@ export const tagEdit = {
       ctx.reply('You do not own this tag.');
       return;
     }
-    // +3 cause spaces and such
-    let content = args['tag edit'].substr(name.length + 3);
+    let content = args['tag edit'].split(name)[1].substr(1).trim();
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
       return;

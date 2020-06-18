@@ -39,8 +39,7 @@ export const tagCreate = {
       ctx.reply('You cannot make a tag with that name');
       return;
     }
-    // +3 cause spaces and such
-    let content = args['tag create'].substr(name.length + 3);
+    let content = args['tag create'].split(name)[1].substr(1).trim();
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
       return;
