@@ -33,7 +33,7 @@ export const tagDelete = {
       return;
     }
 
-    if (!ctx.member!.canManageMessages || data[0].owner !== ctx.user.id) {
+    if (!ctx.member!.canManageMessages && data[0].owner !== ctx.user.id) {
       ctx.reply('You do not own this tag.');
       return;
     }
