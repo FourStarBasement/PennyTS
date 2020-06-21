@@ -53,7 +53,7 @@ export const color = {
             if (
               !ctx.member!.colorRole ||
               ctx.member!.colorRole!.position >=
-              ctx.me?.highestRole!.position ||
+              ctx.me!.highestRole!.position ||
               !ctx.me?.canManageRoles
             )
               return;

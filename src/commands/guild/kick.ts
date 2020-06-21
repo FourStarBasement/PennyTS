@@ -26,9 +26,11 @@ export const kick = {
       return;
     }
 
-    if (ctx.me?.highestRole!.position <= member.highestRole!.position) {
-      ctx.reply('I cannot kick this user.');
-      return;
+    if (ctx.me && ctx.me.highestRole) {
+      if (ctx.me.highestRole.position <= member.highestRole!.position) {
+        ctx.reply('I cannot kick this user.');
+        return;
+      }
     }
 
     let kickImage = undefined;
