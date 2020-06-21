@@ -137,9 +137,7 @@ export const setWelcome = {
             `UPDATE Servers SET welcome_role = '${role.id}' WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
-            ctx.reply(
-              `Welcome Role: Successfully set as ${role!.name}!`
-            )
+            ctx.reply(`Welcome Role: Successfully set as ${role!.name}!`)
           );
       } else {
         ctx.reply('Welcome Role: Successfully unset!');

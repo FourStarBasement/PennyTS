@@ -55,13 +55,14 @@ export const guildMemberRemove = {
       }
 
       if (server.welcome === 1) {
-        let channel = shardClient.channels.get(server.welcome_channel.toString());
+        let channel = shardClient.channels.get(
+          server.welcome_channel.toString()
+        );
         if (channel) {
           if (server.leave_message) {
-            let unsyntaxed = server.leave_message.replace(
-              '{user}',
-              member.username
-            ).replace('{guild}', guild.name);
+            let unsyntaxed = server.leave_message
+              .replace('{user}', member.username)
+              .replace('{guild}', guild.name);
             channel.createMessage(unsyntaxed);
           } else {
             channel.createMessage(
@@ -90,7 +91,7 @@ function makeEmbed(
         name: 'Kicked by',
         value: `${audit.user!.username}#${audit.user!.discriminator} (${
           audit.userId
-          })`,
+        })`,
       },
       {
         name: 'Reason',

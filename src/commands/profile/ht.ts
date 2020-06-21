@@ -35,9 +35,7 @@ export const ht = {
     }
     if (ht.startsWith(args.ht.toLowerCase())) {
       ctx.commandClient.query(
-        `UPDATE users SET credits=credits+2 WHERE user_id = ${
-        ctx.member!.id
-        }`
+        `UPDATE users SET credits=credits+2 WHERE user_id = ${ctx.member!.id}`
       );
       ctx.reply(`It was ${ht}! Congrats! You won exactly 1 (one) credit!`);
     } else {

@@ -3,7 +3,7 @@
 export enum QueryType {
   Single,
   Multi,
-  Void
+  Void,
 }
 
 export interface DBEmotes {

@@ -10,7 +10,7 @@ export const top = {
   },
   aliases: ['leaderboard'],
   checks: ['attachments'],
-  // TODO: Improve this 
+  // TODO: Improve this
   run: async (ctx: Context) => {
     let res: DBUser[] = await ctx.commandClient
       .query('SELECT * FROM users ORDER BY level DESC LIMIT 10')

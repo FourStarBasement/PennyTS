@@ -9,7 +9,7 @@ let canHugWiggy = [
   '310839399728545792', // Matza
   '600058196249411587', // Batthew's dummy thicc cheeks like holy fuck they're so thicc
   '411710271229526017', // Bats cause she wants to be nice
-  '357763197559767041' // Glowwy cause 😳😳😳
+  '357763197559767041', // Glowwy cause 😳😳😳
 ];
 
 export const hug = {
@@ -62,7 +62,7 @@ export const hug = {
         ctx.reply({
           content: `${
             ctx.member!.username
-            } just tried to hug Lilwiggy. Yeah that didn't work.`,
+          } just tried to hug Lilwiggy. Yeah that didn't work.`,
           file: {
             data: await fetch(image).then((d) => d.buffer()),
             filename: 'hug.gif',

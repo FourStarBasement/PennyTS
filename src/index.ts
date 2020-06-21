@@ -12,7 +12,9 @@ import pgPromise, { IBaseProtocol } from 'pg-promise';
 const pgp = pgPromise();
 
 // TODO: Perhaps make a custom class wrapper for this?
-const connection: IBaseProtocol<{}> = pgp(`postgres://${config.sql.username}:${config.sql.password}@${config.sql.host}/${config.sql.db_name}`);
+const connection: IBaseProtocol<{}> = pgp(
+  `postgres://${config.sql.username}:${config.sql.password}@${config.sql.host}/${config.sql.db_name}`
+);
 
 const cmdClient = new CommandClient(config.token, {
   activateOnEdits: true,

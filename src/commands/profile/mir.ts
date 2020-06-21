@@ -20,7 +20,7 @@ export const mir = {
     }
     ctx.commandClient.query(
       `UPDATE users SET credits = credits - ${cr} WHERE user_id = ${
-      ctx.member!.id
+        ctx.member!.id
       }`
     );
     let filter = (m: Message) => {
@@ -31,9 +31,9 @@ export const mir = {
     };
     ctx.reply(
       `${
-      ctx.member!.username
+        ctx.member!.username
       } has just thrown ${cr} credits in the air! The first person to grab them by saying "${
-      ctx.prefix
+        ctx.prefix
       }grab" gets to keep them!`
     );
     let thing = new MessageCollector(ctx, 30000, filter);
@@ -41,7 +41,7 @@ export const mir = {
       thing.destroy();
       ctx.commandClient.query(
         `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
-        m.member!.id
+          m.member!.id
         }`
       );
       ctx.reply(
@@ -53,7 +53,7 @@ export const mir = {
       ctx.reply('It seems as if no one has picked up the credits. Oh well.');
       ctx.commandClient.query(
         `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
-        ctx.member!.id
+          ctx.member!.id
         }`
       );
     });

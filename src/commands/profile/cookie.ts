@@ -45,7 +45,7 @@ export const cookie = {
         if (user.cookie_time) {
           await ctx.commandClient.query(
             `UPDATE users SET cookie_time=false WHERE user_id= ${
-            ctx.member!.id
+              ctx.member!.id
             }`
           );
           await ctx.commandClient.query(

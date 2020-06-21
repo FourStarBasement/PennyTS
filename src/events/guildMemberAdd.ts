@@ -50,10 +50,9 @@ export const guildMemberAdd = {
 
         if (channel) {
           if (server.welcome_message) {
-            let unsyntaxed = server.welcome_message.replace(
-              '{user}',
-              member.username
-            ).replace('{guild}', guild.name);
+            let unsyntaxed = server.welcome_message
+              .replace('{user}', member.username)
+              .replace('{guild}', guild.name);
             channel.createMessage(unsyntaxed);
           } else {
             channel.createMessage(
@@ -88,7 +87,7 @@ function makeEmbed(
         name: 'Added by',
         value: `${audit.user!.username}#${audit.user!.discriminator} (${
           audit.userId
-          })`,
+        })`,
       },
     ],
     timestamp: new Date().toISOString(),

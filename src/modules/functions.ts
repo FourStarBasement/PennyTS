@@ -41,11 +41,14 @@ declare module 'detritus-client/lib/structures/user' {
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
-
   interface CommandClient {
     query: (query: string) => Promise<any>; // Promise based queries
     queryOne: (query: string) => Promise<any>;
-    preparedQuery: (query: string, values: Array<any>, typ: QueryType) => Promise<any>;
+    preparedQuery: (
+      query: string,
+      values: Array<any>,
+      typ: QueryType
+    ) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
@@ -61,7 +64,10 @@ declare module 'detritus-client/lib/commandclient' {
   }
 }
 
-export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) => {
+export default (
+  client: CommandClient,
+  connection: pgPromise.IBaseProtocol<{}>
+) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
     return connection.query(query);
@@ -75,16 +81,22 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
    * Makes a prepared statement with the query and values.
    * Last paramater specifies the type of query we want to make
    */
-  client.preparedQuery = (query: string, values: Array<any>, typ : QueryType) => {
-    const preparedStatement = new PreparedStatement({text: query, values: values});
-    switch(typ) {
+  client.preparedQuery = (
+    query: string,
+    values: Array<any>,
+    typ: QueryType
+  ) => {
+    const preparedStatement = new PreparedStatement({
+      text: query,
+      values: values,
+    });
+    switch (typ) {
       case QueryType.Single:
         return connection.one(preparedStatement);
       case QueryType.Multi:
         return connection.query(preparedStatement);
       case QueryType.Void:
         return connection.none(preparedStatement);
-
     }
   };
 
@@ -119,7 +131,7 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
   client.checkUser = async (ctx: Context, id: string) => {
     let result: DBUser = await client
       .queryOne(`SELECT blacklisted FROM users WHERE user_id = ${id}`)
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
 
     if (!result) {
       await client
@@ -139,7 +151,8 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
     let result: DBServer = await client
       .queryOne(
         `SELECT server_id, modlog_perm FROM servers WHERE server_id = ${id}`
-      ).catch(console.error);
+      )
+      .catch(console.error);
 
     if (!result) {
       await client
@@ -220,7 +233,7 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
   client.on('commandRan', (cmd) => {
     console.log(
       `Ran command ${cmd.command.name} by ${cmd.context.member!.username}\n${
-      cmd.context.user.id
+        cmd.context.user.id
       }`
     );
   });
@@ -336,9 +349,7 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
       `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
     );
     let starboardInfo: DBServer = await client.query(
-      `SELECT starboard FROM servers WHERE server_id = ${
-      message.guild!.id
-      }`
+      `SELECT starboard FROM servers WHERE server_id = ${message.guild!.id}`
     );
 
     let channels = message.guild!.channels;
@@ -489,7 +500,7 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
       if (userData[0].XP > userData[0].Next && enabled === 1) {
         ctx.reply(
           `Congrats ${ctx.user.username}! You just leveled up to level ${
-          userData[0].Level + 1
+            userData[0].Level + 1
           }`
         );
         await client.query(

@@ -25,7 +25,9 @@ export const messageDelete = {
     if (!server.mod_channel) return;
 
     // TODO: BigInt support
-    let channel = payload.message.guild!.channels.get(server.mod_channel.toString());
+    let channel = payload.message.guild!.channels.get(
+      server.mod_channel.toString()
+    );
 
     if (!channel) return;
 
@@ -53,7 +55,7 @@ export const messageDelete = {
           color: 16741749,
           title: `Message sent by ${payload.message!.author.username} deleted ${
             auditLog ? `by ${auditLog.user!.username}` : ''
-            } in ${payload.message!.channel?.name}`,
+          } in ${payload.message!.channel?.name}`,
           thumbnail: {
             url: payload.message!.author.avatarUrl,
           },

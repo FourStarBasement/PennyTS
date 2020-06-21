@@ -39,7 +39,7 @@ export const daily = {
         );
         await ctx.commandClient.query(
           `UPDATE users SET daily_time = false WHERE user_id = ${
-          ctx.member!.id
+            ctx.member!.id
           }`
         );
         ctx.reply(

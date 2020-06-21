@@ -18,9 +18,7 @@ export const enable = {
       ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
     } else if (args.enable === 'levels') {
       ctx.commandClient
-        .query(
-          `UPDATE servers SET levels = 1 WHERE server_id = ${ctx.guildId}`
-        )
+        .query(`UPDATE servers SET levels = 1 WHERE server_id = ${ctx.guildId}`)
         .then(() => {
           ctx.reply('Enabled levels.');
         });

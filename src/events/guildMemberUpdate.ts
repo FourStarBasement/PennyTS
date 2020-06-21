@@ -89,7 +89,7 @@ function makeEmbed(
           name: 'Updated by',
           value: `${audit.user!.username}#${audit.user!.discriminator} (${
             audit.userId
-            })`,
+          })`,
         },
         {
           name: 'Reason',

@@ -29,7 +29,7 @@ export const emote = {
         data = await ctx.commandClient
           .query(
             `SELECT * FROM emote WHERE server_id = ${
-            ctx.guildId
+              ctx.guildId
             } AND emote_id = ${r.substr(0, 18)}`
           )
           .catch((e) => {
@@ -99,7 +99,7 @@ function embed(ctx: Context, emotes: Array<DBEmotes>): Page {
     e.fields?.push({
       name: `${
         ctx.guild?.emojis.get(em.emote_id)?.name
-        }: ${ctx.guild?.emojis.get(em.emote_id)}`,
+      }: ${ctx.guild?.emojis.get(em.emote_id)}`,
       value: `Used: ${em.used}`,
     });
   });
