@@ -1,7 +1,10 @@
 import { Context } from 'detritus-client/lib/command';
+import { QueryType } from '../../modules/db';
+
 interface CommandArgs {
   'set prefix': string;
 }
+
 export const setPrefix = {
   name: 'set prefix',
   metadata: {
@@ -9,20 +12,23 @@ export const setPrefix = {
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
-    if (!args['set prefix']) {
+    const prefix = args['set prefix'];
+    if (!prefix) {
       ctx.reply(`Usage: ${ctx.prefix}set prefix newprefix.`);
       return;
     }
-    if (args['set prefix'].length > 5) {
+    if (prefix.length > 5) {
       ctx.reply('Prefix must be smaller than 6 characters.');
       return;
     }
 
-    // TODO: Prepared statement
-    await ctx.commandClient.query(
-      `UPDATE servers SET prefix = '${args['set prefix']}' WHERE server_id = ${ctx.guildId}`
+    await ctx.commandClient.preparedQuery(
+      'UPDATE servers SET prefix = $1 WHERE server_id = $2',
+      [prefix, ctx.guildId],
+      QueryType.Void
     );
-    ctx.guild!.prefix = args['set prefix'];
-    ctx.reply(`This server's prefix is now ${args['set prefix']}`);
+
+    ctx.guild!.prefix = prefix;
+    ctx.reply(`This server's prefix is now ${prefix}`);
   },
 };

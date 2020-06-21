@@ -10,8 +10,9 @@ import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
+import { PreparedStatement } from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { DBUser, DBServer, StarData, DBTags } from './db';
+import { DBUser, DBServer, StarData, DBTags, QueryType } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
@@ -40,9 +41,11 @@ declare module 'detritus-client/lib/structures/user' {
 
 // Additional properties/functions to access on the commandClient
 declare module 'detritus-client/lib/commandclient' {
+
   interface CommandClient {
     query: (query: string) => Promise<any>; // Promise based queries
     queryOne: (query: string) => Promise<any>;
+    preparedQuery: (query: string, values: Array<any>, typ: QueryType) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
@@ -66,6 +69,23 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
 
   client.queryOne = (query: string) => {
     return connection.one(query);
+  };
+
+  /*
+   * Makes a prepared statement with the query and values.
+   * Last paramater specifies the type of query we want to make
+   */
+  client.preparedQuery = (query: string, values: Array<any>, typ : QueryType) => {
+    const preparedStatement = new PreparedStatement({text: query, values: values});
+    switch(typ) {
+      case QueryType.Single:
+        return connection.one(preparedStatement);
+      case QueryType.Multi:
+        return connection.query(preparedStatement);
+      case QueryType.Void:
+        return connection.none(preparedStatement);
+
+    }
   };
 
   // Used for fetching guild member objects easier.
@@ -413,16 +433,15 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
       let content = payload.context.message.content
         .substr(payload.context.guild.prefix!.length)
         .split(/<@!?(\d+)>/);
-      // TODO: Prepared statement
-      let tag: DBTags[] = await client
-        .query(
-          `SELECT * FROM tags WHERE guild_id = ${
-          payload.context.guildId
-          } AND name = '${content}'`
+      let tag: DBTags = await client
+        .preparedQuery(
+          'SELECT * FROM tags WHERE guild_id = $1 AND name = $2',
+          [payload.context.guildId, content],
+          QueryType.Single
         )
         .catch(console.error);
 
-      if (!tag || !tag[0]) return;
+      if (!tag) return;
       console.log(tag);
       // Debugging info
       console.log(
@@ -431,14 +450,13 @@ export default (client: CommandClient, connection: pgPromise.IBaseProtocol<{}>) 
         }`
       );
       // Useful for tag stats
-      // TODO: Prepared statement
-      await client.query(
-        `UPDATE tags SET used = used + 1 WHERE name = '${
-        content
-        }'`
+      await client.preparedQuery(
+        'UPDATE tags SET used = used + 1 WHERE name = $1',
+        [content],
+        QueryType.Void
       );
       // This replaces custom bits inside tags like username and mentions.username etc
-      let s: string = tag[0].content.replace(
+      let s: string = tag.content.replace(
         /{username}/g,
         payload.context.user.username
       );

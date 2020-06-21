@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { chanReg, roleReg } from '../../modules/utils';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
+import { QueryType } from '../../modules/db';
 
 export const setWelcome = {
   name: 'set welcome',
@@ -56,12 +57,11 @@ export const setWelcome = {
           "Welcome Message: I'm sorry but I can't add an everyone mention."
         );
       } else {
-        // TODO: Prepared statement
         await ctx.commandClient
-          .query(
-            `UPDATE servers SET welcome_message = ${
-            welcome_message
-            } WHERE server_id = ${ctx.guildId}`
+          .preparedQuery(
+            'UPDATE servers SET welcome_message = $1 WHERE server_id = $2',
+            [welcome_message, ctx.guildId],
+            QueryType.Void
           )
           .then(() => {
             ctx.reply('Welcome Message: Successfully set!');

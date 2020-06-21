@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
-import { DBUser } from '../../modules/db';
+import { DBUser, QueryType } from '../../modules/db';
 
 interface CommandArgs {
   blacklist: string;
@@ -26,17 +26,19 @@ export const blacklist = {
     let mentioned = ctx.users.get(blacklistArgs[0]);
 
     if (!mentioned!.blacklisted) {
-      // TODO: Prepared Statement
-      const user: DBUser = await ctx.commandClient.query(
-        `SELECT blacklisted FROM users WHERE user_id = ${blacklistArgs[0]}`
+      const user: DBUser = await ctx.commandClient.preparedQuery(
+        'SELECT blacklisted FROM users WHERE user_id = $1',
+        [blacklistArgs[0]],
+        QueryType.Single
       );
       mentioned!.blacklisted = user.blacklisted;
     }
 
     if (mentioned?.blacklisted) {
-      // TODO: Prepared Statement
-      await ctx.commandClient.query(
-        `UPDATE users SET blacklisted = false WHERE user_id = ${blacklistArgs[0]}`
+      await ctx.commandClient.preparedQuery(
+        'UPDATE users SET blacklisted = false WHERE user_id = $1',
+        [blacklistArgs[0]],
+        QueryType.Void
       );
 
       ctx.reply(`${mentioned} has been unblacklisted`);
@@ -48,9 +50,10 @@ export const blacklist = {
     } else {
       let reason = stringExtractor(args.blacklist)[0];
 
-      // TODO: Prepared Statement
-      await ctx.commandClient.query(
-        `UPDATE users SET blacklisted = true WHERE user_id = ${blacklistArgs[0]}`
+      await ctx.commandClient.preparedQuery(
+        'UPDATE users SET blacklisted = true WHERE user_id = $1',
+        [blacklistArgs[0]],
+        QueryType.Void
       );
 
       ctx.reply(`${mentioned} has been blacklisted`);

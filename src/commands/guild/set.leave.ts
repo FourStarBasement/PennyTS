@@ -1,4 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
+import { QueryType } from '../../modules/db';
 
 export const setLeave = {
   name: 'set leave',
@@ -30,12 +31,11 @@ export const setLeave = {
           "Leave Message: I'm sorry but I can't add an everyone mention."
         );
       } else {
-        // TODO: Prepared statement
         await ctx.commandClient
-          .query(
-            `UPDATE servers SET leave_message = ${
-            leave_message
-            } WHERE server_id = ${ctx.guildId}`
+          .preparedQuery(
+            'UPDATE servers SET leave_message = $1 WHERE server_id = $2',
+            [leave_message, ctx.guildId],
+            QueryType.Void
           )
           .then(() => {
             ctx.reply('Leave Message: Successfully set!');

@@ -1,5 +1,11 @@
 /// Interfaces for all tables in the database
 
+export enum QueryType {
+  Single,
+  Multi,
+  Void
+}
+
 export interface DBEmotes {
   server_id: BigInt;
   emote_id: string;

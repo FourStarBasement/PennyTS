@@ -1,5 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
+import { QueryType } from '../../modules/db';
 
 interface CommandArgs {
   'tag claim': string;
@@ -25,9 +26,10 @@ export const tagClaim = {
     if (quotes.includes(args['tag claim'].charAt(0)))
       name = stringExtractor(args['tag claim'])[0];
     else name = tagArg[0];
-    // TODO: Prepared statement
-    let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = ${ctx.guildId} AND name = '${name}'`
+    let data = await ctx.commandClient.preparedQuery(
+      'SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = $1 AND name = $2',
+      [ctx.guildId, name],
+      QueryType.Single
     );
     if (data[0].inD !== 1) {
       ctx.reply('This tag does not exist.');
@@ -38,8 +40,10 @@ export const tagClaim = {
       ctx.reply('The owner of this tag is still in the server.');
       return;
     }
-    await ctx.commandClient.query(
-      `UPDATE tags SET owner = ${ctx.user.id} WHERE name = '${name}' AND guild = ${ctx.guildId}`
+    await ctx.commandClient.preparedQuery(
+      'UPDATE tags SET owner = ${ctx.user.id} WHERE name = $1 AND guild = $2',
+      [name, ctx.guildId],
+      QueryType.Void
     );
     ctx.reply(
       `You are now the "proud" owner of ${name.replace(/@/g, '')}. Congrats.`
