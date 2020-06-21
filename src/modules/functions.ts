@@ -52,7 +52,7 @@ declare module 'detritus-client/lib/commandclient' {
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
-    checkUser: (context: Context, id: string) => Promise<void>; // Checks if a user is in the database before making SQL calls
+    checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -129,18 +129,21 @@ export default (
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (ctx: Context, id: string) => {
+    // TODO: Monitor for performance hits
     let result: DBUser = await client
-      .queryOne(`SELECT blacklisted FROM users WHERE user_id = ${id}`)
-      .catch((error) => console.error(error));
+      .queryOne(`
+      WITH e AS(
+          INSERT INTO users (user_id) VALUES (${id})
+          ON CONFLICT("user_id") DO NOTHING
+          RETURNING blacklisted
+      )
+      SELECT blacklisted FROM e
+      UNION
+          SELECT blacklisted FROM users WHERE user_id = ${id};
+      `)
+      .catch(console.error);
 
-    if (!result) {
-      await client
-        .query(`INSERT INTO users(user_id) VALUES (${id})`)
-        .catch(console.error);
-    }
-
-    ctx.user.checked = true;
-    ctx.user.blacklisted = result.blacklisted;
+    return result;
   };
 
   // Check if the guild is in the DB before doing anything
@@ -172,8 +175,14 @@ export default (
   // This handles all the stuff like levels and custom prefixes
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
-    if (!context.user.checked) await client.checkUser(context, context.user.id);
-    if (context.user.blacklisted) return '';
+    if (!context.user.checked) {
+      await client.checkUser(context, context.user.id).then(results => {
+        context.user.checked = true;
+        context.user.blacklisted = results.blacklisted;
+      });
+
+      if (context.user.blacklisted) return '';
+    }
     if (context.guild && context.guildId) {
       let prefix: string;
       // Check if the prefix is cached
