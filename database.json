@@ -1,0 +1,15 @@
+{
+  "prod": {
+    "driver": "pg",
+    "user": "",
+    "password": ""
+  },
+
+  "dev": {
+    "driver": "pg",
+    "user": "postgres",
+    "password": "lol",
+    "host": "localhost",
+    "database": "penny"
+  }
+}

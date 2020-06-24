@@ -17,27 +17,28 @@ export const setEmblem = {
       return;
     }
 
+    // TODO: Do this
     let emblems = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS hasB FROM \`userE\` WHERE \`userID\` = ${ctx.userId} AND \`emblem\` = '${args['set emblem']}'`
+      `SELECT COUNT(*) AS hasB FROM userE WHERE userID = ${ctx.userId} AND emblem = '${args['set emblem']}'`
     );
-    let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${ctx.userId}`
+    let data: DBUser = await ctx.commandClient.queryOne(
+      `SELECT Credits FROM User WHERE User_ID = ${ctx.userId}`
     );
     if (
       items[args['set emblem']] &&
       items[args['set emblem']].type === 'emblem'
     ) {
       let bg = items[args['set emblem']];
-      if (bg.price > data[0].Credits.toString()) {
+      if (bg.price > data.credits.toString()) {
         ctx.reply('You do not have enough credits for this emblem.');
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE \`User\` SET \`emblem\` = '${bg.name}', \`Credits\`=\`Credits\` - ${bg.price} WHERE \`User_ID\` = ${ctx.userId}`
+        `UPDATE User SET emblem = '${bg.name}', Credits=Credits - ${bg.price} WHERE User_ID = ${ctx.userId}`
       );
       if (emblems.hasB === 0)
         await ctx.commandClient.query(
-          `INSERT INTO \`userE\` (\`userID\`, \`emblem\`) VALUES (${ctx.user}, '${bg}')`
+          `INSERT INTO userE (userID, emblem) VALUES (${ctx.user}, '${bg}')`
         );
       ctx.reply(`Equipped ${bg.name} as your profile emblem!`);
     } else {

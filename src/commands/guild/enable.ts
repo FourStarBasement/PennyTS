@@ -18,15 +18,13 @@ export const enable = {
       ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
     } else if (args.enable === 'levels') {
       ctx.commandClient
-        .query(
-          `UPDATE \`Servers\` SET \`levels\` = 1 WHERE \`ServerID\` = ${ctx.guildId}`
-        )
+        .query(`UPDATE servers SET levels = 1 WHERE server_id = ${ctx.guildId}`)
         .then(() => {
           ctx.reply('Enabled levels.');
         });
     } else if (args.enable === 'mod logs') {
       ctx.commandClient.query(
-        `UPDATE \`Servers\` SET \`mod_log\` = 1 WHERE \`ServerID\` = ${ctx.guildId}`
+        `UPDATE servers SET mod_log = 1 WHERE server_id = ${ctx.guildId}`
       );
       ctx.reply('Please mention the chat for logs:');
       let filter = (m: Message) =>
@@ -43,7 +41,7 @@ export const enable = {
         }
 
         ctx.commandClient.query(
-          `UPDATE \`Servers\` SET \`mod_channel\` = '${channel.id}' WHERE \`ServerID\` = '${ctx.guildId}'`
+          `UPDATE servers SET mod_channel = '${channel.id}' WHERE server_id = ${ctx.guildId}`
         );
         ctx.reply(
           `Enabled mod logs and set ${channel.mention} as the mod channel.`
@@ -58,7 +56,7 @@ export const enable = {
       });
     } else if (args.enable === 'edits') {
       ctx.commandClient.query(
-        `UPDATE \`Servers\` SET \`edits\` = 1 WHERE \`ServerID\` = '${ctx.guildId}'`
+        `UPDATE servers SET edits = 1 WHERE server_id = ${ctx.guildId}`
       );
       ctx.reply('Enabled role edits.');
     } else {

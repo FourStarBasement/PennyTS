@@ -11,15 +11,15 @@ export const mir = {
   },
   run: async (ctx: Context) => {
     const cr = Math.floor(Math.random() * 1000);
-    let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` from \`User\` WHERE \`User_ID\` = ${ctx.member!.id}`
+    let data: DBUser = await ctx.commandClient.queryOne(
+      `SELECT credits from users WHERE user_id = ${ctx.member!.id}`
     );
-    if (data[0].Credits < cr) {
+    if (data.credits < cr) {
       ctx.reply('You do not have enough credits to perform this command.');
       return;
     }
     ctx.commandClient.query(
-      `UPDATE \`User\` SET \`Credits\` = \`Credits\` - ${cr} WHERE \`User_ID\` = ${
+      `UPDATE users SET credits = credits - ${cr} WHERE user_id = ${
         ctx.member!.id
       }`
     );
@@ -40,7 +40,7 @@ export const mir = {
     thing.on('collect', (m: Message) => {
       thing.destroy();
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
+        `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
           m.member!.id
         }`
       );
@@ -52,7 +52,7 @@ export const mir = {
     thing.on('end', () => {
       ctx.reply('It seems as if no one has picked up the credits. Oh well.');
       ctx.commandClient.query(
-        `UPDATE \`User\` SET \`Credits\` = \`Credits\` + ${cr} WHERE \`User_ID\` = ${
+        `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
           ctx.member!.id
         }`
       );

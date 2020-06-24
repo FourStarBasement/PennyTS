@@ -1,5 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
+import { QueryType } from '../../modules/db';
 
 interface CommandArgs {
   'tag create': string;
@@ -25,8 +26,10 @@ export const tagCreate = {
     if (quotes.includes(args['tag create'].charAt(0)))
       name = stringExtractor(args['tag create'])[0];
     else name = tagArg[0];
-    let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+    let data = await ctx.commandClient.preparedQuery(
+      'SELECT COUNT(*) AS inD FROM tags WHERE guild = $1 AND name = $2',
+      [ctx.guildId, name],
+      QueryType.Single
     );
     if (data[0].inD !== 0) {
       ctx.reply('This tag already exists.');
@@ -44,10 +47,10 @@ export const tagCreate = {
       ctx.reply('You need to include content in a tag.');
       return;
     }
-    await ctx.commandClient.query(
-      `INSERT INTO \`tags\` (\`guild\`, \`ID\`, \`owner\`, \`name\`, \`content\`) VALUES (${
-        ctx.guildId
-      }, '${Date.now().toString(16)}', ${ctx.user.id}, '${name}', '${content}')`
+    await ctx.commandClient.preparedQuery(
+      'INSERT INTO tags (guild, ID, owner, name, content) VALUES ($1, $2, $3, $4, $5)',
+      [ctx.guildId, Date.now().toString(16), ctx.user.id, name, content],
+      QueryType.Void
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} created succesfully.`);
   },

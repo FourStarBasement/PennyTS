@@ -20,13 +20,17 @@ export const ban = {
       ctx.reply('I cannot let you do that.');
       return;
     }
+
     if (member.id == ctx.member!.id) {
       ctx.reply('You cannot ban yourself!');
       return;
     }
-    if (ctx.me?.highestRole!.position <= member.highestRole!.position) {
-      ctx.reply('I cannot ban this user.');
-      return;
+
+    if (ctx.me && ctx.me.highestRole) {
+      if (ctx.me.highestRole.position <= member.highestRole!.position) {
+        ctx.reply('I cannot ban this user.');
+        return;
+      }
     }
 
     let banImage = undefined;

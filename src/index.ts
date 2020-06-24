@@ -5,15 +5,16 @@ import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 
 import { CommandClient } from 'detritus-client';
-import mysql from 'mysql';
 import events from './events';
 import { Range } from 'node-schedule';
-const connection = mysql.createConnection({
-  host: config.sql.host,
-  user: config.sql.username,
-  password: config.sql.password,
-  database: config.sql.db_name,
-});
+
+import pgPromise, { IBaseProtocol } from 'pg-promise';
+const pgp = pgPromise();
+
+// TODO: Perhaps make a custom class wrapper for this?
+const connection: IBaseProtocol<{}> = pgp(
+  `postgres://${config.sql.username}:${config.sql.password}@${config.sql.host}/${config.sql.db_name}`
+);
 
 const cmdClient = new CommandClient(config.token, {
   activateOnEdits: true,
@@ -46,8 +47,8 @@ cmdClient.addEvents(events);
   const s = require('node-schedule');
 
   cmdClient.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {
-    cmdClient.query('UPDATE `User` SET `CT` = 1');
-    cmdClient.query('UPDATE `User` SET `DailyTime` = 1');
+    cmdClient.query('UPDATE User SET CT = 1');
+    cmdClient.query('UPDATE User SET DailyTime = 1');
   });
 
   cmdClient.starInterval = s.scheduleJob(

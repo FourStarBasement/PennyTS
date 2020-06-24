@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import config from '../../modules/config';
-import { DBServers, DBRoles } from '../../modules/db';
+import { DBServer, DBRoles } from '../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
 
@@ -20,19 +20,17 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    let guild: DBServers[] = await ctx.commandClient
-      .query(
-        `SELECT \`edits\` FROM \`Servers\` WHERE \`ServerID\` = ${ctx.guildId}`
-      )
-      .catch(() => console.log('Line 25'));
-    if (guild[0].edits !== 1) {
+    let guild: DBServer = await ctx.commandClient.queryOne(
+      `SELECT edits FROM servers WHERE server_id = ${ctx.guildId}`
+    );
+    if (guild.edits !== 1) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
     }
 
     let roles: DBRoles[] = await ctx.commandClient
-      .query(`SELECT * FROM \`roles\` WHERE \`guild\` = ${ctx.guildId}`)
-      .catch(() => (blacklist = [])); // There are no blacklisted roles. Catch to keep continuing code
+      .query(`SELECT * FROM roles WHERE guild = ${ctx.guildId}`)
+      .catch(() => (blacklist = []));
 
     let r_id: string = '';
     let edit: boolean = true;
@@ -41,7 +39,8 @@ export const edit = {
     });
 
     roles.forEach((d) => {
-      blacklist.push(d.role);
+      // TODO: Change to bigint array
+      blacklist.push(d.role.toString());
     });
     if (blacklist.includes(r_id)) edit = false;
 

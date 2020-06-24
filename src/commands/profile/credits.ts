@@ -12,9 +12,9 @@ export const credits = {
       ctx.reply('Silly you! Bots have no use for money.');
       return;
     }
-    let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`Credits\` FROM \`User\` WHERE \`User_ID\` = ${user!.id}`
+    let data: DBUser = await ctx.commandClient.queryOne(
+      `SELECT credits FROM users WHERE user_id = ${user!.id}`
     );
-    ctx.reply(`💸 ${user?.username} has ${data[0].Credits} credits. 💸`);
+    ctx.reply(`💸 ${user?.username} has ${data.credits} credits. 💸`);
   },
 };

@@ -21,8 +21,8 @@ export const tags = {
 
     let query: string =
       args.tags === 'all'
-        ? `SELECT * FROM \`tags\` WHERE \`guild\` = ${ctx.guildId}`
-        : `SELECT * FROM \`tags\` WHERE \`owner\` = ${user.id} AND \`guild\` = ${ctx.guildId}`;
+        ? `SELECT * FROM tags WHERE guild = ${ctx.guildId}`
+        : `SELECT * FROM tags WHERE owner = ${user.id} AND guild = ${ctx.guildId}`;
     let data = await ctx.commandClient.query(query);
     let pages = new Array<Page>();
     let emotes = new Array<Array<DBTags>>();

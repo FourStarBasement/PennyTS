@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  penny:
+    build: .
+    restart: always
+    depends_on:
+      - penny_db
+    networks:
+      - penny_network
+
+  penny_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWD}"
+      POSTGRES_DB: "${PG_DB}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data:z
+    networks:
+      - penny_network
+
+volumes:
+  postgres_data:
+    driver: local
+networks:
+  penny_network:
+

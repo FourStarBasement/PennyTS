@@ -9,9 +9,10 @@ import { Member, User, Message, Guild } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
-import { Connection } from 'mysql';
+import pgPromise from 'pg-promise';
+import { PreparedStatement } from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { DBUser, DBServers, StarData, DBCount, DBTags } from './db';
+import { DBUser, DBServer, StarData, DBTags, QueryType } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
@@ -42,10 +43,16 @@ declare module 'detritus-client/lib/structures/user' {
 declare module 'detritus-client/lib/commandclient' {
   interface CommandClient {
     query: (query: string) => Promise<any>; // Promise based queries
+    queryOne: (query: string) => Promise<any>;
+    preparedQuery: (
+      query: string,
+      values: Array<any>,
+      typ: QueryType
+    ) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
-    checkUser: (context: Context, id: string) => Promise<void>; // Checks if a user is in the database before making SQL calls
+    checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -57,15 +64,40 @@ declare module 'detritus-client/lib/commandclient' {
   }
 }
 
-export default (client: CommandClient, connection: Connection) => {
+export default (
+  client: CommandClient,
+  connection: pgPromise.IBaseProtocol<{}>
+) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
-    return new Promise((resolve, reject) => {
-      connection.query(query, (err: any, res: any) => {
-        if (err || res.length < 1) reject(err || 'Query returned nothing');
-        resolve(res);
-      });
+    return connection.query(query);
+  };
+
+  client.queryOne = (query: string) => {
+    return connection.one(query);
+  };
+
+  /*
+   * Makes a prepared statement with the query and values.
+   * Last paramater specifies the type of query we want to make
+   */
+  client.preparedQuery = (
+    query: string,
+    values: Array<any>,
+    typ: QueryType
+  ) => {
+    const preparedStatement = new PreparedStatement({
+      text: query,
+      values: values,
     });
+    switch (typ) {
+      case QueryType.Single:
+        return connection.one(preparedStatement);
+      case QueryType.Multi:
+        return connection.query(preparedStatement);
+      case QueryType.Void:
+        return connection.none(preparedStatement);
+    }
   };
 
   // Used for fetching guild member objects easier.
@@ -97,20 +129,21 @@ export default (client: CommandClient, connection: Connection) => {
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (ctx: Context, id: string) => {
-    let result: DBUser[] = await client
-      .query(`SELECT * FROM \`User\` WHERE \`User_ID\` = ${id}`)
-      .catch((error) => {
-        if (error !== 'Query returned nothing') console.error(error);
-      });
+    // TODO: Monitor for performance hits
+    let result: DBUser = await client
+      .queryOne(`
+      WITH e AS(
+          INSERT INTO users (user_id) VALUES (${id})
+          ON CONFLICT("user_id") DO NOTHING
+          RETURNING blacklisted
+      )
+      SELECT blacklisted FROM e
+      UNION
+          SELECT blacklisted FROM users WHERE user_id = ${id};
+      `)
+      .catch(console.error);
 
-    if (!result || !result[0]) {
-      await client
-        .query(`INSERT INTO \`User\`(\`User_ID\`) VALUES ('${id}')`)
-        .catch(console.error);
-    }
-
-    ctx.user.checked = true;
-    ctx.user.blacklisted = Boolean(result[0].Blacklisted);
+    return result;
   };
 
   // Check if the guild is in the DB before doing anything
@@ -118,24 +151,22 @@ export default (client: CommandClient, connection: Connection) => {
     const guild = (client.client as ShardClient).guilds.get(id);
 
     if (!guild) return;
-    let result: DBServers[] = await client
-      .query(
-        `SELECT \`ModLogPerm\`, COUNT(*) as \`count\` FROM \`Servers\` WHERE \`ServerID\` = '${id}'`
+    let result: DBServer = await client
+      .queryOne(
+        `SELECT server_id, modlog_perm FROM servers WHERE server_id = ${id}`
       )
-      .catch((error) => {
-        if (error !== 'Query returned nothing') console.error(error);
-      });
+      .catch(console.error);
 
-    if (result[0].count === 0) {
+    if (!result) {
       await client
-        .query(`INSERT INTO \`Servers\` (\`ServerID\`) VALUES ('${id}')`)
+        .query(`INSERT INTO servers (server_id) VALUES (${id})`)
         .catch(console.error);
       if (!guild?.modLog) {
         guild!.modLog = 0;
       }
     } else {
       if (!guild?.modLog) {
-        guild!.modLog = parseInt(result[0].ModLogPerm);
+        guild!.modLog = parseInt(result.modlog_perm);
       }
     }
     guild!.checked = true;
@@ -144,8 +175,14 @@ export default (client: CommandClient, connection: Connection) => {
   // This handles all the stuff like levels and custom prefixes
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
-    if (!context.user.checked) await client.checkUser(context, context.user.id);
-    if (context.user.blacklisted) return '';
+    if (!context.user.checked) {
+      await client.checkUser(context, context.user.id).then(results => {
+        context.user.checked = true;
+        context.user.blacklisted = results.blacklisted;
+      });
+
+      if (context.user.blacklisted) return '';
+    }
     if (context.guild && context.guildId) {
       let prefix: string;
       // Check if the prefix is cached
@@ -154,15 +191,14 @@ export default (client: CommandClient, connection: Connection) => {
       } else {
         // If the prefix is not cached we cache it
         await client.checkGuild(context.guildId);
-        let data: DBServers[] = await client
-          .query(
-            `SELECT \`Prefix\`, \`levels\` FROM \`Servers\` WHERE \`ServerID\` = ${context.guildId}`
+        let data: DBServer = await client
+          .queryOne(
+            `SELECT prefix, levels FROM servers WHERE server_id = ${context.guildId}`
           )
-          .catch((error) => {
-            if (error !== 'Query returned nothing') console.error(error);
-          });
-        context.guild!.levels = data[0].levels;
-        prefix = data[0].Prefix;
+          .catch(console.error);
+        console.log(data);
+        context.guild!.levels = data.levels;
+        prefix = data.prefix;
         context.guild!.prefix = prefix;
       }
       // This grabs the emote stats
@@ -318,25 +354,23 @@ export default (client: CommandClient, connection: Connection) => {
 
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
-    let starData: StarData[] = await client.query(
-      `SELECT COUNT(*) AS \`count\`, \`msgID\`, \`starID\` FROM \`starboard\` WHERE \`msgID\` = ${message.id} OR \`starID\` = ${message.id}`
+    let starData: StarData = await client.query(
+      `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
     );
-    let starboardInfo: DBServers[] = await client.query(
-      `SELECT \`starboard\` FROM \`Servers\` WHERE \`ServerID\` = ${
-        message.guild!.id
-      }`
+    let starboardInfo: DBServer = await client.query(
+      `SELECT starboard FROM servers WHERE server_id = ${message.guild!.id}`
     );
 
     let channels = message.guild!.channels;
-    let starboard = channels.get(starboardInfo[0].starboard);
+    let starboard = channels.get(starboardInfo.starboard_channel.toString());
 
     let starMessage;
     let starredMessage;
-    if (starData[0].count) {
-      starMessage = await starboard?.fetchMessage(starData[0].starID);
+    if (starData.count) {
+      starMessage = await starboard?.fetchMessage(starData.star_id);
       starredMessage = await channels
         .get(chanReg.exec(starMessage.content)![1])
-        ?.fetchMessage(starData[0].msgID);
+        ?.fetchMessage(starData.message_id);
     }
 
     return {
@@ -385,18 +419,18 @@ export default (client: CommandClient, connection: Connection) => {
   client.emoteCheck = async (emoteID: string, serverID: string) => {
     let data = await client
       .query(
-        `SELECT COUNT(*) AS inD FROM \`emote\` WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+        `SELECT COUNT(*) AS inD FROM emote WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
       )
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
       });
     if (data[0].inD === 0) {
       await client.query(
-        `INSERT INTO \`emote\` (\`server_id\`, \`emote_id\`) VALUES (${serverID}, ${emoteID})`
+        `INSERT INTO emote (server_id, emote_id) VALUES (${serverID}, ${emoteID})`
       );
     }
     await client.query(
-      `UPDATE \`emote\` SET \`used\` = \`used\` + 1 WHERE \`server_id\` = ${serverID} AND \`emote_id\` = ${emoteID}`
+      `UPDATE emote SET used = used + 1 WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
     );
   };
 
@@ -419,18 +453,16 @@ export default (client: CommandClient, connection: Connection) => {
       let content = payload.context.message.content
         .substr(payload.context.guild.prefix!.length)
         .split(/<@!?(\d+)>/);
-      let tag: DBTags[] = await client
-        .query(
-          `SELECT * FROM \`tags\` WHERE \`guild\` = ${
-            payload.context.guildId
-          } AND \`name\` = ${connection.escape(content[0].trim())}`
+      let tag: DBTags = await client
+        .preparedQuery(
+          'SELECT * FROM tags WHERE guild_id = $1 AND name = $2',
+          [payload.context.guildId, content],
+          QueryType.Single
         )
-        .catch((e) => {
-          // Tag doesn't exist
-          if (e === 'Query returned nothing') return;
-          else console.log(e);
-        });
+        .catch(console.error);
+
       if (!tag) return;
+      console.log(tag);
       // Debugging info
       console.log(
         `Ran tag ${content[0].trim()} by ${payload.context.user.username}\n${
@@ -438,13 +470,13 @@ export default (client: CommandClient, connection: Connection) => {
         }`
       );
       // Useful for tag stats
-      await client.query(
-        `UPDATE \`tags\` SET \`used\` = \`used\` + 1 WHERE \`name\` = ${connection.escape(
-          content[0].trim()
-        )}`
+      await client.preparedQuery(
+        'UPDATE tags SET used = used + 1 WHERE name = $1',
+        [content],
+        QueryType.Void
       );
       // This replaces custom bits inside tags like username and mentions.username etc
-      let s: string = tag[0].content.replace(
+      let s: string = tag.content.replace(
         /{username}/g,
         payload.context.user.username
       );
@@ -472,7 +504,7 @@ export default (client: CommandClient, connection: Connection) => {
     ) {
       let xp: number = Math.floor(Math.random() * 50); // 50 xp max at random. Just to make leveling up hard as pee pee
       await client.query(
-        `UPDATE \`User\` SET \`xp_cool\`=NOW(), \`XP\`=\`XP\` + '${xp}' WHERE \`User_ID\` = ${ctx.user.id}`
+        `UPDATE users SET xp_cool=NOW(), XP=XP + '${xp}' WHERE user_id = ${ctx.user.id}`
       );
       if (userData[0].XP > userData[0].Next && enabled === 1) {
         ctx.reply(
@@ -481,7 +513,7 @@ export default (client: CommandClient, connection: Connection) => {
           }`
         );
         await client.query(
-          `UPDATE \`User\` SET \`Level\` = \`Level\` + 1, \`Next\` = \`Next\` + 500, \`xp\` = 0 WHERE \`User_ID\` = ${ctx.user.id}`
+          `UPDATE users SET Level = Level + 1, Next = Next + 500, xp = 0 WHERE user_id = ${ctx.user.id}`
         );
       }
     }

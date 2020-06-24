@@ -9,7 +9,7 @@ let canHugWiggy = [
   '310839399728545792', // Matza
   '600058196249411587', // Batthew's dummy thicc cheeks like holy fuck they're so thicc
   '411710271229526017', // Bats cause she wants to be nice
-  '357763197559767041' // Glowwy cause 😳😳😳
+  '357763197559767041', // Glowwy cause 😳😳😳
 ];
 
 export const hug = {
@@ -53,7 +53,7 @@ export const hug = {
     }
 
     let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT \`weeb\` FROM \`User\` WHERE \`User_ID\` = ${user.id}`
+      `SELECT weeb FROM User WHERE User_ID = ${user.id}`
     );
 
     if (user.id === '232614905533038593') {

@@ -47,7 +47,7 @@ export const setModLog = {
       } else {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`mod_channel\` = ${channel.id} WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE servers SET mod_channel = ${channel.id} WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(
@@ -77,7 +77,7 @@ export const setModLog = {
           if (r.emoji.name === '⏹️') {
             collector.destroy();
             ctx.commandClient
-              .query(`UPDATE \`Servers\` SET \`ModLogPerm\` = '${bits}'`)
+              .query(`UPDATE servers SET modlog_perm = '${bits}'`)
               .then(() => {
                 message.edit({ content: 'Set!', embed: {} });
                 message.deleteReactions();

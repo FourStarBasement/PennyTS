@@ -2,7 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import { Member, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
-import { DBServers } from '../../modules/db';
+import { DBServer } from '../../modules/db';
 import config from '../../modules/config';
 
 interface CommandArgs {
@@ -53,27 +53,27 @@ export const color = {
             if (
               !ctx.member!.colorRole ||
               ctx.member!.colorRole!.position >=
-                ctx.me?.highestRole!.position ||
+                ctx.me!.highestRole!.position ||
               !ctx.me?.canManageRoles
             )
               return;
-            let data: [DBServers] = await ctx.commandClient
-              .query(
-                `SELECT * FROM \`Servers\` WHERE \`ServerID\` = '${ctx.guildId}'`
+            let server: DBServer = await ctx.commandClient
+              .queryOne(
+                `SELECT * FROM servers WHERE server_id = ${ctx.guildId}`
               )
               .catch(console.error);
             await ctx.commandClient
               .query(
-                `SELECT * FROM \`roles\` WHERE \`guild\` = ${
-                  ctx.guildId
-                } AND \`role\` = ${ctx.member!.colorRole!.id}`
+                `SELECT * FROM roles WHERE guild = ${ctx.guildId} AND role = ${
+                  ctx.member!.colorRole!.id
+                }`
               )
               .catch((err) => {
                 if (err !== 'Query returned nothing') {
                   console.error(err);
                   return;
                 }
-                if (data[0].edits === 0) return;
+                if (server.edits === 0) return;
                 m.react('📝');
 
                 let filter = (r: Reaction, u: User) => {

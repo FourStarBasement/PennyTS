@@ -1,5 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
+import { QueryType } from '../../modules/db';
 
 interface CommandArgs {
   'tag delete': string;
@@ -25,8 +26,10 @@ export const tagDelete = {
     if (quotes.includes(args['tag delete'].charAt(0)))
       name = stringExtractor(args['tag delete'])[0];
     else name = tagArg[0];
-    let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`owner\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+    let data = await ctx.commandClient.preparedQuery(
+      'SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = $1 AND name = $2',
+      [ctx.guildId, name],
+      QueryType.Single
     );
     if (data[0].inD !== 1) {
       ctx.reply('This tag does not exist.');
@@ -37,8 +40,10 @@ export const tagDelete = {
       ctx.reply('You do not own this tag.');
       return;
     }
-    await ctx.commandClient.query(
-      `DELETE FROM \`tags\` WHERE \`name\` = '${name}' AND \`guild\` = ${ctx.guildId}`
+    await ctx.commandClient.preparedQuery(
+      'DELETE FROM tags WHERE name = $1 AND guild = $2',
+      [name, ctx.guildId],
+      QueryType.Void
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} deleted.`);
   },

@@ -12,7 +12,7 @@ export const globalDisable = {
     ctx.commandClient.commands.forEach((c) => {
       if (c.name === args['global disable']) {
         c.metadata.disabled = true;
-        ctx.reply(`Disabled \`${c.name}\`.`);
+        ctx.reply(`Disabled ${c.name}.`);
         success = true;
       }
     });

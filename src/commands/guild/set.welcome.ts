@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { chanReg, roleReg } from '../../modules/utils';
-import { escape } from 'mysql';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
+import { QueryType } from '../../modules/db';
 
 export const setWelcome = {
   name: 'set welcome',
@@ -23,7 +23,7 @@ export const setWelcome = {
     if (attr === 'on') {
       ctx.commandClient
         .query(
-          `UPDATE \`Servers\` SET \`Welcome\` = 1 WHERE \`ServerID\` = '${ctx.guildId}'`
+          `UPDATE Servers SET Welcome = 1 WHERE ServerID = '${ctx.guildId}'`
         )
         .then(() => {
           ctx.reply('Successfully turned on welcome messages.');
@@ -34,7 +34,7 @@ export const setWelcome = {
     if (attr === 'off') {
       ctx.commandClient
         .query(
-          `UPDATE \`Servers\` SET \`Welcome\` = 0 WHERE \`ServerID\` = '${ctx.guildId}'`
+          `UPDATE Servers SET Welcome = 0 WHERE ServerID = '${ctx.guildId}'`
         )
         .then(() => {
           ctx.reply('Successfully turned off welcome messages.');
@@ -58,10 +58,10 @@ export const setWelcome = {
         );
       } else {
         await ctx.commandClient
-          .query(
-            `UPDATE \`Servers\` SET \`WMessage\` = ${escape(
-              welcome_message
-            )} WHERE \`ServerID\` = '${ctx.guildId}'`
+          .preparedQuery(
+            'UPDATE servers SET welcome_message = $1 WHERE server_id = $2',
+            [welcome_message, ctx.guildId],
+            QueryType.Void
           )
           .then(() => {
             ctx.reply('Welcome Message: Successfully set!');
@@ -92,7 +92,7 @@ export const setWelcome = {
       } else {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`wc\` = ${channel.id} WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE servers SET wc = ${channel.id} WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(
@@ -110,7 +110,7 @@ export const setWelcome = {
       if (value === '$none') {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`WelcomeR\` = NULL WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE servers SET welcome_role = NULL WHERE server_id = ${ctx.guildId}`
           )
           .then(() => {
             unset = true;
@@ -134,12 +134,10 @@ export const setWelcome = {
       } else if (role && !unset) {
         await ctx.commandClient
           .query(
-            `UPDATE \`Servers\` SET \`WRole\` = '${role.id}' WHERE \`ServerID\` = '${ctx.guildId}'`
+            `UPDATE Servers SET welcome_role = '${role.id}' WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
-            ctx.reply(
-              `Welcome Role: Successfully set as \`\`${role!.name}\`\`!`
-            )
+            ctx.reply(`Welcome Role: Successfully set as ${role!.name}!`)
           );
       } else {
         ctx.reply('Welcome Role: Successfully unset!');

@@ -1,5 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
+import { QueryType } from '../../modules/db';
 
 interface CommandArgs {
   'tag info': string;
@@ -26,8 +27,10 @@ export const tagInfo = {
     if (quotes.includes(args['tag info'].charAt(0)))
       name = stringExtractor(args['tag info'])[0];
     else name = tagArg[0];
-    let data = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS inD, \`ID\`, \`used\`, \`owner\` FROM \`tags\` WHERE \`guild\` = ${ctx.guildId} AND \`name\` = '${name}'`
+    let data = await ctx.commandClient.preparedQuery(
+      'SELECT COUNT(*) AS inD, ID, used, owner FROM tags WHERE guild = $1 AND name = $2',
+      [ctx.guildId, name],
+      QueryType.Single
     );
     if (data[0].inD === 0) {
       ctx.reply('This tag does not exist.');

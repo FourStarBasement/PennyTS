@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
-import { DBUserB } from '../../modules/db';
+import { DBUserBackgrounds, DBUser } from '../../modules/db';
 
 export const backgrounds = {
   name: 'backgrounds',
@@ -12,8 +12,8 @@ export const backgrounds = {
   run: async (ctx: Context) => {
     let bg: Array<any> = [];
     let i = 0;
-    let data = await ctx.commandClient
-      .query(`SELECT * FROM \`userB\` WHERE User_ID = '${ctx.member!.id}'`)
+    let data: DBUserBackgrounds[] = await ctx.commandClient
+      .query(`SELECT * FROM user_backgrounds WHERE user_id = ${ctx.member!.id}`)
       .catch((r) => {
         if (r == 'Query returned nothing') {
           ctx.reply('You do not own any backgrounds.');
@@ -21,7 +21,7 @@ export const backgrounds = {
         }
       });
 
-    data.forEach((element: DBUserB) => {
+    data.forEach((element: DBUserBackgrounds) => {
       if (element.name !== 'default') {
         bg.push(embed(element.name));
       }
