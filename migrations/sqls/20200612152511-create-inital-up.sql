@@ -55,10 +55,10 @@ CREATE TABLE users (
   cookie_time boolean default true,
   cookies integer default 0,
   background varchar(36),
-  patron boolean default false,
   emblem varchar(32),
   weeb boolean default true,
-  token varchar(32)
+  token varchar(32),
+  flags integer default 0
 );
 
 CREATE TABLE user_backgrounds (

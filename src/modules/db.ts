@@ -6,6 +6,16 @@ export enum QueryType {
   Void,
 }
 
+export enum UserFlags {
+  Staff = 1 << 0,
+  Contrib = 1 << 1,
+  Moderator = 1 << 2,
+  Patron = 1 << 3,
+  Weeb = 1 << 4,
+  Beta = 1 << 5,
+  BugFinder = 1 << 6
+}
+
 export interface DBEmotes {
   server_id: BigInt;
   emote_id: string;
@@ -62,10 +72,9 @@ export interface DBUser {
   cookie_time: number;
   cookies: number;
   background: string;
-  patron: boolean;
   emblem: string;
-  weeb: string;
   token: string;
+  flags: number;
 }
 
 export interface DBUserBackgrounds {

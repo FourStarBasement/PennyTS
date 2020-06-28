@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import images from '../../modules/images';
-import { DBUser } from '../../modules/db';
+import { DBUser, UserFlags } from '../../modules/db';
 
 let canHugWiggy = [
   '407773762814083072', // Elferton
@@ -52,8 +52,8 @@ export const hug = {
       }
     }
 
-    let data: DBUser[] = await ctx.commandClient.query(
-      `SELECT weeb FROM User WHERE User_ID = ${user.id}`
+    let data: DBUser = await ctx.commandClient.queryOne(
+      `SELECT flags FROM users WHERE user_id = ${user.id}`
     );
 
     if (user.id === '232614905533038593') {
@@ -71,7 +71,7 @@ export const hug = {
         return;
       }
     }
-    if (data[0].weeb === 'on')
+    if (ctx.commandClient.hasFlag(data.flags, UserFlags.Weeb))
       image = hugsAnime[Math.floor(Math.random() * hugsAnime.length)];
     else image = hugsReal[Math.floor(Math.random() * hugsReal.length)];
 

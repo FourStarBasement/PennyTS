@@ -12,7 +12,7 @@ import config from './config';
 import pgPromise from 'pg-promise';
 import { PreparedStatement } from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { DBUser, DBServer, StarData, DBTags, QueryType } from './db';
+import { UserFlags, DBUser, DBServer, StarData, DBTags, QueryType } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
@@ -53,6 +53,7 @@ declare module 'detritus-client/lib/commandclient' {
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
     checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
+    hasFlag: (flags: number, flag: UserFlags) => Boolean;
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -125,6 +126,11 @@ export default (
     if (r.statusText !== 'OK') return 'failed';
 
     return image;
+  };
+
+  // Check if a DBUser has a flag set
+  client.hasFlag = (flags: number, flag: UserFlags) => {
+    return ((flags & flag.valueOf()) == flag.valueOf())
   };
 
   // Check if user is in the DB before doing anything

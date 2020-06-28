@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { items } from '../../modules/shop';
-import { DBUser } from '../../modules/db';
+import { DBUser, UserFlags } from '../../modules/db';
 interface CommandArgs {
   'set background': string;
 }
@@ -33,10 +33,10 @@ export const setBackground = {
       `SELECT COUNT(*) AS hasB FROM userB WHERE User_ID = ${ctx.userId} AND name = '${args['set background']}'`
     );
     let data: DBUser = await ctx.commandClient.queryOne(
-      `SELECT patron, credits FROM User WHERE User_ID = ${ctx.userId}`
+      `SELECT flags, credits FROM User WHERE User_ID = ${ctx.userId}`
     );
     if (args['set background'] === 'patreon') {
-      if (!data.patron) {
+      if (!ctx.commandClient.hasFlag(data.flags, UserFlags.Patron)) {
         ctx.reply(
           'You are not a patron! Consider donating here. Making bots is hard sometimes... <https://www.patreon.com/lilwiggy>'
         );

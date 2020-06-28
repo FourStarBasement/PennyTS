@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import moment from 'moment';
 import { humanize } from '../../modules/utils';
-import { DBUser } from '../../modules/db';
+import { DBUser, UserFlags } from '../../modules/db';
 
 export const daily = {
   name: 'daily',
@@ -19,11 +19,11 @@ export const daily = {
     }
 
     let dbUser: DBUser = await ctx.commandClient.queryOne(
-      `SELECT daily_time, patron FROM users WHERE user_id = ${ctx.member!.id}`
+      `SELECT daily_time, flags FROM users WHERE user_id = ${ctx.member!.id}`
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;
 
-    if (dbUser.patron) amount += 500;
+    if (ctx.commandClient.hasFlag(dbUser.flags, UserFlags.Patron)) amount += 500;
 
     if (dbUser.daily_time) {
       if (user.id === ctx.member!.id) {
