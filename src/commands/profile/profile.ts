@@ -12,22 +12,20 @@ export const profile = {
   run: async (ctx: Context) => {
     let member =
       (ctx.commandClient.fetchGuildMember(ctx) as Member) || ctx.member;
-    let img = await fetch(`${config.imageAPI.url}/profile`, {
-      headers: {
-        user_id: member!.id,
-        user_avatar: member!.avatarUrl,
-        color: `#${member!.color.toString(16)}`,
-        authorization: config.imageAPI.password,
-      },
+    await fetch(
+      `${config.imageAPI.url}/profile?id=${member!.id}&avatar_url=${member!.avatarUrl}&color=${member!.color}`, {
+      headers: { Authorization: config.imageAPI.password }
     })
-      .then((d) => d.json())
-      .catch(console.error);
-    ctx.reply({
-      content: `${member!.username}'s profile.`,
-      file: {
-        data: Buffer.from(img.buffer),
-        filename: 'profile.png',
-      },
-    });
+    .then(resp => resp.arrayBuffer())
+    .then(buffer => {
+      ctx.reply({
+        content: `${member!.username}'s profile.`,
+        file: {
+          data: Buffer.from(buffer),
+          filename: 'profile.png',
+        },
+      });
+    })
+    .catch(console.error);
   },
 };

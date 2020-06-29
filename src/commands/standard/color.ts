@@ -17,8 +17,13 @@ export const color = {
   arg: {
     name: 'color',
   },
-  aliases: ['colour'], // for all you non freedom landers (please don't hurt me NC and seth ily)
+  aliases: ['colour'], // for all you non freedom landers (please don't hurt me NC and seth ily) (seth says thanks)
   checks: ['attachments'],
+  /*
+     TODO: Improve this
+     This should take any form of input, hex, decimal, maybe even R,G,B,A?
+     This can probably also be cleaner :)
+   */
   run: async (ctx: Context, args: CommandArgs) => {
     let hex = /^#?[0-9A-F]{6}$/i;
     let user = ctx.commandClient.fetchGuildMember(ctx);
@@ -30,22 +35,20 @@ export const color = {
       );
       return;
     }
-    let img;
     if (args.color) {
       if (hex.test(args.color)) {
-        img = await fetch(`${config.imageAPI.url}/color`, {
+        await fetch(`${config.imageAPI.url}/color/${args.color}`, {
           headers: {
-            color: args.color,
-            authorization: config.imageAPI.password,
+            Authorization: config.imageAPI.password,
           },
         })
-          .then((d) => d.json())
-          .catch(console.error);
-        ctx
+        .then(resp => resp.arrayBuffer())
+        .then(buffer => {
+          ctx
           .reply({
             content: `Color for **${args.color}**`,
             file: {
-              data: Buffer.from(img.buffer),
+              data: Buffer.from(buffer),
               filename: 'color.png',
             },
           })
@@ -53,48 +56,50 @@ export const color = {
             if (
               !ctx.member!.colorRole ||
               ctx.member!.colorRole!.position >=
-                ctx.me!.highestRole!.position ||
-              !ctx.me?.canManageRoles
+            ctx.me!.highestRole!.position ||
+          !ctx.me?.canManageRoles
             )
-              return;
+            return;
             let server: DBServer = await ctx.commandClient
-              .queryOne(
-                `SELECT * FROM servers WHERE server_id = ${ctx.guildId}`
-              )
-              .catch(console.error);
+            .queryOne(
+              `SELECT * FROM servers WHERE server_id = ${ctx.guildId}`
+            )
+            .catch(console.error);
             await ctx.commandClient
-              .query(
-                `SELECT * FROM roles WHERE guild = ${ctx.guildId} AND role = ${
-                  ctx.member!.colorRole!.id
-                }`
-              )
-              .catch((err) => {
-                if (err !== 'Query returned nothing') {
-                  console.error(err);
-                  return;
-                }
-                if (server.edits === 0) return;
-                m.react('📝');
+            .query(
+              `SELECT * FROM roles WHERE guild = ${ctx.guildId} AND role = ${
+                ctx.member!.colorRole!.id
+              }`
+            )
+            .catch((err) => {
+              if (err !== 'Query returned nothing') {
+                console.error(err);
+                return;
+              }
+              if (server.edits === 0) return;
+              m.react('📝');
 
-                let filter = (r: Reaction, u: User) => {
-                  return r.emoji.name === '📝' && u.id === ctx.member!.id;
-                };
-                let collector = new ReactionCollector(ctx, 30000, m, filter);
-                let old = ctx.member!.colorRole?.color.toString(16);
-                collector.on('collect', (r: Reaction, u: User) => {
-                  ctx
-                    .member!.colorRole?.edit({
-                      color: parseInt(`0x${args.color.replace('#', '')}`),
-                      reason: `Requested change by ${
-                        ctx.member!.username
-                      }. Used to be ${old}.`,
-                    })
-                    .catch(console.error);
-                  ctx.reply(`Your role color is now ${args.color}. Enjoy!`);
-                  collector.destroy();
-                });
+              let filter = (r: Reaction, u: User) => {
+                return r.emoji.name === '📝' && u.id === ctx.member!.id;
+              };
+              let collector = new ReactionCollector(ctx, 30000, m, filter);
+              let old = ctx.member!.colorRole?.color.toString(16);
+              collector.on('collect', (r: Reaction, u: User) => {
+                ctx
+                .member!.colorRole?.edit({
+                  color: parseInt(`0x${args.color.replace('#', '')}`),
+                  reason: `Requested change by ${
+                    ctx.member!.username
+                  }. Used to be ${old}.`,
+                })
+                .catch(console.error);
+                ctx.reply(`Your role color is now ${args.color}. Enjoy!`);
+                collector.destroy();
               });
+            });
           });
+        })
+        .catch(console.error);
       }
     } else {
       ctx.reply(`Your role color is **#${ctx.member!.color.toString(16)}**`);

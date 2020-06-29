@@ -11,6 +11,7 @@ export const edit = {
     description: 'Edit your role color.',
     checks: ['manageRoles', 'attachments'],
   },
+  //TODO: Improve this
   run: async (ctx: Context) => {
     let role = ctx.message.content
       .slice(ctx.prefix!.length + ctx.command!.name.length)
@@ -72,22 +73,20 @@ export const edit = {
       ctx.reply('I cannot edit this role.');
       return;
     }
-    let img = await fetch(`${config.imageAPI.url}/messagepreview`, {
+    await fetch(`${config.imageAPI.url}/messagepreview?id=${ctx.user.id}&username=${ctx.user.username}&avatar_url=${ctx.user.avatarUrl}&color=${role[1]}`, {
       headers: {
-        user: JSON.stringify(ctx.user),
-        color: role[1],
-        authorization: config.imageAPI.password,
+        Authorization: config.imageAPI.password,
       },
     })
-      .then((d) => d.json())
-      .catch(console.error);
-    ctx
+    .then(resp => resp.arrayBuffer())
+    .then(buffer => {
+      ctx
       .reply({
         content: `Here is a preview of what your role will look like with ${role[1]}. React with 🇾 if you want to keep it or 🇳 if you do not.`,
-        file: {
-          data: Buffer.from(img.buffer),
-          filename: 'edit.png',
-        },
+          file: {
+            data: Buffer.from(buffer),
+            filename: 'edit.png',
+          },
       })
       .then(async (m: Message) => {
         await m.react('🇾');
@@ -95,7 +94,7 @@ export const edit = {
         let filter = (re: Reaction, u: User) => {
           return (
             (re.emoji.name === '🇾' || re.emoji.name === '🇳') &&
-            u.id === ctx.user.id
+              u.id === ctx.user.id
           );
         };
         let collector = new ReactionCollector(ctx, 30000, m, filter);
@@ -115,5 +114,7 @@ export const edit = {
           }
         });
       });
+    })
+    .catch(console.error);
   },
 };
