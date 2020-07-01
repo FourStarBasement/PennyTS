@@ -28,8 +28,15 @@ export const setEmblem = {
       items[args['set emblem']] &&
       items[args['set emblem']].type === 'emblem'
     ) {
-      let bg = items[args['set emblem']];
-      if (bg.price > data.credits.toString()) {
+      const bg = items[args['set emblem']];
+      const price = Number(bg.price);
+
+      if (isNaN(price)) {
+        ctx.reply('Hm, the price is somehow not a number! Contact the devs!');
+        return;
+      }
+
+      if (price > data.credits)
         ctx.reply('You do not have enough credits for this emblem.');
         return;
       }
