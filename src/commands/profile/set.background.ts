@@ -30,10 +30,10 @@ export const setBackground = {
 
     // TODO: Do this
     let backgrounds = await ctx.commandClient.query(
-      `SELECT COUNT(*) AS hasB FROM userB WHERE User_ID = ${ctx.userId} AND name = '${args['set background']}'`
+      `SELECT COUNT(*) AS hasB FROM user_backgrounds WHERE user_id = ${ctx.userId} AND name = '${args['set background']}'`
     );
     let data: DBUser = await ctx.commandClient.queryOne(
-      `SELECT flags, credits FROM User WHERE User_ID = ${ctx.userId}`
+      `SELECT flags, credits FROM users WHERE user_id = ${ctx.userId}`
     );
     if (args['set background'] === 'patreon') {
       if (!ctx.commandClient.hasFlag(data.flags, UserFlags.Patron)) {
@@ -43,7 +43,7 @@ export const setBackground = {
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE User SET background = 'patreon' WHERE User_ID = ${ctx.userId}`
+        `UPDATE users SET background = 'patreon' WHERE user_id = ${ctx.userId}`
       );
       ctx.reply(
         'Your background is now the patreon background! Thanks a ton for your support <3'
@@ -61,11 +61,11 @@ export const setBackground = {
         return;
       }
       await ctx.commandClient.query(
-        `UPDATE User SET background = '${bg.name}', Credits=Credits - ${bg.price} WHERE User_ID = ${ctx.userId}`
+        `UPDATE users SET background = '${bg.name}', credits=credits - ${bg.price} WHERE user_id = ${ctx.userId}`
       );
       if (backgrounds.hasB === 0)
         await ctx.commandClient.query(
-          `INSERT INTO userB (User_ID, name) VALUES (${ctx.user}, '${bg}')`
+          `INSERT INTO user_backgrounds (user_id, name) VALUES (${ctx.user}, '${bg}')`
         );
       ctx.reply(`Equipped ${bg.name} as your profile background!`);
     } else {
