@@ -57,7 +57,7 @@ export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
       },
       {
         name: 'Purchase:',
-        value: `${ctx.prefix}set${currItem.type} ${currItem.name}`,
+        value: `${ctx.prefix}set ${currItem.type} ${currItem.name}`,
       },
     ],
     image: {
