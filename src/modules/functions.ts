@@ -462,7 +462,7 @@ export default (
       let tag: DBTags = await client
         .preparedQuery(
           'SELECT * FROM tags WHERE guild_id = $1 AND name = $2',
-          [payload.context.guildId, content],
+          [payload.context.guildId, content[0].trim()],
           QueryType.Single
         )
         .catch(console.error);
