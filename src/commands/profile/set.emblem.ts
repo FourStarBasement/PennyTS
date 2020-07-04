@@ -36,7 +36,7 @@ export const setEmblem = {
         return;
       }
 
-      if (price > data.credits)
+      if (price > data.credits) {
         ctx.reply('You do not have enough credits for this emblem.');
         return;
       }
