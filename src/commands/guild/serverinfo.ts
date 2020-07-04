@@ -50,6 +50,10 @@ export const serverinfo = {
             ctx.guild?.ownerId
           }`,
         },
+        {
+          name: 'Server created',
+          value: ctx.guild!.createdAt.toString(),
+        },
       ],
       thumbnail: {
         url: ctx.guild?.iconUrl!,
