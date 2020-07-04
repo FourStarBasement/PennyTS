@@ -364,7 +364,7 @@ export default (
       `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id} GROUP BY message_id, star_id`
     );
     let starboardInfo: DBServer = await client.query(
-      `SELECT starboard FROM servers WHERE server_id = ${message.guild!.id}`
+      `SELECT starboard_channel FROM servers WHERE server_id = ${message.guild!.id}`
     );
 
     let channels = message.guild!.channels;
