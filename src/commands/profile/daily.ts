@@ -50,7 +50,7 @@ export const daily = {
       }
     } else {
       // Typing is incorrect, it returns a CronDate, not Date.
-      let nextInvocation = ctx.commandClient.job.nextInvocation();
+      let nextInvocation: any = ctx.commandClient.job.nextInvocation();
       let dur = moment.duration(nextInvocation.toDate() - Date.now());
       ctx.reply(`Your daily will reset in ${humanize(dur)}.`);
     }

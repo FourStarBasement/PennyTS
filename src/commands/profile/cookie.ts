@@ -30,7 +30,7 @@ export const cookie = {
     if (!mention) {
       if (!user.cookie_time) {
         // Typing is incorrect, it returns a CronDate, not Date.
-        let nextInvocation = ctx.commandClient.job.nextInvocation() as any;
+        let nextInvocation: any = ctx.commandClient.job.nextInvocation();
         let dur = moment.duration(nextInvocation.toDate() - Date.now());
         ctx.reply(`You can give someone a cookie in ${humanize(dur)}.`);
       } else {
@@ -69,7 +69,7 @@ export const cookie = {
           });
         } else {
           // Typing is incorrect, it returns a CronDate, not Date.
-          let nextInvocation = ctx.commandClient.job.nextInvocation();
+          let nextInvocation: any = ctx.commandClient.job.nextInvocation();
           let dur = moment.duration(nextInvocation.toDate() - Date.now());
           ctx.reply(`You can give someone a cookie in ${humanize(dur)}.`);
         }
