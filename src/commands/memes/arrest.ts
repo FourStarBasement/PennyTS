@@ -17,42 +17,43 @@ export const arrest = {
     name: 'arrest',
   },
   run: async (ctx: Context, args: CommandArgs) => {
-    let imageURL =
+    console.log(args);
+    let member =
       ctx.commandClient.fetchGuildMember(ctx)?.avatarUrl ||
       args.arrest ||
       ctx.message.attachments.first()?.url ||
       'None';
-    if (imageURL === 'None') {
+    if (member === 'None') {
       ctx.reply('Please provide a valid user or image or image URL');
       return;
     }
     const urlReg = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;
 
-    if (!urlReg.test(imageURL)) {
+    if (!urlReg.test(member)) {
       ctx.reply('Please use a valid image URL');
       return;
     }
 
-    await fetch(`${config.imageAPI.url}/arrest?user_image=${ctx.member!.avatarUrl}&target_image=${imageURL}`, {
+    let img = await fetch(`${config.imageAPI.url}/arrest`, {
       headers: {
-        Authorization: config.imageAPI.password
+        image: member!,
+        user_avatar: ctx.member!.avatarUrl,
       },
     })
-    .then(resp => resp.arrayBuffer())
-    .then(buffer => {
-      ctx.reply({
-        content: `${ctx.member!.username} has arrested someone!`,
-        file: {
-          data: Buffer.from(buffer),
-          filename: 'arrest.png',
-        },
-      });
-    })
-    .catch(error => {
-      console.error(error);
+      .then((d) => d.json())
+      .catch(console.error);
+    if (img.error) {
       ctx.reply(
         'The image you requested has failed to load. Please try again with a valid image URL.'
       );
+      return;
+    }
+    ctx.reply({
+      content: `${ctx.member!.username} has arrested someone!`,
+      file: {
+        data: Buffer.from(img.buffer),
+        filename: 'arrest.png',
+      },
     });
   },
 };

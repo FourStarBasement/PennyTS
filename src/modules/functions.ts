@@ -526,13 +526,13 @@ export default (
   }
 
   // This function fetches an image's average color.
-  // TODO: Perhaps keep this in just our bot, not really a need to shell out to our image service
-  client.fetchAverageColor = async (url: string): Promise<number> => {
-    let img = await fetch(`${config.imageAPI.url}/averagecolor?url=${url}`, {
+  client.fetchAverageColor = async (input: string): Promise<number> => {
+    let img = await fetch(`${config.imageAPI.url}/averagecolor`, {
       headers: {
-        Authorization: config.imageAPI.password,
+        authorization: config.imageAPI.password,
+        image: input,
       },
-    }).then(resp => resp.json());
+    }).then((d) => d.json());
     return img.color;
   };
 };
