@@ -55,10 +55,10 @@ export const gamble = {
         const rand = Math.floor(Math.random() * 21);
 
         if (rand >= 13) {
-          user.credits += credits;
+          user.credits += BigInt(credits);
           ctx.reply(`You won ${credits} credits. Congrats!!`);
         } else {
-          user.credits -= credits;
+          user.credits -= BigInt(credits);
           ctx.reply(`It looks like you lost ${credits} credits, Sorry!`);
         }
 
