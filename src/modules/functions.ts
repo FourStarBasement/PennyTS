@@ -361,7 +361,7 @@ export default (
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
     let starData: StarData = await client.query(
-      `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
+      `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id} GROUP BY message_id, star_id`
     );
     let starboardInfo: DBServer = await client.query(
       `SELECT starboard FROM servers WHERE server_id = ${message.guild!.id}`
