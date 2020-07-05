@@ -23,7 +23,7 @@ export const setWelcome = {
     if (attr === 'on') {
       ctx.commandClient
         .query(
-          `UPDATE Servers SET Welcome = 1 WHERE ServerID = '${ctx.guildId}'`
+          `UPDATE servers SET welcome = true WHERE server_id = ${ctx.guildId}`
         )
         .then(() => {
           ctx.reply('Successfully turned on welcome messages.');
@@ -34,7 +34,7 @@ export const setWelcome = {
     if (attr === 'off') {
       ctx.commandClient
         .query(
-          `UPDATE Servers SET Welcome = 0 WHERE ServerID = '${ctx.guildId}'`
+          `UPDATE servers SET welcome = false WHERE server_id = ${ctx.guildId}`
         )
         .then(() => {
           ctx.reply('Successfully turned off welcome messages.');
@@ -92,7 +92,7 @@ export const setWelcome = {
       } else {
         await ctx.commandClient
           .query(
-            `UPDATE servers SET wc = ${channel.id} WHERE server_id = ${ctx.guildId}`
+            `UPDATE servers SET welcome_channel = ${channel.id} WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(
@@ -134,7 +134,7 @@ export const setWelcome = {
       } else if (role && !unset) {
         await ctx.commandClient
           .query(
-            `UPDATE Servers SET welcome_role = '${role.id}' WHERE server_id = ${ctx.guildId}`
+            `UPDATE servers SET welcome_role = '${role.id}' WHERE server_id = ${ctx.guildId}`
           )
           .then(() =>
             ctx.reply(`Welcome Role: Successfully set as ${role!.name}!`)
