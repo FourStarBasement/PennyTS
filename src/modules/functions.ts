@@ -87,10 +87,10 @@ export default (
     values: Array<any>,
     typ: QueryType
   ) => {
-    const preparedStatement = new PreparedStatement({
+    const preparedStatement = {
       text: query,
       values: values,
-    });
+    };
     switch (typ) {
       case QueryType.Single:
         return connection.one(preparedStatement);
