@@ -29,7 +29,7 @@ export interface DBRoles {
 
 export interface DBServer {
   server_id: BigInt;
-  welcome: number;
+  welcome: boolean;
   welcome_message: string;
   welcome_role: BigInt;
   welcome_channel: BigInt;
