@@ -27,7 +27,7 @@ export const tagEdit = {
       name = stringExtractor(args['tag edit'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, owner, content FROM tags WHERE guild = $1 AND name = $2',
+      'SELECT COUNT(*) AS inD, owner_id, content FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -35,7 +35,7 @@ export const tagEdit = {
       ctx.reply('This tag does not exist.');
       return;
     }
-    if (data[0].owner !== ctx.user.id) {
+    if (data[0].owner_id !== ctx.user.id) {
       ctx.reply('You do not own this tag.');
       return;
     }
@@ -45,7 +45,7 @@ export const tagEdit = {
       return;
     }
     await ctx.commandClient.preparedQuery(
-      'UPDATE tags SET content = $1 WHERE guild = $2 AND name = $3',
+      'UPDATE tags SET content = $1 WHERE guild_id = $2 AND name = $3',
       [content, ctx.guildId, name],
       QueryType.Void
     );

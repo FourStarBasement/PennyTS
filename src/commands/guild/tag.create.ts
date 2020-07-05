@@ -27,7 +27,7 @@ export const tagCreate = {
       name = stringExtractor(args['tag create'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD FROM tags WHERE guild = $1 AND name = $2',
+      'SELECT COUNT(*) AS inD FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -48,8 +48,8 @@ export const tagCreate = {
       return;
     }
     await ctx.commandClient.preparedQuery(
-      'INSERT INTO tags (guild, ID, owner, name, content) VALUES ($1, $2, $3, $4, $5)',
-      [ctx.guildId, Date.now().toString(16), ctx.user.id, name, content],
+      'INSERT INTO tags (id, name, owner_id, content, guild_id) VALUES ($1, $2, $3, $4, $5)',
+      [Date.now().toString(16), name, ctx.user.id, content, ctx.guildId],
       QueryType.Void
     );
     ctx.reply(`Tag ${name.replace(/@/g, '')} created succesfully.`);

@@ -21,8 +21,8 @@ export const tags = {
 
     let query: string =
       args.tags === 'all'
-        ? `SELECT * FROM tags WHERE guild = ${ctx.guildId}`
-        : `SELECT * FROM tags WHERE owner = ${user.id} AND guild = ${ctx.guildId}`;
+        ? `SELECT * FROM tags WHERE guild_id = ${ctx.guildId}`
+        : `SELECT * FROM tags WHERE owner_id = ${user.id} AND guild_id = ${ctx.guildId}`;
     let data = await ctx.commandClient.query(query);
     let pages = new Array<Page>();
     let emotes = new Array<Array<DBTags>>();
@@ -48,7 +48,7 @@ function embed(ctx: Context, tags: Array<DBTags>): Page {
     color: user.color,
     fields: [],
   };
-  tags.forEach((tag: DBTags, i: number) => {
+  tags.forEach((tag: DBTags, _i: number) => {
     e.fields?.push({
       name: `${tag.name}    ​   ​`,
       value: `${tag.used} uses.`,

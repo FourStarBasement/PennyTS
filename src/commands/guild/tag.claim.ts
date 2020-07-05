@@ -27,7 +27,7 @@ export const tagClaim = {
       name = stringExtractor(args['tag claim'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = $1 AND name = $2',
+      'SELECT COUNT(*) AS inD, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -36,12 +36,12 @@ export const tagClaim = {
       return;
     }
 
-    if (ctx.guild?.members.get(data[0].owner)) {
+    if (ctx.guild?.members.get(data[0].owner_id)) {
       ctx.reply('The owner of this tag is still in the server.');
       return;
     }
     await ctx.commandClient.preparedQuery(
-      'UPDATE tags SET owner = ${ctx.user.id} WHERE name = $1 AND guild = $2',
+      'UPDATE tags SET owner_id = ${ctx.user.id} WHERE name = $1 AND guild_id = $2',
       [name, ctx.guildId],
       QueryType.Void
     );

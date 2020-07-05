@@ -27,7 +27,7 @@ export const tagDelete = {
       name = stringExtractor(args['tag delete'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, owner FROM tags WHERE guild = $1 AND name = $2',
+      'SELECT COUNT(*) AS inD, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -41,7 +41,7 @@ export const tagDelete = {
       return;
     }
     await ctx.commandClient.preparedQuery(
-      'DELETE FROM tags WHERE name = $1 AND guild = $2',
+      'DELETE FROM tags WHERE name = $1 AND guild_id = $2',
       [name, ctx.guildId],
       QueryType.Void
     );
