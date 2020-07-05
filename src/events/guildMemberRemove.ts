@@ -23,7 +23,7 @@ export const guildMemberRemove = {
 
     client.checkGuild(payload.guildId).then(async () => {
       let server: DBServer = await client.queryOne(
-        `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
+        `SELECT mod_channel, welcome, welcome_channel, leave_message  FROM servers WHERE server_id = ${payload.guildId}`
       );
 
       if (!server.mod_channel) return;
@@ -54,7 +54,7 @@ export const guildMemberRemove = {
         }
       }
 
-      if (server.welcome === 1) {
+      if (server.welcome) {
         let channel = shardClient.channels.get(
           server.welcome_channel.toString()
         );
