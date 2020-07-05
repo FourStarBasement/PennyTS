@@ -16,8 +16,8 @@ export const guildMemberAdd = {
     let guild = payload.member.guild!;
 
     await client.checkGuild(payload.guildId).then(async () => {
-      let server: DBServer = await client.query(
-        `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`
+      let server: DBServer = await client.queryOne(
+        `SELECT mod_channel, welcome, welcome_message, welcome_channel, welcome_role FROM servers WHERE server_id = ${payload.guildId}`
       );
 
       if (!server.mod_channel) return;
@@ -45,7 +45,7 @@ export const guildMemberAdd = {
         }
       }
 
-      if (server.welcome === 1) {
+      if (server.welcome) {
         const channel = guild.channels.get(server.welcome_channel.toString());
 
         if (channel) {
@@ -60,6 +60,8 @@ export const guildMemberAdd = {
             );
           }
         }
+
+        if (!server.welcome_role) return;
 
         const role = guild.roles.get(server.welcome_role.toString());
 
