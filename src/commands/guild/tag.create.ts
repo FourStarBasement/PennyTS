@@ -31,10 +31,13 @@ export const tagCreate = {
       [ctx.guildId, name],
       QueryType.Single
     );
-    if (data[0].inD !== 0) {
+
+    if (!data) return;
+    if (Number(data.ind) !== 0) {
       ctx.reply('This tag already exists.');
       return;
     }
+
     if (
       ctx.commandClient.commands.filter((c) => c.name === name.toLowerCase())
         .length > 0

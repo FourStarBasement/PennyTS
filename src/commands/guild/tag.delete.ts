@@ -27,16 +27,17 @@ export const tagDelete = {
       name = stringExtractor(args['tag delete'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
+      'SELECT owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
-    if (data[0].inD !== 1) {
+
+    if (!data) {
       ctx.reply('This tag does not exist.');
       return;
     }
 
-    if (!ctx.member!.canManageMessages && data[0].owner !== ctx.user.id) {
+    if (!ctx.member!.canManageMessages && data.owner_id !== ctx.user.id) {
       ctx.reply('You do not own this tag.');
       return;
     }

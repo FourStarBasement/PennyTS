@@ -28,15 +28,17 @@ export const tagInfo = {
       name = stringExtractor(args['tag info'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, id, used, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
+      'SELECT id, used, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
-    if (data[0].inD === 0) {
+
+    if (!data) {
       ctx.reply('This tag does not exist.');
       return;
     }
-    let user = ctx.guild?.members.get(data[0].owner_id);
+
+    let user = ctx.guild?.members.get(data.owner_id);
 
     if (!user) {
       ctx.reply('The owner of this tag has left the server.');
@@ -56,11 +58,11 @@ export const tagInfo = {
           },
           {
             name: 'Tag ID',
-            value: data[0].id,
+            value: data.id,
           },
           {
             name: 'Uses',
-            value: data[0].used,
+            value: data.used,
           },
         ],
       },

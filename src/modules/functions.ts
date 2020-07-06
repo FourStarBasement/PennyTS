@@ -477,8 +477,8 @@ export default (
       );
       // Useful for tag stats
       await client.preparedQuery(
-        'UPDATE tags SET used = used + 1 WHERE name = $1',
-        [content],
+        'UPDATE tags SET used = used + 1 WHERE name = $1 AND guild_id = $2',
+        [content[0].trim(), payload.context.guildId],
         QueryType.Void
       );
       // This replaces custom bits inside tags like username and mentions.username etc

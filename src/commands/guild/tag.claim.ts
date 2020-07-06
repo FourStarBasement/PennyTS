@@ -31,12 +31,14 @@ export const tagClaim = {
       [ctx.guildId, name],
       QueryType.Single
     );
-    if (data[0].inD !== 1) {
+
+    if (!data) return;
+    if (Number(data.ind) !== 1) {
       ctx.reply('This tag does not exist.');
       return;
     }
 
-    if (ctx.guild?.members.get(data[0].owner_id)) {
+    if (ctx.guild?.members.get(data.owner_id)) {
       ctx.reply('The owner of this tag is still in the server.');
       return;
     }
