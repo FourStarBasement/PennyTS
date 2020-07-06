@@ -71,11 +71,11 @@ export default (
 ) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
-    return connection.query(query);
+    return connection.manyOrNone(query);
   };
 
   client.queryOne = (query: string) => {
-    return connection.one(query);
+    return connection.oneOrNone(query);
   };
 
   /*
@@ -93,9 +93,9 @@ export default (
     };
     switch (typ) {
       case QueryType.Single:
-        return connection.one(preparedStatement);
+        return connection.oneOrNone(preparedStatement);
       case QueryType.Multi:
-        return connection.query(preparedStatement);
+        return connection.manyOrNone(preparedStatement);
       case QueryType.Void:
         return connection.none(preparedStatement);
     }
@@ -468,7 +468,6 @@ export default (
         .catch(console.error);
 
       if (!tag) return;
-      console.log(tag);
       // Debugging info
       console.log(
         `Ran tag ${content[0].trim()} by ${payload.context.user.username}\n${
