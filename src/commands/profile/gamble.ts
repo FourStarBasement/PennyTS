@@ -14,13 +14,13 @@ export const gamble = {
   },
   arg: {
     name: 'amount',
-    type: Number,
+    type: BigInt,
   },
   run: async (ctx: Context, args: CommandArgs) => {
     const member = ctx.member as Member;
 
-    let credits = args.gamble ? Math.round(Number(args.gamble)) : 100;
-    if (isNaN(credits)) {
+    let credits: bigint = args.gamble ? BigInt(args.gamble) : BigInt(100);
+    if (credits === undefined) {
       ctx.reply('You must provide me with a valid number!');
       return;
     }
@@ -49,22 +49,23 @@ export const gamble = {
     const collector = new MessageCollector(ctx, 10000, filter);
     collector.on('collect', (message: Message) => {
       const content = message.content.toLowerCase();
+      let toGive = BigInt(user.credits);
 
       // TODO: Allow multiple answers
       if (content === 'yes') {
         const rand = Math.floor(Math.random() * 21);
 
         if (rand >= 13) {
-          user.credits += BigInt(credits);
+          toGive += credits;
           ctx.reply(`You won ${credits} credits. Congrats!!`);
         } else {
-          user.credits -= BigInt(credits);
+          toGive -= credits;
           ctx.reply(`It looks like you lost ${credits} credits, Sorry!`);
         }
 
         collector.destroy();
         ctx.commandClient.query(
-          `UPDATE users SET credits = ${user.credits} WHERE user_id = ${member.id}`
+          `UPDATE users SET credits = ${toGive} WHERE user_id = ${member.id}`
         );
       } else if (content === 'no') {
         collector.destroy();
