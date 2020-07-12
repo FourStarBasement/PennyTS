@@ -20,11 +20,13 @@ export const tagCreate = {
       );
       return;
     }
+    const argument = args['tag create'];
+
     let name: string = '';
     let quotes: string[] = ['"', "'", '“', '‘'];
-    let tagArg = args['tag create'].split(' ');
-    if (quotes.includes(args['tag create'].charAt(0)))
-      name = stringExtractor(args['tag create'])[0];
+    let tagArg = argument.split(' ');
+    if (quotes.includes(argument.charAt(0)))
+      name = stringExtractor(argument)[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
       'SELECT COUNT(*) AS inD FROM tags WHERE guild_id = $1 AND name = $2',
@@ -45,11 +47,18 @@ export const tagCreate = {
       ctx.reply('You cannot make a tag with that name');
       return;
     }
-    let content = args['tag create'].slice(name.length).trim();
+
+    let content = argument;
+    if (quotes.includes(argument.charAt(0)))
+      content = argument.slice(name.length + 2).trim();
+    else
+      content = argument.slice(name.length).trim();
+
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
       return;
     }
+
     await ctx.commandClient.preparedQuery(
       'INSERT INTO tags (id, name, owner_id, content, guild_id) VALUES ($1, $2, $3, $4, $5)',
       [Date.now().toString(16), name, ctx.user.id, content, ctx.guildId],
