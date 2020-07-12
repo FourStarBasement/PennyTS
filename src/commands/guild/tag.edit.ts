@@ -20,14 +20,15 @@ export const tagEdit = {
       );
       return;
     }
+    let argument = args['tag edit'];
     let name: string = '';
     let quotes: string[] = ['"', "'", '“', '‘'];
-    let tagArg = args['tag edit'].split(' ');
-    if (quotes.includes(args['tag edit'].charAt(0)))
-      name = stringExtractor(args['tag edit'])[0];
+    let tagArg = argument.split(' ');
+    if (quotes.includes(argument.charAt(0)))
+      name = stringExtractor(argument)[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT owner_id, content FROM tags WHERE guild_id = $1 AND name = $2',
+      'SELECT owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -41,7 +42,13 @@ export const tagEdit = {
       ctx.reply('You do not own this tag.');
       return;
     }
-    let content = args['tag edit'].split(name)[1].substr(1).trim();
+
+    let content = argument;
+    if (quotes.includes(argument.charAt(0)))
+      content = argument.slice(name.length + 2).trim();
+    else
+      content = argument.slice(name.length).trim();
+
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
       return;

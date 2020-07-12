@@ -27,13 +27,12 @@ export const tagClaim = {
       name = stringExtractor(args['tag claim'])[0];
     else name = tagArg[0];
     let data = await ctx.commandClient.preparedQuery(
-      'SELECT COUNT(*) AS inD, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
+      'SELECT owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
 
-    if (!data) return;
-    if (Number(data.ind) !== 1) {
+    if (!data) {
       ctx.reply('This tag does not exist.');
       return;
     }
@@ -43,8 +42,8 @@ export const tagClaim = {
       return;
     }
     await ctx.commandClient.preparedQuery(
-      'UPDATE tags SET owner_id = ${ctx.user.id} WHERE name = $1 AND guild_id = $2',
-      [name, ctx.guildId],
+      'UPDATE tags SET owner_id = $1 WHERE name = $2 AND guild_id = $3',
+      [ctx.user.id, name, ctx.guildId],
       QueryType.Void
     );
     ctx.reply(
