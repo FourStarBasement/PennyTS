@@ -45,7 +45,7 @@ export const tagCreate = {
       ctx.reply('You cannot make a tag with that name');
       return;
     }
-    let content = args['tag create'].split(name)[1].substr(1).trim();
+    let content = args['tag create'].slice(name.length).trim();
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
       return;
