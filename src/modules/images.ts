@@ -162,9 +162,7 @@ export default {
     ],
     noAnime: [
       'https://media1.tenor.com/images/022a19f8ad9260b5045e16289e66c903/tenor.gif',
-      'http://cdn.smosh.com/sites/default/files/ftpuploads/bloguploads/0413/epic-hugs-cat-dot.gif',
       'https://media.giphy.com/media/QM6nfBpKUxgKA/giphy.gif',
-      'http://gif-finder.com/wp-content/uploads/2016/10/Dog-thanks-cat-for-the-hug.gif',
       'https://media1.tenor.com/images/e8d40503289094b72a40ab9efbb804f0/tenor.gif',
       'https://vignette.wikia.nocookie.net/degrassi/images/2/24/Rachel_and_Monica_hug.gif',
       'https://vignette.wikia.nocookie.net/degrassi/images/d/d3/Slexie_hug.gif',
@@ -173,7 +171,6 @@ export default {
       'https://i0.wp.com/gifrific.com/wp-content/uploads/2013/01/Frodo-Hug-Samwise-Elijah-Wood-Sean-Astin.gif',
       'https://78.media.tumblr.com/6589b36f120ce40aab47508f3e64da2a/tumblr_inline_o30t6bWucg1rlkil0_540.gif',
       'https://media4.giphy.com/media/3o7TKu8D1d12Eo9wSQ/giphy.gif',
-      'http://cdn1.clevver.com/wp-content/uploads/2012/12/new-years-resolutions-2013-family-1.gif',
       'https://i.imgur.com/lenljW6.gif',
       'https://i.imgur.com/DaGG4HR.gif',
       'https://media.giphy.com/media/Z35IRzsNpSAlq/giphy.gif',
@@ -185,7 +182,6 @@ export default {
       'https://i.gifer.com/DUua.gif',
       'https://vignette.wikia.nocookie.net/degrassi/images/2/24/Rachel_and_Monica_hug.gif',
       'https://78.media.tumblr.com/tumblr_ll771bdzkB1qfcvm6.gif',
-      'http://cdn.smosh.com/wp-content/uploads/ftpuploads/bloguploads/0413/epic-hugs-toy-story.gif',
       'https://i.chzbgr.com/full/8432724224/h2019AEDD/its-national-hug-day-go-give-someone-a-squeeze',
     ],
     lolNo: [
@@ -199,7 +195,6 @@ export default {
       'http://www.reactiongifs.com/r/fpdnw.gif',
       'https://lh3.googleusercontent.com/-Bkdr5oBlS4k/ViNAt9wOdeI/AAAAAAAAPuo/LLKz9bFQFe4ATzYqEGBzol9rZlDtTWY8wCJoC/w530-h245-n/DW_12_ThumbsUp.gif',
       'http://www.blog.thehoya.com/wp-content/uploads/2016/03/giphy-1-1.gif',
-      'http://i.perezhilton.com/wp-content/uploads/2015/01/taylor-swift-olivia-munn(1).gif',
       'https://pa1.narvii.com/5977/62fc1167c42cd4be5235e179f6c9d32901d2c7a4_hq.gif',
       'https://i.gifer.com/4oxx.gif',
       'https://www.dramafever.com/st/news/images/d7e194d9-5caa-4919-af7e-090784a60e54.gif',
