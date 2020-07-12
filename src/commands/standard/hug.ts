@@ -71,7 +71,7 @@ export const hug = {
         return;
       }
     }
-    if (ctx.commandClient.hasFlag(data.flags, UserFlags.Weeb))
+    if (data && ctx.commandClient.hasFlag(data.flags, UserFlags.Weeb))
       image = hugsAnime[Math.floor(Math.random() * hugsAnime.length)];
     else image = hugsReal[Math.floor(Math.random() * hugsReal.length)];
 
