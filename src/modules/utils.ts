@@ -133,24 +133,22 @@ export function escapeMarkdown(text: string): string {
   return text.replace(ESCAPE_MARKDOWN, '\\$1');
 }
 
-export function stringExtractor(str: string): string[] {
-  let final: string[] = [];
-  let current: string = '';
-  let quotes: string[] = ['"', "'"];
-  let indexing: boolean = false;
-  str.split('').forEach((s: string, i: number) => {
-    s = s.replace(/‘|’/g, "'").replace(/”|“/g, '"');
-    if (quotes.includes(s)) {
-      if (indexing) {
-        indexing = false;
-        // substr so you don't add a " to the string
-        final.push(current.substr(1));
-        current = '';
-      } else {
-        indexing = true;
+export function stringExtractor(str: string, quotes: string[] = ['"', "'"]) {
+  let startIndex = 0, nextIndex = 0;
+  let finalStrings = [];
+  str = str.replace('‘', "'").replace('’', "'").replace('”', '"').replace('“', '"');
+  for (const char of str) {
+    if(quotes.includes(char)) {
+      if (startIndex == 0)
+        startIndex = nextIndex + 1;
+      else {
+        finalStrings.push(str.slice(startIndex, nextIndex));
+        startIndex = 0;
       }
     }
-    if (indexing) current += s;
-  });
-  return final;
+
+    nextIndex += 1;
+  }
+
+  return finalStrings;
 }
