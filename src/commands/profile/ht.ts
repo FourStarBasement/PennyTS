@@ -27,7 +27,7 @@ export const ht = {
     }
 
     let user: DBUser = await ctx.commandClient.queryOne(
-      `SELECT credits FROM user WHERE user_id = ${ctx.member!.id}`
+      `SELECT credits FROM users WHERE user_id = ${ctx.member!.id}`
     );
     if (user.credits < 1) {
       ctx.reply('You do not have enough credits to perform this command.');
