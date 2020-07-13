@@ -134,7 +134,7 @@ async function prepare(
       let stars = (await reaction.fetchUsers()).filter(
         (v, k) => v.id !== message.author.id
       );
-      if (stars.length >= 2) {
+      if (stars.length >= 3) {
         embed.fields = [
           {
             name: 'Jump to this message',
@@ -155,11 +155,13 @@ async function prepare(
             embed: embed,
           })
           .then(async (m) => {
-            await client.query(
-              `INSERT INTO starboard (message_id, star_id) VALUES (${message.id}, ${m.id})`
-            );
+            await client
+              .queryOne(
+                `INSERT INTO starboard (message_id, star_id) VALUES (${message.id}, ${m.id})`
+              )
+              .catch(console.error);
             console.log(
-              `ReactionAdd/Starboard G#${message.guildId} C#${m.channelId}: New Starred Message: M#${m.id}`
+              `ReactionAdd/Starboard G#${message.guildId} C#${m.channelId}: New Starred Message: M#${m.id}\nAdded to Starboard`
             );
           });
       }

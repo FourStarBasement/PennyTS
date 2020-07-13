@@ -130,14 +130,15 @@ export default (
 
   // Check if a DBUser has a flag set
   client.hasFlag = (flags: number, flag: UserFlags) => {
-    return ((flags & flag.valueOf()) == flag.valueOf())
+    return (flags & flag.valueOf()) == flag.valueOf();
   };
 
   // Check if user is in the DB before doing anything
   client.checkUser = async (ctx: Context, id: string) => {
     // TODO: Monitor for performance hits
     let result: DBUser = await client
-      .queryOne(`
+      .queryOne(
+        `
       WITH e AS(
           INSERT INTO users (user_id) VALUES (${id})
           ON CONFLICT("user_id") DO NOTHING
@@ -146,7 +147,8 @@ export default (
       SELECT blacklisted FROM e
       UNION
           SELECT blacklisted FROM users WHERE user_id = ${id};
-      `)
+      `
+      )
       .catch(console.error);
 
     return result;
@@ -182,7 +184,7 @@ export default (
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
     if (!context.user.checked) {
-      await client.checkUser(context, context.user.id).then(results => {
+      await client.checkUser(context, context.user.id).then((results) => {
         context.user.checked = true;
         context.user.blacklisted = results.blacklisted;
       });
@@ -202,7 +204,6 @@ export default (
             `SELECT prefix, levels FROM servers WHERE server_id = ${context.guildId}`
           )
           .catch(console.error);
-        console.log(data);
         context.guild!.levels = data.levels;
         prefix = data.prefix;
         context.guild!.prefix = prefix;
@@ -360,11 +361,13 @@ export default (
 
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
-    let starData: StarData = await client.query(
+    let starData: StarData[] = await client.query(
       `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id} GROUP BY message_id, star_id`
     );
     let starboardInfo: DBServer = await client.queryOne(
-      `SELECT starboard_channel FROM servers WHERE server_id = ${message.guild!.id}`
+      `SELECT starboard_channel FROM servers WHERE server_id = ${
+        message.guild!.id
+      }`
     );
 
     let channels = message.guild!.channels;
@@ -372,11 +375,11 @@ export default (
 
     let starMessage;
     let starredMessage;
-    if (starData.count) {
-      starMessage = await starboard?.fetchMessage(starData.star_id);
+    if (starData[0]) {
+      starMessage = await starboard?.fetchMessage(starData[0].star_id);
       starredMessage = await channels
         .get(chanReg.exec(starMessage.content)![1])
-        ?.fetchMessage(starData.message_id);
+        ?.fetchMessage(starData[0].message_id);
     }
 
     return {
