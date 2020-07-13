@@ -361,8 +361,8 @@ export default (
 
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
-    let starData: StarData[] = await client.query(
-      `SELECT COUNT(*) AS count, message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id} GROUP BY message_id, star_id`
+    let starData: StarData = await client.queryOne(
+      `SELECT message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
     );
     let starboardInfo: DBServer = await client.queryOne(
       `SELECT starboard_channel FROM servers WHERE server_id = ${
@@ -375,11 +375,11 @@ export default (
 
     let starMessage;
     let starredMessage;
-    if (starData[0]) {
-      starMessage = await starboard?.fetchMessage(starData[0].star_id);
+    if (starData) {
+      starMessage = await starboard?.fetchMessage(starData.star_id);
       starredMessage = await channels
         .get(chanReg.exec(starMessage.content)![1])
-        ?.fetchMessage(starData[0].message_id);
+        ?.fetchMessage(starData.message_id);
     }
 
     return {

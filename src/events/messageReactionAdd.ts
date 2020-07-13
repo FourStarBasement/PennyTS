@@ -4,6 +4,7 @@ import { CommandClient } from 'detritus-client/lib/commandclient';
 import { ShardClient } from 'detritus-client';
 import { Message, User, Reaction } from 'detritus-client/lib/structures';
 import { Page, convertEmbed } from '../modules/utils';
+import { QueryType } from '../modules/db';
 
 export const messageReactionAdd = {
   event: ClientEvents.MESSAGE_REACTION_ADD,
@@ -109,6 +110,7 @@ async function prepare(
         }
       }
     }
+
     let count = uniqueReactions.length;
 
     embed.fields = [
@@ -134,6 +136,7 @@ async function prepare(
       let stars = (await reaction.fetchUsers()).filter(
         (v, k) => v.id !== message.author.id
       );
+
       if (stars.length >= 3) {
         embed.fields = [
           {
@@ -155,11 +158,12 @@ async function prepare(
             embed: embed,
           })
           .then(async (m) => {
-            await client
-              .queryOne(
-                `INSERT INTO starboard (message_id, star_id) VALUES (${message.id}, ${m.id})`
-              )
-              .catch(console.error);
+            await client.preparedQuery(
+              'INSERT INTO starboard (message_id, star_id) VALUES ($1, $2)',
+              [message.id, m.id],
+              QueryType.Void
+            );
+
             console.log(
               `ReactionAdd/Starboard G#${message.guildId} C#${m.channelId}: New Starred Message: M#${m.id}\nAdded to Starboard`
             );
