@@ -77,7 +77,7 @@ async function prepare(
   let r = await client.fetchStarData(message);
   let stars = parseInt(r.starred?.content.split(' ')[1]!);
   let reaction = r.original?.reactions.find((v, k) => v.emoji.name === '⭐')!;
-  if ((await reaction.fetchUsers()).has(reacted.id)) {
+  if (reaction && (await reaction.fetchUsers()).has(reacted.id)) {
     console.log(
       `ReactionRemove/Starboard G#${message.guildId}: Dupe-star M#${
         r.starred!.id
@@ -85,7 +85,7 @@ async function prepare(
     );
     return;
   }
-  if (stars < 2) {
+  if (stars < 3) {
     await r.starred!.delete().catch(() => null);
   } else {
     await r.starred!.edit({
