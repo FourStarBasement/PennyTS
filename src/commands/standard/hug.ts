@@ -53,9 +53,8 @@ export const hug = {
     }
 
     let data: DBUser = await ctx.commandClient.queryOne(
-      `SELECT weeb FROM users WHERE user_id = ${user.id}`
+      `SELECT flags FROM users WHERE user_id = ${user.id}`
     );
-    console.log(data);
 
     if (user.id === '232614905533038593') {
       if (!canHugWiggy.includes(ctx.member!.id)) {

@@ -56,7 +56,6 @@ CREATE TABLE users (
   cookies integer default 0,
   background varchar(36),
   emblem varchar(32),
-  weeb boolean default true,
   token varchar(32),
   flags integer default 0
 );
