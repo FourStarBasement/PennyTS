@@ -370,6 +370,8 @@ export default (
       }`
     );
 
+    if (!starboardInfo.starboard_channel) return {};
+
     let channels = message.guild!.channels;
     let starboard = channels.get(starboardInfo.starboard_channel.toString());
 
