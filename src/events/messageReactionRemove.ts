@@ -75,27 +75,29 @@ async function prepare(
   embed: Page
 ) {
   let r = await client.fetchStarData(message);
-  let stars = parseInt(r.starred?.content.split(' ')[1]!);
-  let reaction = r.original?.reactions.find((v, k) => v.emoji.name === '⭐')!;
-  if (reaction && (await reaction.fetchUsers()).has(reacted.id)) {
+  if (r.starred) {
+    let stars = parseInt(r.starred.content.split(' ')[1]!);
+    let reaction = r.original?.reactions.find((v, _) => v.emoji.name === '⭐')!;
+    if (reaction && (await reaction.fetchUsers()).has(reacted.id)) {
+      console.log(
+        `ReactionRemove/Starboard G#${message.guildId}: Dupe-star M#${
+          r.starred.id
+        } U#${reacted.id}`
+      );
+      return;
+    }
+    if (stars < 3) {
+      await r.starred.delete().catch(() => null);
+    } else {
+      await r.starred.edit({
+        content: `⭐ ${stars - 1} stars in ${r.original?.channel?.mention}`,
+        embed: embed,
+      });
+    }
     console.log(
-      `ReactionRemove/Starboard G#${message.guildId}: Dupe-star M#${
-        r.starred!.id
-      } U#${reacted.id}`
+      `ReactionRemove/Starboard G#${
+        message.guildId
+      }: Starboard Message Edited: C#${r.starboard!.id} M#${r.starred.id}`
     );
-    return;
   }
-  if (stars < 3) {
-    await r.starred!.delete().catch(() => null);
-  } else {
-    await r.starred!.edit({
-      content: `⭐ ${stars - 1} stars in ${r.original?.channel?.mention}`,
-      embed: embed,
-    });
-  }
-  console.log(
-    `ReactionRemove/Starboard G#${
-      message.guildId
-    }: Starboard Message Edited: C#${r.starboard!.id} M#${r.starred!.id}`
-  );
 }
