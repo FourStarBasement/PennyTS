@@ -47,8 +47,12 @@ cmdClient.addEvents(events);
   const s = require('node-schedule');
 
   cmdClient.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {
-    cmdClient.query('UPDATE users SET cookie_time = true');
-    cmdClient.query('UPDATE users SET daily_time = true');
+    cmdClient.query(
+      'UPDATE users SET cookie_time = true WHERE cookie_time = false'
+    );
+    cmdClient.query(
+      'UPDATE users SET daily_time = true WHERE daily_time = false'
+    );
   });
 
   cmdClient.starInterval = s.scheduleJob(
