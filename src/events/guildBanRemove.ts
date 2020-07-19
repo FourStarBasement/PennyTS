@@ -33,11 +33,14 @@ export const guildBanRemove = {
             })
             .then((audit) =>
               audit.find(
-                (v, k) =>
+                (v, _) =>
                   v.target!.id === payload.user!.id &&
                   new Date().getTime() - v.createdAt.getTime() <= 60_0000
               )
-            );
+            )
+            .catch((error) => {
+              console.error(`GuildBanRemove/${payload.guildId} ${error}`);
+            });
 
           if (!auditLog) {
             return; // Must be self-update

@@ -47,8 +47,10 @@ export const messageDelete = {
               v.target!.id === payload.message!.author.id &&
               new Date().getTime() - v.createdAt.getTime() <= 60_0000
           )
-        );
-      let user: string;
+        )
+        .catch((error) => {
+          console.error(`MessageDelete/${payload.raw.guild_id} ${error}`);
+        });
 
       channel!.createMessage({
         embed: {

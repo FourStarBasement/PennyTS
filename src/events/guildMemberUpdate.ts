@@ -36,16 +36,14 @@ export const guildMemberUpdate = {
             })
             .then((audit) =>
               audit.find(
-                (v, k) =>
+                (v, _) =>
                   v.targetId === payload.userId &&
                   v.userId !== payload.userId &&
                   new Date().getTime() - v.createdAt.getTime() <= 60_0000
               )
             )
             .catch((error) => {
-              console.error(
-                `Failed to fetch audit logs in ${payload.guildId}: ${error}`
-              );
+              console.error(`GuildMemberUpdate/${payload.guildId} ${error}`);
             });
 
           if (!auditLog) {

@@ -39,9 +39,8 @@ export const guildMemberRemove = {
               actionType: AuditLogActions.MEMBER_KICK,
             })
             .then((audit) => {
-              let now = new Date();
               let action = audit.find(
-                (v, k) =>
+                (v, _) =>
                   v.targetId === payload.userId &&
                   new Date().getTime() - v.createdAt.getTime() <= 60_0000
               );
@@ -50,6 +49,9 @@ export const guildMemberRemove = {
               }
 
               channel!.createMessage({ embed: makeEmbed(action, payload) });
+            })
+            .catch((error) => {
+              console.error(`GuildMemberRemove/${payload.guildId} ${error}`);
             });
         }
       }

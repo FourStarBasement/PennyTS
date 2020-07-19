@@ -36,10 +36,13 @@ export const guildMemberAdd = {
               .then((audit) => {
                 channel!.createMessage({
                   embed: makeEmbed(
-                    audit.find((v, k) => v.targetId === payload.userId)!,
+                    audit.find((v, _) => v.targetId === payload.userId)!,
                     payload
                   ),
                 });
+              })
+              .catch((error) => {
+                console.error(`GuildMemberAdd/${payload.guildId} ${error}`);
               });
           }
         }
