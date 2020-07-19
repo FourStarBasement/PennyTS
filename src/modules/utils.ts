@@ -69,9 +69,10 @@ export function shopEmbed(ctx: Context, currItem: ItemInfo): Page {
 export function humanize(duration: Duration) {
   let ret = [];
 
-  let days = duration.days();
-  let hours = duration.hours();
-  let minutes = duration.minutes();
+  const days = duration.days();
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+  const seconds = duration.seconds();
 
   if (days > 0) {
     ret.push(`${days} day${days > 1 ? 's' : ''}`);
@@ -85,6 +86,15 @@ export function humanize(duration: Duration) {
         minutes > 1 ? 's' : ''
       }`
     );
+  }
+
+  // We don't want to display seconds if we have days or hours.
+  if (days == 0 && hours == 0 && seconds > 0) {
+    ret.push(
+      `${ret.length > 0 ? 'and ' : ''}${seconds} second${
+        seconds > 1 ? 's' : ''
+      }`
+    )
   }
 
   return ret.join(', ');
