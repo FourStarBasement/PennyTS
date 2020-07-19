@@ -14,6 +14,8 @@ export const guildBanAdd = {
   ) => {
     let guild = payload.guild!;
 
+    if (!guild.me?.canViewAuditLogs) return;
+
     client.checkGuild(payload.guildId).then(async () => {
       let server: DBServer = await client.queryOne(
         `SELECT mod_channel FROM servers WHERE server_id = ${payload.guildId}`

@@ -21,6 +21,8 @@ export const guildMemberRemove = {
     let member = payload.user;
     let guild = shardClient.guilds.get(payload.guildId)!;
 
+    if (!guild.me?.canViewAuditLogs) return;
+
     client.checkGuild(payload.guildId).then(async () => {
       let server: DBServer = await client.queryOne(
         `SELECT mod_channel, welcome, welcome_channel, leave_message  FROM servers WHERE server_id = ${payload.guildId}`

@@ -17,28 +17,31 @@ export const messageDelete = {
 
     if (payload.message.author.bot) return;
 
+    const guild = payload.message.guild!;
+
+    if (!guild.me?.canViewAuditLogs) return;
+
     await client.checkGuild(payload.raw.guild_id);
     let server: DBServer = await client.queryOne(
-      `SELECT mod_channel FROM servers WHERE server_id = ${payload.raw.guild_id}`
+      `SELECT mod_channel FROM servers WHERE server_id = ${guild.id}`
     );
 
     if (!server.mod_channel) return;
 
     // TODO: BigInt support
-    let channel = payload.message.guild!.channels.get(
+    let channel = guild.channels.get(
       server.mod_channel.toString()
     );
 
     if (!channel) return;
 
     if (
-      (ModLogActions.MESSAGE_DELETE & payload.message.guild!.modLog) !==
+      (ModLogActions.MESSAGE_DELETE & guild.modLog) !==
       ModLogActions.MESSAGE_DELETE
     )
       return;
     setTimeout(async () => {
-      let auditLog = await payload
-        .message!.guild!.fetchAuditLogs({
+      let auditLog = await guild.fetchAuditLogs({
           actionType: AuditLogActions.MESSAGE_DELETE,
         })
         .then((audit) =>
@@ -49,7 +52,7 @@ export const messageDelete = {
           )
         )
         .catch((error) => {
-          console.error(`MessageDelete/${payload.raw.guild_id} ${error}`);
+          console.error(`MessageDelete/${guild.id} ${error}`);
         });
 
       channel!.createMessage({

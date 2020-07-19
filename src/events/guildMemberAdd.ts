@@ -15,6 +15,8 @@ export const guildMemberAdd = {
     let member = payload.member;
     let guild = payload.member.guild!;
 
+    if (!guild.me?.canViewAuditLogs) return;
+
     await client.checkGuild(payload.guildId).then(async () => {
       let server: DBServer = await client.queryOne(
         `SELECT mod_channel, welcome, welcome_message, welcome_channel, welcome_role FROM servers WHERE server_id = ${payload.guildId}`
