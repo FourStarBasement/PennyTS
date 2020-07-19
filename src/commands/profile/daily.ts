@@ -23,7 +23,8 @@ export const daily = {
     );
     let amount = Math.floor(Math.random() * (1000 - 500)) + 500;
 
-    if (ctx.commandClient.hasFlag(dbUser.flags, UserFlags.Patron)) amount += 500;
+    if (ctx.commandClient.hasFlag(dbUser.flags, UserFlags.Patron))
+      amount += 500;
 
     if (dbUser.daily_time) {
       if (user.id === ctx.member!.id) {

@@ -94,7 +94,7 @@ export function humanize(duration: Duration) {
       `${ret.length > 0 ? 'and ' : ''}${seconds} second${
         seconds > 1 ? 's' : ''
       }`
-    )
+    );
   }
 
   return ret.join(', ');
@@ -144,13 +144,17 @@ export function escapeMarkdown(text: string): string {
 }
 
 export function stringExtractor(str: string, quotes: string[] = ['"', "'"]) {
-  let startIndex = 0, nextIndex = 0;
+  let startIndex = 0,
+    nextIndex = 0;
   let finalStrings = [];
-  str = str.replace('‘', "'").replace('’', "'").replace('”', '"').replace('“', '"');
+  str = str
+    .replace('‘', "'")
+    .replace('’', "'")
+    .replace('”', '"')
+    .replace('“', '"');
   for (const char of str) {
-    if(quotes.includes(char)) {
-      if (startIndex == 0)
-        startIndex = nextIndex + 1;
+    if (quotes.includes(char)) {
+      if (startIndex == 0) startIndex = nextIndex + 1;
       else {
         finalStrings.push(str.slice(startIndex, nextIndex));
         startIndex = 0;

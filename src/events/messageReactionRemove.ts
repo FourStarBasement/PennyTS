@@ -80,9 +80,7 @@ async function prepare(
     let reaction = r.original?.reactions.find((v, _) => v.emoji.name === '⭐')!;
     if (reaction && (await reaction.fetchUsers()).has(reacted.id)) {
       console.log(
-        `ReactionRemove/Starboard G#${message.guildId}: Dupe-star M#${
-          r.starred.id
-        } U#${reacted.id}`
+        `ReactionRemove/Starboard G#${message.guildId}: Dupe-star M#${r.starred.id} U#${reacted.id}`
       );
       return;
     }

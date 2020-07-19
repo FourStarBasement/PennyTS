@@ -13,7 +13,7 @@ export enum UserFlags {
   Patron = 1 << 3,
   Weeb = 1 << 4,
   Beta = 1 << 5,
-  BugFinder = 1 << 6
+  BugFinder = 1 << 6,
 }
 
 export interface DBEmotes {

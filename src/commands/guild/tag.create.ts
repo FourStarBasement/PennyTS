@@ -51,8 +51,7 @@ export const tagCreate = {
     let content = argument;
     if (quotes.includes(argument.charAt(0)))
       content = argument.slice(name.length + 2).trim();
-    else
-      content = argument.slice(name.length).trim();
+    else content = argument.slice(name.length).trim();
 
     if (content.length < 1) {
       ctx.reply('You need to include content in a tag.');
