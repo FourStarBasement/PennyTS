@@ -39,8 +39,6 @@ export const evaluate = {
       body = transpile(body);
     }
 
-    console.log(body);
-
     body = body
       .replace('ctx$', 'arguments[0]')
       .replace('client$', 'arguments[1]')

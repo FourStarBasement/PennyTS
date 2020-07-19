@@ -17,7 +17,6 @@ export const arrest = {
     name: 'arrest',
   },
   run: async (ctx: Context, args: CommandArgs) => {
-    console.log(args);
     let member =
       ctx.commandClient.fetchGuildMember(ctx)?.avatarUrl ||
       args.arrest ||

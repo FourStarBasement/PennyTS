@@ -12,7 +12,6 @@ export const guildBanAdd = {
     client: CommandClient,
     payload: GatewayClientEvents.GuildBanAdd
   ) => {
-    console.log('test', payload);
     let guild = payload.guild!;
 
     client.checkGuild(payload.guildId).then(async () => {

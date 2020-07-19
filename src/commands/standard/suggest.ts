@@ -81,7 +81,6 @@ export const suggest = {
         };
         let col = new ReactionCollector(ctx, 8.64e7, m, filter);
         col.on('collect', (r: Reaction, u: User) => {
-          console.log(images.waifu);
           if (r.emoji.name === '✅') {
             if (
               (images[waifu ? 'waifu' : 'nsfw'] as string[]).includes(
@@ -111,7 +110,6 @@ export const suggest = {
                   );
                 });
             } else {
-              console.log(JSON.stringify(images, null, 2));
               (images[waifu ? 'waifu' : 'nsfw'] as string[]).push(
                 suggestImage[1]
               );

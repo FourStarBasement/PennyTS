@@ -12,7 +12,6 @@ export const weeb = {
     description: 'Disables/enables the anime gifs for the hug command.',
   },
   run: async (ctx: Context, args: CommandArgs) => {
-    console.log(args);
     if (
       !args.weeb ||
       (args.weeb.toLowerCase() !== 'on' && args.weeb.toLowerCase() !== 'off')

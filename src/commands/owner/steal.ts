@@ -99,7 +99,6 @@ export const steal: CommandOptions = {
           collector.destroy();
           ctx.reply("Then why'd you call me here?!");
         } else {
-          console.log(content);
           let wantedIndex = parseInt(content) || undefined;
 
           if (!wantedIndex) {

@@ -7,7 +7,6 @@ export const globalDisable = {
   },
   arg: { name: 'command' },
   run: async (ctx: Context, args: Record<string, string>) => {
-    console.log(args);
     let success = false;
     ctx.commandClient.commands.forEach((c) => {
       if (c.name === args['global disable']) {
