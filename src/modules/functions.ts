@@ -248,9 +248,9 @@ export default (
   // This tells me when someone runs a command. Useful for debugging
   client.on('commandRan', (cmd) => {
     console.log(
-      `Ran command ${cmd.command.name} by ${cmd.context.member!.username}\n${
-        cmd.context.user.id
-      }`
+      `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.user.username} (${cmd.context.user.id}) ran: ${
+        cmd.command.name
+      } ${cmd.args[cmd.command.name] || ''}`
     );
   });
 
