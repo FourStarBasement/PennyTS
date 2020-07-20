@@ -98,7 +98,6 @@ export default {
       'http://gifimage.net/wp-content/uploads/2017/06/anime-hug-gif-16.gif',
       'https://media.giphy.com/media/xJlOdEYy0r7ZS/giphy.gif',
       'https://media.giphy.com/media/DjczAlIcyK1Co/giphy.gif',
-      'https://myanimelist.cdn-dena.com/s/common/uploaded_files/1460993069-9ac8eaae8cd4149af4510d0fed0796bf.gif',
       'https://media.tenor.com/images/4441c1824642f363ed1a3fae53df3b43/tenor.gif',
       'https://s-media-cache-ak0.pinimg.com/originals/c5/85/27/c58527caa736f8d5ce4ab6ee6e3f736b.gif',
       'https://media.tenor.com/images/365f34c638f5fcc6564bb2ead561ff5c/tenor.gif',
