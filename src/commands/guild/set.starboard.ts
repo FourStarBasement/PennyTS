@@ -30,7 +30,6 @@ export const setStarboard = {
       return;
     }
 
-    console.log(chan.id);
     await ctx.commandClient.preparedQuery(
       'UPDATE servers SET starboard_channel = $1 WHERE server_id = $2',
       [chan.id, ctx.guildId],
