@@ -110,6 +110,7 @@ export interface FetchedStarData {
   original?: Message;
   starred?: Message;
   starboard?: ChannelGuildText;
+  limit?: number;
 }
 
 const URL_REG = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i;

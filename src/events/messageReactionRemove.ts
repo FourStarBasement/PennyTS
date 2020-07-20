@@ -84,7 +84,7 @@ async function prepare(
       );
       return;
     }
-    if (stars < 3) {
+    if (stars < 1) {
       await r.starred.delete().catch(() => null);
     } else {
       await r.starred.edit({

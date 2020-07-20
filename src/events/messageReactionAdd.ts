@@ -137,7 +137,7 @@ async function prepare(
         (v, k) => v.id !== message.author.id
       );
 
-      if (stars.length >= 3) {
+      if (stars.length >= r.limit!) {
         embed.fields = [
           {
             name: 'Jump to this message',

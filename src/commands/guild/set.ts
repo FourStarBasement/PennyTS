@@ -9,7 +9,7 @@ export const set = {
   },
   run: async (ctx: Context) => {
     ctx.reply(
-      `Usage: ${ctx.prefix}set {welcome/prefix/leave/mod log/background/emblem}`
+      `Usage: ${ctx.prefix}set {welcome/prefix/leave/mod log/background/emblem/starboard/star limit}`
     );
   },
 };
