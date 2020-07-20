@@ -2,7 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 import { DBTags } from '../../modules/db';
-import { Member } from 'detritus-client/lib/structures';
+import { Member, Guild } from 'detritus-client/lib/structures';
 
 interface CommandArgs {
   tags: string;
@@ -48,6 +48,15 @@ function embed(ctx: Context, tags: Array<DBTags>): Page {
     color: user.color,
     fields: [],
   };
+  if (ctx.message.content.split(' ')[1] === 'all')
+    e = {
+      title: `Tags for ${ctx.guild?.name}`,
+      thumbnail: {
+        url: ctx.guild!.iconUrl!,
+      },
+      color: ctx.guild?.avgColor,
+      fields: [],
+    };
   tags.forEach((tag: DBTags, _i: number) => {
     e.fields?.push({
       name: `${tag.name}    ​   ​`,
