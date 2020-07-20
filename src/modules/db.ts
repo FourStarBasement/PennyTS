@@ -41,6 +41,7 @@ export interface DBServer {
   mod_log: number;
   mod_channel: BigInt;
   modlog_perm: string;
+  star_limit: number;
 }
 
 export interface DBStarboard {

@@ -248,9 +248,9 @@ export default (
   // This tells me when someone runs a command. Useful for debugging
   client.on('commandRan', (cmd) => {
     console.log(
-      `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.user.username} (${cmd.context.user.id}) ran: ${
-        cmd.command.name
-      } ${cmd.args[cmd.command.name] || ''}`
+      `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.user.username} (${
+        cmd.context.user.id
+      }) ran: ${cmd.command.name} ${cmd.args[cmd.command.name] || ''}`
     );
   });
 
@@ -365,7 +365,7 @@ export default (
       `SELECT message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
     );
     let starboardInfo: DBServer = await client.queryOne(
-      `SELECT starboard_channel FROM servers WHERE server_id = ${
+      `SELECT starboard_channel, star_limit FROM servers WHERE server_id = ${
         message.guild!.id
       }`
     );
@@ -388,6 +388,7 @@ export default (
       original: starredMessage,
       starred: starMessage,
       starboard: starboard,
+      limit: starboardInfo.star_limit,
     };
   };
 
