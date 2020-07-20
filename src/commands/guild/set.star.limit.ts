@@ -13,6 +13,10 @@ export const setStarLimit = {
   },
   run: async (ctx: Context, args: CommandArgs) => {
     let limit = args['set star limit'];
+    if (!limit) {
+      ctx.reply(`Usage: ${ctx.prefix}set star limit {number}`);
+      return;
+    }
     if (isNaN(limit)) {
       ctx.reply('Star limit must be a number!');
       return;
