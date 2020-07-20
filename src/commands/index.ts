@@ -62,6 +62,7 @@ import { setBackground } from './profile/set.background';
 import { setEmblem } from './profile/set.emblem';
 import { setLeave } from './guild/set.leave';
 import { serverinfo } from './guild/serverinfo';
+import { setStarboard } from './guild/set.starboard';
 export default [
   avatar,
   daily,
@@ -108,6 +109,7 @@ export default [
   setBackground,
   setLeave,
   setEmblem,
+  setStarboard,
   set,
   kick,
   arrest,
