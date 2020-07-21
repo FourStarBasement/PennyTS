@@ -64,6 +64,7 @@ import { setLeave } from './guild/set.leave';
 import { serverinfo } from './guild/serverinfo';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
+import { whoIs } from './standard/whois';
 export default [
   avatar,
   daily,
@@ -131,4 +132,5 @@ export default [
   emote,
   suggest,
   serverinfo,
+  whoIs,
 ];
