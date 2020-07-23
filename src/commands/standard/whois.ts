@@ -51,7 +51,6 @@ export const whoIs = {
       });
     let status: string | undefined;
     if (user.presence) {
-      console.log(user.presence.activities.first());
       switch (user.presence.activities.first()?.name) {
         case 'Custom Status':
           status = user.presence.activities.first()!.state!;
