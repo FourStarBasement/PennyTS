@@ -20,7 +20,17 @@ export const whoIs = {
     let user = ctx.commandClient.fetchGuildMember(ctx) as User;
     if (!user)
       if (isNaN(args.whois)) user = ctx.user;
-      else user = await ctx.client.rest.fetchUser(args.whois.toString());
+      else
+        user = (await ctx.client.rest
+          .fetchUser(args.whois.toString())
+          .catch((err) => {
+            console.log(err);
+            return;
+          })) as User;
+    if (!user) {
+      ctx.reply('I could not find that user!');
+      return;
+    }
     if (!user.avgColor)
       user.avgColor = await ctx.commandClient.fetchAverageColor(user.avatarUrl);
     let embed: Page = {
