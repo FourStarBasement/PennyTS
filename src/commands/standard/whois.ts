@@ -24,7 +24,7 @@ export const whoIs = {
     if (!user.avgColor)
       user.avgColor = await ctx.commandClient.fetchAverageColor(user.avatarUrl);
     let embed: Page = {
-      title: `${user} (${user.id})`,
+      title: `${user} (${user.id})\n`,
       color: user.avgColor,
       thumbnail: {
         url: user.avatarUrl,
@@ -36,12 +36,41 @@ export const whoIs = {
         },
       ],
     };
+    // This adds the status to the title of the embed. It's a little long...
+    let e_name: string = '';
+    if (!user.presence?.status) e_name = 'invisible';
+    else e_name = user.presence?.status.toLowerCase();
+    embed.title += `${ctx.client.emojis.find(
+      (e: Emoji) => e.name === e_name
+    )} (${e_name === 'invisible' ? 'offline' : e_name})`;
 
     if (ctx.guild?.members.get(user.id))
       embed.fields?.push({
         name: `${user.username} joined this server on`,
         value: ctx.guild!.members.get(user.id)!.joinedAt!.toDateString(),
       });
+    let status: string | undefined;
+    if (user.presence) {
+      console.log(user.presence.activities.first());
+      switch (user.presence.activities.first()?.name) {
+        case 'Custom Status':
+          status = user.presence.activities.first()!.state!;
+          break;
+        case 'Spotify':
+          status = `${user.presence.activities.first()!
+            .state!} on spotify.\nRun ${ctx.prefix}listening ${
+            args.whois || ''
+          } to learn more!`;
+          break;
+      }
+      embed.fields?.push({
+        name: user.presence?.activities.first()?.typeText || 'Status',
+        value:
+          status ||
+          user.presence?.activities.first()?.name ||
+          'Not playing anything',
+      });
+    }
     let flags = [];
     for (let i: number = 0; i < 18; i++) {
       if (user.hasPublicFlag(1 << i))
