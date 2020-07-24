@@ -85,7 +85,7 @@ export const edit = {
       .reply({
         content: `Here is a preview of what your role will look like with ${role[1]}. React with 🇾 if you want to keep it or 🇳 if you do not.`,
         file: {
-          data: Buffer.from(img.buffer),
+          value: Buffer.from(img.buffer),
           filename: 'edit.png',
         },
       })

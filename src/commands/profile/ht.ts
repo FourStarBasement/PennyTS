@@ -42,7 +42,7 @@ export const ht = {
       ctx.reply({
         content: `It was ${ht}. Seems like you lost. Sad.`,
         file: {
-          data: await fetch('https://i.imgur.com/d8w9ElP.png').then((d) =>
+          value: await fetch('https://i.imgur.com/d8w9ElP.png').then((d) =>
             d.buffer()
           ),
           filename: 'tryagain.png',

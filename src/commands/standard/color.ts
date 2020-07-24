@@ -45,7 +45,7 @@ export const color = {
           .reply({
             content: `Color for **${args.color}**`,
             file: {
-              data: Buffer.from(img.buffer),
+              value: Buffer.from(img.buffer),
               filename: 'color.png',
             },
           })

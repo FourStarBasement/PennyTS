@@ -21,7 +21,7 @@ const cmdClient = new CommandClient(config.token, {
   gateway: {
     presence: {
       activity: {
-        name: 'Hello everyone!',
+        name: 'penny.wiggy.dev',
         type: ActivityTypes.PLAYING,
       },
       status: PresenceStatuses.ONLINE,
@@ -31,6 +31,7 @@ const cmdClient = new CommandClient(config.token, {
       $browser: 'Discord iOS',
     },
   },
+  useClusterClient: false,
 });
 
 functions(cmdClient, connection);

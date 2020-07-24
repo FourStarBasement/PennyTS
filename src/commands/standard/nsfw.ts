@@ -34,7 +34,7 @@ export const nsfw = {
     let img = await fetch(rand).then(async (r) => await r.buffer());
     ctx.reply({
       file: {
-        data: img,
+        value: img,
         filename: `nsfw.${ext.substr(0, 3)}`,
       },
     });

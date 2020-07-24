@@ -23,7 +23,7 @@ export const highfive = {
         content: `${ctx.member!.name} just high-fived ${highfived}!`,
         file: {
           filename: 'high-five.gif',
-          data: img,
+          value: img,
         },
       });
     }

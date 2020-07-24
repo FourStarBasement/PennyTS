@@ -14,7 +14,7 @@ export const slap = {
     let mention = ctx.message.mentions.first();
     let username = ctx.member!.username;
 
-    let content;
+    let content = `${username} just slapped ${mention?.username}!`;
 
     if (!mention || mention.id === ctx.member!.id) {
       content = `${username} has just slapped themselves in confusion.`;
@@ -30,7 +30,7 @@ export const slap = {
       content: content,
       file: {
         filename: 'slap.gif',
-        data: img,
+        value: img,
       },
     });
   },

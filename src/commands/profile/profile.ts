@@ -25,7 +25,7 @@ export const profile = {
     ctx.reply({
       content: `${member!.username}'s profile.`,
       file: {
-        data: Buffer.from(img.buffer),
+        value: Buffer.from(img.buffer),
         filename: 'profile.png',
       },
     });

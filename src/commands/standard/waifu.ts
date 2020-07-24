@@ -46,7 +46,7 @@ export const waifu = {
     ctx.reply({
       content: `I approve ${emote}`,
       file: {
-        data: img,
+        value: img,
         filename: `waifu.${ext.substr(0, 3)}`,
       },
     });

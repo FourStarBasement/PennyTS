@@ -35,7 +35,7 @@ export const top = {
       .catch(console.error);
     ctx.reply({
       file: {
-        data: Buffer.from(img.buffer),
+        value: Buffer.from(img.buffer),
         filename: 'leaderboard.png',
       },
     });

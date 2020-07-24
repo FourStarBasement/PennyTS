@@ -50,7 +50,7 @@ export const arrest = {
     ctx.reply({
       content: `${ctx.member!.username} has arrested someone!`,
       file: {
-        data: Buffer.from(img.buffer),
+        value: Buffer.from(img.buffer),
         filename: 'arrest.png',
       },
     });

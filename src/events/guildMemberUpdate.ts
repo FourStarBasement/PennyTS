@@ -32,7 +32,7 @@ export const guildMemberUpdate = {
           let auditLog = await guild
             .fetchAuditLogs({
               limit: 50,
-              actionType: payload.differences.nick
+              actionType: payload.differences?.nick
                 ? AuditLogActions.MEMBER_UPDATE
                 : AuditLogActions.MEMBER_ROLE_UPDATE,
             })

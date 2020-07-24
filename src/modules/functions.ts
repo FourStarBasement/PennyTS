@@ -157,14 +157,12 @@ export default (
   // Check if the guild is in the DB before doing anything
   client.checkGuild = async (id: string) => {
     const guild = (client.client as ShardClient).guilds.get(id);
-
     if (!guild) return;
     let result: DBServer = await client
       .queryOne(
         `SELECT server_id, modlog_perm FROM servers WHERE server_id = ${id}`
       )
       .catch(console.error);
-
     if (!result) {
       await client
         .query(`INSERT INTO servers (server_id) VALUES (${id})`)
@@ -188,7 +186,6 @@ export default (
         context.user.checked = true;
         context.user.blacklisted = results.blacklisted;
       });
-
       if (context.user.blacklisted) return '';
     }
     if (context.guild && context.guildId) {

@@ -14,7 +14,7 @@ export const inspire = {
     ctx.reply({
       file: {
         filename: 'inspire.png',
-        data: buffer,
+        value: buffer,
       },
     });
   },

@@ -39,7 +39,7 @@ export const kick = {
       let img = await fetch(
         'https://i.giphy.com/media/wOly8pa4s4W88/giphy.gif'
       ).then(async (r) => await r.buffer());
-      kickImage = { filename: 'kick.gif', data: img };
+      kickImage = { filename: 'kick.gif', value: img };
     }
 
     ctx.guild?.removeMember(member.id, {

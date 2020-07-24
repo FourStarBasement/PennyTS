@@ -39,7 +39,7 @@ export const ban = {
       let img = await fetch(
         'https://i.makeagif.com/media/6-01-2015/yeWyfV.gif'
       ).then(async (r) => await r.buffer());
-      banImage = { filename: 'ban.gif', data: img };
+      banImage = { filename: 'ban.gif', value: img };
     }
 
     ctx.guild?.createBan(member.id, {

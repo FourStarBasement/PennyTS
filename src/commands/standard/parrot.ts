@@ -22,7 +22,7 @@ export const parrot = {
       content: '<a:partyparrot:393630054321487882>',
       file: {
         filename: 'parrot.gif',
-        data: img,
+        value: img,
       },
     });
   },

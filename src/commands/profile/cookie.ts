@@ -58,7 +58,7 @@ export const cookie = {
             let gif =
               images.cookie[Math.floor(Math.random() * images.cookie.length)];
             let img = await fetch(gif).then(async (r) => r.buffer());
-            cookieImage = { filename: 'cookie.gif', data: img };
+            cookieImage = { filename: 'cookie.gif', value: img };
           }
 
           ctx.reply({

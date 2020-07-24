@@ -39,7 +39,7 @@ export const hug = {
         ctx.reply({
           content: `${ctx.member!.username} just gave me a hug! <3`,
           file: {
-            data: await fetch(
+            value: await fetch(
               'https://cdn.discordapp.com/attachments/289898558898044928/518528032156287036/Penny_tackle_hugs_Ruby.gif'
             ).then((d) => d.buffer()),
             filename: 'hug.gif',
@@ -64,7 +64,7 @@ export const hug = {
             ctx.member!.username
           } just tried to hug Lilwiggy. Yeah that didn't work.`,
           file: {
-            data: await fetch(image).then((d) => d.buffer()),
+            value: await fetch(image).then((d) => d.buffer()),
             filename: 'hug.gif',
           },
         });
@@ -78,7 +78,7 @@ export const hug = {
     ctx.reply({
       content: `${ctx.member!.username} just gave ${user.username} a hug!`,
       file: {
-        data: await fetch(image).then((d) => d.buffer()),
+        value: await fetch(image).then((d) => d.buffer()),
         filename: 'hug.gif',
       },
     });

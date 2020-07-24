@@ -18,7 +18,7 @@ export const sam = {
     ctx.reply({
       file: {
         filename: `sam.${ext}`,
-        data: img,
+        value: img,
       },
     });
   },

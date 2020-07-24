@@ -29,7 +29,7 @@ export const kiss = {
         content: `${author.username} just tried to kiss Lilwiggy. Yeah that didn't work.`,
         file: {
           filename: 'ew.gif',
-          data: img,
+          value: img,
         },
       });
     } else {
@@ -42,7 +42,7 @@ export const kiss = {
         content: `${author.username} just gave ${kissed} a kiss!`,
         file: {
           filename: `kiss.gif`,
-          data: img,
+          value: img,
         },
       });
     }

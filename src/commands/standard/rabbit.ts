@@ -22,7 +22,7 @@ export const rabbit = {
       content: ':rabbit2:',
       file: {
         filename: 'rabbit.gif',
-        data: img,
+        value: img,
       },
     });
   },

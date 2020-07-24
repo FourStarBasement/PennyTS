@@ -15,8 +15,7 @@ export const test = {
         content: "I'm running!",
         file: {
           filename: 'test.png',
-
-          data: img,
+          value: img,
         },
       })
       .catch(console.error);
