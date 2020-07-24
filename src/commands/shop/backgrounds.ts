@@ -14,12 +14,11 @@ export const backgrounds = {
     let i = 0;
     let data: DBUserBackgrounds[] = await ctx.commandClient
       .query(`SELECT * FROM user_backgrounds WHERE user_id = ${ctx.member!.id}`)
-      .catch((r) => {
-        if (r == 'Query returned nothing') {
-          ctx.reply('You do not own any backgrounds.');
-          return;
-        }
-      });
+      .catch(console.error);
+    if (!data || data.length < 1) {
+      ctx.reply('You do not own any backgrounds.');
+      return;
+    }
 
     data.forEach((element: DBUserBackgrounds) => {
       if (element.name !== 'default') {
