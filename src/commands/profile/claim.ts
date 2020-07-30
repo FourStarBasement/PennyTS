@@ -27,7 +27,15 @@ export const claim = {
           Authorization: config.topgg.token,
         },
       }
-    ).then((da) => da.json());
+    ).then((da) => {
+      if (da.status === 429) {
+        ctx.reply(
+          'We are submitting too many requests! Please try again later.'
+        );
+        return;
+      }
+      return da.json();
+    });
 
     if (voters.voted === 1) voted = true;
 
