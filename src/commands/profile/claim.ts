@@ -37,6 +37,7 @@ export const claim = {
       return da.json();
     });
 
+    if (!voters) return;
     if (voters.voted === 1) voted = true;
 
     if (!voted) {
