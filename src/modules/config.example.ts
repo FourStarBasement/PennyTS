@@ -24,7 +24,9 @@ export default {
   youtube: {
     key: '',
   },
-
+  topgg: {
+    token: '',
+  },
   osu: {
     token: '',
   },
