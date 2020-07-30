@@ -58,6 +58,7 @@ export const claim = {
       QueryType.Void
     );
     ctx.member?.addRole('738441920291799070');
+    ctx.user.claimed = true;
     ctx.reply(
       'You have received 20 thousand credits, 10 free cookies, and, your custom voter role! If you would like a colored role you can change ask a mod for a role!'
     );
