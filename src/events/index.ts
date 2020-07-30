@@ -6,7 +6,6 @@ import { guildMemberUpdate } from './guildMemberUpdate';
 import { guildBanAdd } from './guildBanAdd';
 import { guildBanRemove } from './guildBanRemove';
 import { messageDelete } from './messageDelete';
-import { guildCreate } from './guildCreate';
 
 export default [
   messageReactionAdd,
@@ -17,5 +16,4 @@ export default [
   guildBanAdd,
   guildBanRemove,
   messageDelete,
-  guildCreate,
 ];
