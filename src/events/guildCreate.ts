@@ -1,12 +1,20 @@
 import { ClientEvents } from 'detritus-client/lib/constants';
-import { CommandClient, ShardClient } from 'detritus-client';
+import {
+  GatewayClientEvents,
+  CommandClient,
+  ShardClient,
+} from 'detritus-client';
 import fetch from 'node-fetch';
 import config from '../modules/config';
 
 export const guildCreate = {
   event: ClientEvents.GUILD_CREATE,
-  listener: async (cmdClient: CommandClient) => {
+  listener: async (
+    cmdClient: CommandClient,
+    payload: GatewayClientEvents.GuildCreate
+  ) => {
     if (!cmdClient.ready) return;
+    console.log(`Posting ${payload.guild.name} as a new stat for top.gg`);
     await fetch(`https://top.gg/api/bots/309531399789215744/stats`, {
       method: 'POST',
       headers: {
