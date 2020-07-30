@@ -4,7 +4,7 @@ import ownerCommands from './commands/owner/index';
 import functions from './modules/functions';
 import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 
-import { CommandClient } from 'detritus-client';
+import { CommandClient, ShardClient } from 'detritus-client';
 import events from './events';
 import { Range } from 'node-schedule';
 
@@ -63,4 +63,16 @@ cmdClient.addEvents(events);
       cmdClient.starQueue.shift()();
     }
   );
+
+  setInterval(async () => {
+    await fetch(`https://top.gg/api/bots/309531399789215744/stats`, {
+      method: 'POST',
+      headers: {
+        Authorization: config.topgg.token,
+      },
+      body: JSON.stringify({
+        server_count: (cmdClient.client as ShardClient).guilds.size,
+      }),
+    }).catch(console.error);
+  }, 60000 * 60);
 })();
