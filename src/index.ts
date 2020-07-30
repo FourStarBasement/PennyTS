@@ -44,7 +44,7 @@ cmdClient.addEvents(events);
   const client = await cmdClient.run();
   // client has received the READY payload, do stuff now
   console.log(`Online with ${client.shardCount} shards`);
-
+  cmdClient.ready = true;
   const s = require('node-schedule');
 
   cmdClient.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {

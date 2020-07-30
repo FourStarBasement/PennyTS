@@ -36,6 +36,7 @@ declare module 'detritus-client/lib/structures/user' {
     checked: boolean;
     blacklisted: boolean;
     avgColor: number;
+    claimed: boolean;
   }
 }
 
@@ -62,6 +63,7 @@ declare module 'detritus-client/lib/commandclient' {
     job: Job; // Resets everyone's daily/cookie count at midnight on the server host
     starQueue: any[]; // A queue of starboard data to process
     starInterval: Job; // An interval of when to process starboard data
+    ready: boolean; // Tells us bot is ready.
   }
 }
 

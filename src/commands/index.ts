@@ -65,6 +65,7 @@ import { serverinfo } from './guild/serverinfo';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
+import { claim } from './profile/claim';
 export default [
   avatar,
   daily,
@@ -133,4 +134,5 @@ export default [
   suggest,
   serverinfo,
   whoIs,
+  claim,
 ];
