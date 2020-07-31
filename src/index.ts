@@ -76,9 +76,18 @@ cmdClient.addEvents(events);
         body: JSON.stringify({
           server_count: (cmdClient.client as ShardClient).guilds.size,
         }),
-      }).then(_ => console.log(`[Top-GG_Interval] Posted ${(cmdClient.client as ShardClient).guilds.size} guilds to top.gg!`))
-      .catch(console.error);
+      })
+        .then((_) =>
+          console.log(
+            `[Top-GG_Interval] Posted ${
+              (cmdClient.client as ShardClient).guilds.size
+            } guilds to top.gg!`
+          )
+        )
+        .catch(console.error);
     }, 60000 * 60);
   else
-    console.log('[Top-GG_Interval] Not posting server stats due to no token set in config!');
+    console.log(
+      '[Top-GG_Interval] Not posting server stats due to no token set in config!'
+    );
 })();
