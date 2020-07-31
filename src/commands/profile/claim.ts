@@ -15,10 +15,12 @@ export const claim = {
       );
       return;
     }
-    if (ctx.user.claimed) {
+
+    if (ctx.user.claimed || (ctx.member?._roles?.includes('738441920291799070'))) {
       ctx.reply('You already claimed your rewards!');
       return;
     }
+
     let voted: boolean = false;
     let voters = await fetch(
       `https://top.gg/api/bots/309531399789215744/check?userId=${ctx.userId}`,
