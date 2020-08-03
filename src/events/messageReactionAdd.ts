@@ -36,7 +36,9 @@ export const messageReactionAdd = {
     let embed: Page = {
       title: author.name,
       thumbnail: { url: author.avatarUrl },
-      color: 9043849,
+      color: author.avgColor
+        ? author.avgColor
+        : await client.fetchAverageColor(author.avatarUrl),
     };
 
     await client.checkGuild(payload.guildId).then(() => {
