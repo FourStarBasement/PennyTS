@@ -62,6 +62,7 @@ import { setBackground } from './profile/set.background';
 import { setEmblem } from './profile/set.emblem';
 import { setLeave } from './guild/set.leave';
 import { serverinfo } from './guild/serverinfo';
+import { setStarboardEmoji } from './guild/set.starboard.emoji';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
@@ -112,6 +113,7 @@ export default [
   setBackground,
   setLeave,
   setEmblem,
+  setStarboardEmoji,
   setStarboard,
   setStarLimit,
   set,

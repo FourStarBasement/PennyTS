@@ -11,6 +11,7 @@ import { ItemInfo } from './shop';
 
 export const chanReg = /<#(\d+)>/;
 export const roleReg = /<@&(\d+)>/;
+export const emojiReg = /^<a?:(\w+):(\d+)>$/;
 
 export interface PageField {
   name: string;

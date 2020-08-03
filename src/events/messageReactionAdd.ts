@@ -2,9 +2,9 @@ import { ClientEvents } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
 import { ShardClient } from 'detritus-client';
-import { Message, User, Reaction } from 'detritus-client/lib/structures';
+import { Message, User, Reaction, Emoji } from 'detritus-client/lib/structures';
 import { Page, convertEmbed } from '../modules/utils';
-import { QueryType } from '../modules/db';
+import { QueryType, DBServer } from '../modules/db';
 
 export const messageReactionAdd = {
   event: ClientEvents.MESSAGE_REACTION_ADD,
@@ -19,13 +19,17 @@ export const messageReactionAdd = {
       payload.message || (await channel.fetchMessage(payload.messageId));
     let author = message.author;
 
-    if (
-      !payload.guildId ||
-      payload.reaction.emoji.name !== '⭐' ||
-      channel.nsfw ||
-      payload.member!.bot
-    ) {
+    if (!payload.guildId || channel.nsfw || payload.member!.bot) {
       return;
+    }
+
+    let server: DBServer = await client.queryOne(
+      `SELECT starboard_emoji FROM servers WHERE server_id = ${payload.guildId}`
+    );
+    if (isNaN(server.starboard_emoji as number)) {
+      if (payload.reaction.emoji.name !== server.starboard_emoji) return;
+    } else {
+      if (server.starboard_emoji !== payload.reaction.emoji.id) return;
     }
 
     // Drop-in Replacement for Embed
@@ -37,7 +41,16 @@ export const messageReactionAdd = {
 
     await client.checkGuild(payload.guildId).then(() => {
       embed = convertEmbed(author, message, embed);
-      client.starQueue.push(wrap(client, message, payload.user!, embed));
+      client.starQueue.push(
+        wrap(
+          client,
+          message,
+          payload.user!,
+          embed,
+          server,
+          payload.reaction.emoji
+        )
+      );
     });
   },
 };
@@ -46,12 +59,14 @@ function wrap(
   client: CommandClient,
   message: Message,
   reacted: User,
-  embed: Page
+  embed: Page,
+  server: DBServer,
+  emoji: Emoji
 ) {
   return async () => {
     console.log(`ReactionAdd/Starboard G#${message.guildId}: Running.`);
     try {
-      await prepare(client, message, reacted, embed);
+      await prepare(client, message, reacted, embed, server, emoji);
     } catch (error) {
       return console.log(
         `ReactionAdd/Starboard G#${message.guildId}: Error:`,
@@ -66,22 +81,43 @@ async function prepare(
   client: CommandClient,
   message: Message,
   reacted: User,
-  embed: Page
+  embed: Page,
+  server: DBServer,
+  emoji: Emoji
 ) {
   let r = await client.fetchStarData(message);
 
+  let emote: Emoji;
+  if (!server.starboard_emoji)
+    emote = new Emoji(client.client as ShardClient, {
+      name: '⭐',
+    });
+  if (emoji.id) {
+    if (message.guild?.emojis.get(server.starboard_emoji as string))
+      emote = message.guild!.emojis.get(server.starboard_emoji as string)!;
+    else return;
+  } else {
+    emote = emoji;
+  }
   if (r.original && r.starred) {
     if (reacted.id === r.original.author.id) {
-      await r.original.reactions.get('⭐')?.delete(reacted.id);
-      await r.starred.reactions.get('⭐')?.delete(reacted.id);
+      await r.original.reactions
+        .get(server.starboard_emoji as string)
+        ?.delete(reacted.id);
+      await r.starred.reactions
+        .get(server.starboard_emoji as string)
+        ?.delete(reacted.id);
       console.log(
         `ReactionAdd/Starboard G#${message.guildId}: Self-star: M#${r.original.id} U#${reacted.id}`
       );
       return;
     }
-
     // Starboard message
-    if (message.content.startsWith('⭐') && message.id == r.starred.id) {
+    if (
+      (message.content.startsWith(emote.name) ||
+        message.content.startsWith(`<`)) &&
+      message.id == r.starred.id
+    ) {
       for (let reaction of r.original.reactions.values()) {
         if ((await reaction.fetchUsers()).has(reacted.id)) {
           console.log(
@@ -121,7 +157,9 @@ async function prepare(
     ];
 
     await r.starred.edit({
-      content: `⭐ ${count} stars in ${r.original.channel?.mention}`,
+      content: `${emote} ${count} ${emote.id ? emote.name : 'reaction'}s in ${
+        r.original.channel?.mention
+      }`,
       embed: embed,
     });
     console.log(
@@ -129,7 +167,7 @@ async function prepare(
     );
   } else if (r.starboard) {
     for (let reaction of message.reactions.values()) {
-      if (reaction.emoji.name !== '⭐') {
+      if (reaction.emoji.name !== emote.name) {
         continue;
       }
 
@@ -154,7 +192,9 @@ async function prepare(
 
         r.starboard
           .createMessage({
-            content: `⭐ ${stars.length} stars in ${message.channel?.mention}`,
+            content: `${emote} ${stars.length} ${
+              emote.id ? emote.name : 'reaction'
+            }s in ${message.channel?.mention}`,
             embed: embed,
           })
           .then(async (m) => {
