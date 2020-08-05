@@ -89,17 +89,15 @@ async function prepare(
 ) {
   let r = await client.fetchStarData(message);
 
-  let emote: Emoji;
-  if (!server.starboard_emoji)
-    emote = new Emoji(client.client as ShardClient, {
-      name: '⭐',
-    });
-  if (emoji.id) {
-    if (message.guild?.emojis.get(server.starboard_emoji as string))
-      emote = message.guild!.emojis.get(server.starboard_emoji as string)!;
-    else return;
-  } else {
-    emote = emoji;
+  let emote: Emoji = new Emoji(client.client as ShardClient, {
+    name: '⭐',
+  });
+  if (server.starboard_emoji) {
+    if (emoji.id) {
+      if (message.guild?.emojis.get(server.starboard_emoji as string))
+        emote = message.guild!.emojis.get(server.starboard_emoji as string)!;
+      else return;
+    }
   }
   if (r.original && r.starred) {
     if (reacted.id === r.original.author.id) {
