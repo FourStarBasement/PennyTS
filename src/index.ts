@@ -66,7 +66,10 @@ cmdClient.addEvents(events);
     }
   );
 
-  if (config.topgg.token.length != 0)
+  if (
+    config.topgg.token.length !== 0 ||
+    config.discordbotsgg.token.length !== 0
+  )
     setInterval(async () => {
       await fetch(`https://top.gg/api/bots/309531399789215744/stats`, {
         method: 'POST',
@@ -75,6 +78,7 @@ cmdClient.addEvents(events);
         },
         body: JSON.stringify({
           server_count: (cmdClient.client as ShardClient).guilds.size,
+          shard_count: (cmdClient.client as ShardClient).shardCount,
         }),
       })
         .then((_) =>
@@ -85,9 +89,30 @@ cmdClient.addEvents(events);
           )
         )
         .catch(console.error);
+      await fetch(
+        `https://discord.bots.gg/api/v1/bots/309531399789215744/stats`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: config.discordbotsgg.token,
+          },
+          body: JSON.stringify({
+            guildCount: (cmdClient.client as ShardClient).guilds.size,
+            shardCount: (cmdClient.client as ShardClient).shardCount,
+          }),
+        }
+      )
+        .then((_) =>
+          console.log(
+            `[Discord Bots.GG_Interval] Posted ${
+              (cmdClient.client as ShardClient).guilds.size
+            } guilds to discord.bots.gg!`
+          )
+        )
+        .catch(console.error);
     }, 60000 * 60);
   else
     console.log(
-      '[Top-GG_Interval] Not posting server stats due to no token set in config!'
+      '[Bot stats_Interval] Not posting server stats due to no token set in config!'
     );
 })();

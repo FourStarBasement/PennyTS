@@ -27,6 +27,9 @@ export default {
   topgg: {
     token: '',
   },
+  discordbotsgg: {
+    token: '',
+  },
   osu: {
     token: '',
   },
