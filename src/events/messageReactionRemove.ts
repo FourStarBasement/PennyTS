@@ -6,7 +6,7 @@ import {
 } from 'detritus-client';
 import { Message, User, Emoji, Reaction } from 'detritus-client/lib/structures';
 import { Page, convertEmbed } from '../modules/utils';
-import {DBServer} from '../modules/db';
+import { DBServer } from '../modules/db';
 
 export const messageReactionRemove = {
   event: ClientEvents.MESSAGE_REACTION_REMOVE,
@@ -21,11 +21,7 @@ export const messageReactionRemove = {
       payload.message || (await channel.fetchMessage(payload.messageId));
     let author = message.author;
 
-    if (
-      !payload.guildId ||
-      channel.nsfw ||
-      payload.user!.bot
-    ) {
+    if (!payload.guildId || channel.nsfw || payload.user!.bot) {
       return;
     }
 
@@ -43,7 +39,9 @@ export const messageReactionRemove = {
     let embed: Page = {
       title: author.name,
       thumbnail: { url: author.avatarUrl },
-      color: author.avgColor ? author.avgColor : await client.fetchAverageColor(author.avatarUrl),
+      color: author.avgColor
+        ? author.avgColor
+        : await client.fetchAverageColor(author.avatarUrl),
       fields: [
         {
           name: 'Jump to this message',
@@ -54,7 +52,16 @@ export const messageReactionRemove = {
 
     await client.checkGuild(payload.guildId).then(() => {
       embed = convertEmbed(author, message, embed);
-      client.starQueue.push(wrap(client, message, payload.user!, embed, server, payload.reaction.emoji));
+      client.starQueue.push(
+        wrap(
+          client,
+          message,
+          payload.user!,
+          embed,
+          server,
+          payload.reaction.emoji
+        )
+      );
     });
   },
 };
@@ -102,9 +109,9 @@ async function prepare(
     }
   }
   if (r.original && r.starred) {
-    let rs: Reaction[] = Array.from(r.original.reactions.cache.values()).concat(
-      Array.from(r.starred.reactions.cache.values())
-    ).filter((reaction) => reaction.emoji.name == emote.name);
+    let rs: Reaction[] = Array.from(r.original.reactions.cache.values())
+      .concat(Array.from(r.starred.reactions.cache.values()))
+      .filter((reaction) => reaction.emoji.name == emote.name);
 
     let reaction = r.starred.reactions.get(server.starboard_emoji as string);
     let uniqueReactions = new Array<string>();
@@ -129,7 +136,9 @@ async function prepare(
       await r.starred.delete().catch(() => null);
     } else {
       await r.starred.edit({
-        content: `${emote} ${count} ${emote.id ? emote.name : 'reaction'}s in ${r.original?.channel?.mention}`,
+        content: `${emote} ${count} ${emote.id ? emote.name : 'reaction'}s in ${
+          r.original?.channel?.mention
+        }`,
         embed: embed,
       });
     }
