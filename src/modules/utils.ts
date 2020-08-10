@@ -8,8 +8,8 @@ import {
 import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
 import { ItemInfo } from './shop';
-import fetch from 'node-fetch';
 import config from './config';
+import fetch from 'node-fetch';
 
 export const chanReg = /<#(\d+)>/;
 export const roleReg = /<@&(\d+)>/;
@@ -169,6 +169,13 @@ export function stringExtractor(str: string, quotes: string[] = ['"', "'"]) {
   }
 
   return finalStrings;
+}
+export async function fetchRandomNumber(): Promise<number> {
+  let res = await fetch(
+    'https://qrng.anu.edu.au/API/jsonI.php?length=1&type=uint8'
+  ).then((d) => d.json());
+  if (!res.success) throw new Error('No number returned!');
+  return res.data[0] as number;
 }
 
 export async function fetchRandomNumber(

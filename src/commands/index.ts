@@ -67,6 +67,8 @@ import { setStarboardEmoji } from './guild/set.starboard.emoji';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
+import { cardClaim } from './trading cards/card.claim';
+import { cardList } from './trading cards/card.list';
 import { fm } from './standard/fm';
 import { fmAdd } from './standard/fm.add';
 import { fmStats } from './standard/fm.stats';
@@ -141,8 +143,5 @@ export default [
   suggest,
   serverinfo,
   whoIs,
-  //claim,
-  fmStats,
-  fmAdd,
-  fm,
+  claim,
 ];
