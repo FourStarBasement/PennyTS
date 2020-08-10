@@ -67,6 +67,8 @@ import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
 import { claim } from './profile/claim';
+import { cardClaim } from './trading cards/card.claim';
+import { cardList } from './trading cards/card.list';
 export default [
   avatar,
   daily,
@@ -137,4 +139,6 @@ export default [
   serverinfo,
   whoIs,
   claim,
+  cardClaim,
+  cardList,
 ];
