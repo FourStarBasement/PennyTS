@@ -95,3 +95,9 @@ export interface StarData {
   message_id: string;
   star_id: string;
 }
+
+export interface DBCards {
+  owner_id: string;
+  card_id: number;
+  count: number;
+}

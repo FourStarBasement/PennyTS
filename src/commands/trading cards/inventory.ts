@@ -14,7 +14,7 @@ export const inventory = {
     let data: DBCards[] = await ctx.commandClient.query(
       `SELECT * FROM cards WHERE owner_id = ${ctx.userId}`
     );
-    if (!data) {
+    if (!data || data.length < 1) {
       ctx.reply('You have no cards!');
       return;
     }
