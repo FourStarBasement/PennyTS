@@ -73,6 +73,7 @@ import { fm } from './standard/fm';
 import { fmAdd } from './standard/fm.add';
 import { fmStats } from './standard/fm.stats';
 // import { claim } from './profile/claim';
+import { inventory } from './trading cards/inventory';
 export default [
   avatar,
   daily,
@@ -144,4 +145,6 @@ export default [
   serverinfo,
   whoIs,
   claim,
+  cardClaim,
+  cardList,
 ];
