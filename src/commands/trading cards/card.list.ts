@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { cards, Card } from '../../trading cards/cards';
+import { getCards, Card } from '../../trading_cards/cards';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 import { Page } from '../../modules/utils';
 
@@ -9,6 +9,7 @@ export const cardList = {
     description: 'List all cards',
   },
   run: async (ctx: Context) => {
+    let cards = getCards();
     let pages: Page[] = [];
     cards.forEach((card: Card) => {
       pages.push(embed(card));
@@ -24,14 +25,18 @@ function embed(card: Card): Page {
     color: 9043849,
     image: {
       url: `https://penny.wiggy.dev/assets/trading-cards/${
-        cards.indexOf(card) + 1
-      }.png`,
+        (card.name.replace(/ /g, '_') + '_' + card.series.replace(/ /g, '_')).toLowerCase()
+        }.png`,
     },
     fields: [
       {
         name: 'Rarity',
-        value: card.rarity.toString(),
+        value: `${card.rarity}/100`,
       },
+      {
+        name: 'Series',
+        value: card.series
+      }
     ],
   };
 }

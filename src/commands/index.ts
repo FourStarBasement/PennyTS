@@ -69,6 +69,7 @@ import { whoIs } from './standard/whois';
 import { claim } from './profile/claim';
 import { cardClaim } from './trading cards/card.claim';
 import { cardList } from './trading cards/card.list';
+import { inventory } from './trading cards/inventory';
 export default [
   avatar,
   daily,
@@ -141,4 +142,5 @@ export default [
   claim,
   cardClaim,
   cardList,
+  inventory,
 ];
