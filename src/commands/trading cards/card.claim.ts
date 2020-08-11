@@ -1,5 +1,11 @@
 import { Context } from 'detritus-client/lib/command';
-import { getCards, Card, sortCards, RARITIES, RARITY_COLORS } from '../../trading_cards/cards';
+import {
+  getCards,
+  Card,
+  sortCards,
+  RARITIES,
+  RARITY_COLORS,
+} from '../../trading_cards/cards';
 import { DBCards, QueryType } from '../../modules/db';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
@@ -77,19 +83,21 @@ function getEmbed(card: Card, cards: Card[]): Page {
     title: `${card.name} (${cards.indexOf(card)})`,
     color: RARITY_COLORS[RARITIES[card.rarity]],
     image: {
-      url: `https://penny.wiggy.dev/assets/trading-cards/${
-        (card.name.replace(/ /g, '_') + '_' + card.series.replace(/ /g, '_')).toLowerCase()
-        }.png`,
+      url: `https://penny.wiggy.dev/assets/trading-cards/${(
+        card.name.replace(/ /g, '_') +
+        '_' +
+        card.series.replace(/ /g, '_')
+      ).toLowerCase()}.png`,
     },
     fields: [
       {
         name: 'Series',
-        value: card.series
+        value: card.series,
       },
       {
         name: 'Rarity',
-        value: `${card.rarity}/100`
-      }
-    ]
-  }
+        value: `${card.rarity}/100`,
+      },
+    ],
+  };
 }

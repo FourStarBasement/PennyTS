@@ -24,9 +24,11 @@ function embed(card: Card): Page {
     title: card.name,
     color: 9043849,
     image: {
-      url: `https://penny.wiggy.dev/assets/trading-cards/${
-        (card.name.replace(/ /g, '_') + '_' + card.series.replace(/ /g, '_')).toLowerCase()
-        }.png`,
+      url: `https://penny.wiggy.dev/assets/trading-cards/${(
+        card.name.replace(/ /g, '_') +
+        '_' +
+        card.series.replace(/ /g, '_')
+      ).toLowerCase()}.png`,
     },
     fields: [
       {
@@ -35,8 +37,8 @@ function embed(card: Card): Page {
       },
       {
         name: 'Series',
-        value: card.series
-      }
+        value: card.series,
+      },
     ],
   };
 }
