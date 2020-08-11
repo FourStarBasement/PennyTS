@@ -22,9 +22,13 @@ export const inventory = {
     data
       .sort((a, b) => a.count - b.count)
       .forEach((c: DBCards) => {
-        let rarity: Emoji = ctx.client.emojis.find((e) => e.name === RARITIES[cards[c.card_id].rarity])!;
+        let rarity: Emoji = ctx.client.emojis.find(
+          (e) => e.name === RARITIES[cards[c.card_id].rarity]
+        )!;
         allCards.push(
-          `${rarity} ${cards[c.card_id].name}: ${c.count} owned. (ID: ${c.card_id})`
+          `${rarity} ${cards[c.card_id].name}: ${c.count} owned. (ID: ${
+            c.card_id
+          })`
         );
       });
 

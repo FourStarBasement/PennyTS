@@ -1,152 +1,152 @@
 [
- {
-  "name": "Angie Yonaga",
-  "rarity": 100,
-  "series": "Danganronpa"
- },
- {
-  "name": "Mirei Mikagura",
-  "rarity": 80,
-  "series": "Digimon"
- },
- {
-  "name": "Miu Iruma",
-  "rarity": 80,
-  "series": "Danganronpa"
- },
- {
-  "name": "Tsuyu Asui",
-  "rarity": 80,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Inko Midoriya",
-  "rarity": 80,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Mitsuki Bakugo",
-  "rarity": 80,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Ibara Shiozaki",
-  "rarity": 80,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Corrin",
-  "rarity": 40,
-  "series": "Fire Emblem"
- },
- {
-  "name": "Kasandra",
-  "rarity": 40,
-  "series": "Xenoblade Chronicles"
- },
- {
-  "name": "Mamako Oosuki",
-  "rarity": 40,
-  "series": "Okaasan Online"
- },
- {
-  "name": "Ochako Ururaka",
-  "rarity": 40,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Kyoka Jiro",
-  "rarity": 40,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Judy",
-  "rarity": 40,
-  "series": "Cowboy Bebop"
- },
- {
-  "name": "Ichigo",
-  "rarity": 40,
-  "series": "DARLING in the FRANXX"
- },
- {
-  "name": "Mina Ashido",
-  "rarity": 20,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Camie Utsushimi",
-  "rarity": 20,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Nejire Hado",
-  "rarity": 20,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Irina Jelavic",
-  "rarity": 20,
-  "series": "Assassination Classroom"
- },
- {
-  "name": "Chika Fujiwara",
-  "rarity": 20,
-  "series": "Kaguya Sama Love Is War"
- },
- {
-  "name": "Faye Valentine",
-  "rarity": 20,
-  "series": "Cowboy Bebop"
- },
- {
-  "name": "Zero Two",
-  "rarity": 20,
-  "series": "DARLING in the FRANXX"
- },
- {
-  "name": "Kokoro",
-  "rarity": 20,
-  "series": "DARLING in the FRANXX"
- },
- {
-  "name": "Nami",
-  "rarity": 20,
-  "series": "One Piece"
- },
- {
-  "name": "Momo Yaoyorozu",
-  "rarity": 10,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Himiko Toga",
-  "rarity": 5,
-  "series": "My Hero Academia"
- },
- {
-  "name": "Kaede Kayano",
-  "rarity": 5,
-  "series": "Assassination Classroom"
- },
- {
-  "name": "Nico Robin",
-  "rarity": 5,
-  "series": "One Piece"
- },
- {
-  "name": "Komi San",
-  "rarity": 1,
-  "series": "Komi-san wa Komyushou Desu"
- },
- {
-  "name": "Kaguya Shinomiya",
-  "rarity": 1,
-  "series": "Kaguya Sama Love Is War"
- },
- {
-  "name": "Perona",
-  "rarity": 1,
-  "series": "One Piece"
- }
+  {
+    "name": "Angie Yonaga",
+    "rarity": 100,
+    "series": "Danganronpa"
+  },
+  {
+    "name": "Mirei Mikagura",
+    "rarity": 80,
+    "series": "Digimon"
+  },
+  {
+    "name": "Miu Iruma",
+    "rarity": 80,
+    "series": "Danganronpa"
+  },
+  {
+    "name": "Tsuyu Asui",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Inko Midoriya",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mitsuki Bakugo",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Ibara Shiozaki",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Corrin",
+    "rarity": 40,
+    "series": "Fire Emblem"
+  },
+  {
+    "name": "Kasandra",
+    "rarity": 40,
+    "series": "Xenoblade Chronicles"
+  },
+  {
+    "name": "Mamako Oosuki",
+    "rarity": 40,
+    "series": "Okaasan Online"
+  },
+  {
+    "name": "Ochako Ururaka",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kyoka Jiro",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Judy",
+    "rarity": 40,
+    "series": "Cowboy Bebop"
+  },
+  {
+    "name": "Ichigo",
+    "rarity": 40,
+    "series": "DARLING in the FRANXX"
+  },
+  {
+    "name": "Mina Ashido",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Camie Utsushimi",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Nejire Hado",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Irina Jelavic",
+    "rarity": 20,
+    "series": "Assassination Classroom"
+  },
+  {
+    "name": "Chika Fujiwara",
+    "rarity": 20,
+    "series": "Kaguya Sama Love Is War"
+  },
+  {
+    "name": "Faye Valentine",
+    "rarity": 20,
+    "series": "Cowboy Bebop"
+  },
+  {
+    "name": "Zero Two",
+    "rarity": 20,
+    "series": "DARLING in the FRANXX"
+  },
+  {
+    "name": "Kokoro",
+    "rarity": 20,
+    "series": "DARLING in the FRANXX"
+  },
+  {
+    "name": "Nami",
+    "rarity": 20,
+    "series": "One Piece"
+  },
+  {
+    "name": "Momo Yaoyorozu",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Himiko Toga",
+    "rarity": 5,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kaede Kayano",
+    "rarity": 5,
+    "series": "Assassination Classroom"
+  },
+  {
+    "name": "Nico Robin",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Komi San",
+    "rarity": 1,
+    "series": "Komi-san wa Komyushou Desu"
+  },
+  {
+    "name": "Kaguya Shinomiya",
+    "rarity": 1,
+    "series": "Kaguya Sama Love Is War"
+  },
+  {
+    "name": "Perona",
+    "rarity": 1,
+    "series": "One Piece"
+  }
 ]
