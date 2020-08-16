@@ -37,6 +37,10 @@ declare module 'detritus-client/lib/structures/user' {
     blacklisted: boolean;
     avgColor: number;
     claimed: boolean;
+    xp_cool: number;
+    xp: number;
+    next: number;
+    level: number;
   }
 }
 
@@ -144,11 +148,11 @@ export default (
       WITH e AS(
           INSERT INTO users (user_id) VALUES (${id})
           ON CONFLICT("user_id") DO NOTHING
-          RETURNING blacklisted
+          RETURNING blacklisted, xp, next, level, xp_cool
       )
-      SELECT blacklisted FROM e
+      SELECT blacklisted, xp, next, level, xp_cool FROM e
       UNION
-          SELECT blacklisted FROM users WHERE user_id = ${id};
+          SELECT blacklisted, xp, next, level, xp_cool FROM users WHERE user_id = ${id};
       `
       )
       .catch(console.error);
@@ -184,10 +188,13 @@ export default (
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
     if (!context.user.checked) {
-      await client.checkUser(context, context.user.id).then((results) => {
-        context.user.checked = true;
-        context.user.blacklisted = results.blacklisted;
+      client.checkUser(context, context.user.id).then((results: any) => {
+        // This may not be the best method. Please give feedback if you have suggestions :)
+        for (let data in results) {
+          (context.user as any)[data] = results[data];
+        }
       });
+      context.user.checked = true;
     }
     // Idk who the FUCK moved this to inside the above if statement but I will find you >.>
     if (context.user.blacklisted) return '';
@@ -221,7 +228,7 @@ export default (
         }
       }
       // Add XP to a user if it is needed
-      //xpAdd(context, context.guild!.levels, d);
+      xpAdd(context, context.guild!.levels);
       if (context.message.content.indexOf(prefix) === 0) {
         return prefix;
       }
@@ -507,25 +514,35 @@ export default (
     }
   );
   // This is the function that handled adding experience to people. Keeps the prefixCheck clean
-  async function xpAdd(ctx: Context, enabled: number, userData: any[]) {
-    if (
-      userData[0].xpAdd === 1 ||
-      userData[0].xpAdd === null ||
-      userData[0].xpAdd === undefined
-    ) {
+  async function xpAdd(ctx: Context, enabled: number) {
+    let user = ctx.user;
+    // Right now in MS -> subtract xp cool down -> convert to seconds 120 seconds = 2 minutes
+    if (Math.floor((Date.now() - user.xp_cool) / 1000) >= 120) {
       let xp: number = Math.floor(Math.random() * 50); // 50 xp max at random. Just to make leveling up hard as pee pee
-      await client.query(
-        `UPDATE users SET xp_cool=NOW(), XP=XP + '${xp}' WHERE user_id = ${ctx.user.id}`
+      let now = Date.now(); // So the DB and cache will be in perfect sync
+      await client.preparedQuery(
+        `UPDATE users SET xp_cool = $3, xp = xp + $1 WHERE user_id = $2`,
+        [xp, user.id, now],
+        QueryType.Void
       );
-      if (userData[0].XP > userData[0].Next && enabled === 1) {
-        ctx.reply(
-          `Congrats ${ctx.user.username}! You just leveled up to level ${
-            userData[0].Level + 1
-          }`
+      user.xp_cool = now;
+      user.xp = xp;
+      if (user.xp > user.next) {
+        if (enabled === 1) {
+          ctx.reply(
+            `Congrats ${ctx.user.username}! You just leveled up to level ${
+              user.level + 1
+            }`
+          );
+        }
+        await client.preparedQuery(
+          `UPDATE users SET level = level + 1, next = next + 500, xp = 0 WHERE user_id = $1`,
+          [user.id],
+          QueryType.Void
         );
-        await client.query(
-          `UPDATE users SET Level = Level + 1, Next = Next + 500, xp = 0 WHERE user_id = ${ctx.user.id}`
-        );
+        user.xp = 0;
+        user.level++;
+        user.next += 500;
       }
     }
   }
