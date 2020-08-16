@@ -253,11 +253,16 @@ export default (
   });
 
   // This tells me when someone runs a command. Useful for debugging
-  client.on('commandRan', (cmd) => {
+  client.on('commandRan', async (cmd) => {
     console.log(
       `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.user.username} (${
         cmd.context.user.id
       }) ran: ${cmd.command.name} ${cmd.args[cmd.command.name] || ''}`
+    );
+    await client.preparedQuery(
+      'UPDATE users SET used = used + 1 WHERE user_id = $1',
+      [cmd.context.userId],
+      QueryType.Void
     );
   });
 
