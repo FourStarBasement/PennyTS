@@ -4,7 +4,14 @@
   "description": "Pennybot but in TypeScript",
   "main": "index.ts",
   "scripts": {
-    "start": "tsc && node out/index.js"
+    "start": "tsc && node out/index.js",
+    "lint": "prettier . --check",
+    "fmt": "prettier . --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "author": "Lilwiggy, PixeL, NCPlayz",
   "license": "MIT",
@@ -19,13 +26,14 @@
     "node-fetch": "^2.6.0",
     "node-schedule": "^1.3.2",
     "pg-promise": "^10.5.8",
-    "tsc": "^1.20150623.0",
     "youtube-search": "^1.1.4",
     "ytdl-core": "^3.1.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
     "prettier": "2.0.5",
     "typescript": "^3.9.7"
   }
