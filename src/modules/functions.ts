@@ -188,8 +188,9 @@ export default (
         context.user.checked = true;
         context.user.blacklisted = results.blacklisted;
       });
-      if (context.user.blacklisted) return '';
     }
+    // Idk who the FUCK moved this to inside the above if statement but I will find you >.>
+    if (context.user.blacklisted) return '';
     if (context.guild && context.guildId) {
       let prefix: string;
       // Check if the prefix is cached
