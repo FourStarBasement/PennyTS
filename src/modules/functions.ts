@@ -531,7 +531,7 @@ export default (
         QueryType.Void
       );
       user.xp_cool = now;
-      user.xp = xp;
+      user.xp += xp;
       if (user.xp > user.next) {
         if (enabled === 1) {
           ctx.reply(
