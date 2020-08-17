@@ -146,7 +146,7 @@ export default (
       .queryOne(
         `
       WITH e AS(
-          INSERT INTO users (user_id) VALUES (${id})
+          INSERT INTO users (user_id, next) VALUES (${id}, 1024)
           ON CONFLICT("user_id") DO NOTHING
           RETURNING blacklisted, xp, next, level, xp_cool
       )
