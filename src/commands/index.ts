@@ -66,7 +66,7 @@ import { setStarboardEmoji } from './guild/set.starboard.emoji';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
-import { claim } from './profile/claim';
+// import { claim } from './profile/claim';
 export default [
   avatar,
   daily,
