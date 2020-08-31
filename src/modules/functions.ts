@@ -5,18 +5,16 @@ import {
   CommandEvents,
 } from 'detritus-client/lib/command';
 import { CommandClient } from 'detritus-client/lib/commandclient';
-import { Member, User, Message, Guild } from 'detritus-client/lib/structures';
+import { Member, User, Message } from 'detritus-client/lib/structures';
 import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
-import { PreparedStatement } from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
 import { UserFlags, DBUser, DBServer, StarData, DBTags, QueryType } from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
-import { type } from 'os';
 
 // Additional properties/functions to access on the Guild
 declare module 'detritus-client/lib/structures/guild' {
