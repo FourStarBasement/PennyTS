@@ -77,7 +77,9 @@ export const setModLog = {
           if (r.emoji.name === '⏹️') {
             collector.destroy();
             ctx.commandClient
-              .query(`UPDATE servers SET modlog_perm = '${bits}'`)
+              .query(
+                `UPDATE servers SET modlog_perm = ${bits} WHERE server_id = ${ctx.guildId}`
+              )
               .then(() => {
                 message.edit({ content: 'Set!', embed: {} });
                 message.deleteReactions();
