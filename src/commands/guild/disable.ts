@@ -22,6 +22,7 @@ export const disable = {
     switch (args.disable) {
       case 'levels':
         attr = toSay = args.disable;
+        ctx.guild!.levels = 0;
         break;
 
       case 'mod logs':
