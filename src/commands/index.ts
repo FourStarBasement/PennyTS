@@ -34,6 +34,7 @@ import { parrot } from './standard/parrot';
 import { osu } from './standard/osu';
 import { ht } from './profile/ht';
 import { mir } from './profile/mir';
+import { disableCommand } from './guild/disable.command';
 import { disable } from './guild/disable';
 import { enable } from './guild/enable';
 import { setWelcome } from './guild/set.welcome';
@@ -104,6 +105,7 @@ export default [
   osu,
   ht,
   mir,
+  disableCommand,
   disable,
   enable,
   color,

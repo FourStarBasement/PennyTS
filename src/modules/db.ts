@@ -95,3 +95,9 @@ export interface StarData {
   message_id: string;
   star_id: string;
 }
+
+export interface DisabledCommand {
+  count?: number;
+  channel_id?: string;
+  server_id?: string;
+}

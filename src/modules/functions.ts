@@ -11,7 +11,15 @@ import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { UserFlags, DBUser, DBServer, StarData, DBTags, QueryType } from './db';
+import {
+  UserFlags,
+  DBUser,
+  DBServer,
+  StarData,
+  DBTags,
+  QueryType,
+  DisabledCommand,
+} from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
@@ -559,5 +567,37 @@ export default (
       },
     }).then((d) => d.json());
     return img.color;
+  };
+
+  client.onCommandCheck = async (
+    ctx: Context,
+    command: Command
+  ): Promise<boolean> => {
+    if (!command.metadata.disabled) command.metadata.disabled = [];
+
+    if (
+      command.metadata.disabled.includes(ctx.channelId) ||
+      command.metadata.disabled.includes(ctx.guildId)
+    )
+      return false;
+    let cmds: DisabledCommand[] = await client
+      .preparedQuery(
+        'SELECT server_id, channel_id, COUNT(*) AS count FROM disabled_commands WHERE command = $1 AND (server_id = $2 OR channel_id = $3) GROUP BY server_id, channel_id',
+        [command.name, ctx.guildId, ctx.channelId],
+        QueryType.Multi
+      )
+      .catch(console.error);
+    console.log(cmds, cmds.length);
+    if (cmds.length < 1 || cmds[0].count! < 1) return true;
+    if (cmds[0].server_id) {
+      command.metadata.disabled.push(ctx.guildId);
+      return !(cmds[0].server_id === ctx.guildId);
+    }
+    if (cmds[0].channel_id) {
+      command.metadata.disabled.push(ctx.channelId);
+      return !(cmds[0].channel_id === ctx.channelId);
+    }
+
+    return true;
   };
 };
