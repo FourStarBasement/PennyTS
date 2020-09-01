@@ -71,7 +71,6 @@ export const disableCommand = {
           break;
       }
       col.destroy();
-      console.log('Getting data', toUpdate);
       let data = await ctx.commandClient.preparedQuery(
         `SELECT COUNT(*) AS count FROM disabled_commands WHERE ${toUpdate} = $1 AND command = $2`,
         [
@@ -80,11 +79,9 @@ export const disableCommand = {
         ],
         QueryType.Single
       );
-      console.log('Got data', data);
       if (data.count > 0) {
-        console.log('Removing from DB');
         await ctx.commandClient.preparedQuery(
-          `UPDATE disabled_commands SET ${toUpdate} = 0 WHERE command = $1 AND ${toUpdate} = $2`,
+          `DELETE FROM disabled_commands WHERE command = $1 AND ${toUpdate} = $2`,
           [
             args['disable command'],
             toUpdate === 'server_id' ? ctx.guildId : ctx.channelId,
@@ -104,7 +101,6 @@ export const disableCommand = {
           },
         });
       } else {
-        console.log('Adding to DB');
         await ctx.commandClient.preparedQuery(
           `INSERT INTO disabled_commands (command, ${toUpdate}) VALUES($1, $2)`,
           [
