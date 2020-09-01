@@ -11,13 +11,13 @@ export const disableCommand = {
   name: 'disable command',
   aliases: ['enabled command'],
   metadata: {
-    description: 'Disables levels or mod logs or role edits',
+    description: 'Disables or enables commands.',
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args['disable command']) {
       ctx.reply(
-        `Usage: ${ctx.prefix}disable command {command to disable. Doing ${ctx.prefix}disable command tags} will disable tag usage.`
+        `Usage: ${ctx.prefix}disable command {command to disable} Doing ${ctx.prefix}disable command tags will disable tag usage.`
       );
       return;
     }
