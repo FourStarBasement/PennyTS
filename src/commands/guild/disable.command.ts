@@ -9,7 +9,6 @@ interface CommandArgs {
 
 export const disableCommand = {
   name: 'disable command',
-  aliases: ['enabled command'],
   metadata: {
     description: 'Disables or enables commands.',
     checks: ['userAdmin'],
