@@ -274,7 +274,11 @@ export default (
 
   // This runs checks on commands when they are set in place so we don't have to do it for each file
   client.onCommandCheck = async (ctx: Context, command: Command) => {
-    if (command.metadata.disabled) return false;
+    if (
+      command.metadata.disabled.includes(ctx.channelId) ||
+      command.metadata.disabled.includes(ctx.guildId)
+    )
+      return false;
 
     if (command.metadata.owner) {
       if (ctx.content.indexOf(config.prefixes.owner) !== 0) {
@@ -412,7 +416,17 @@ export default (
 
   // This adds commands based on classes
   client.addMultiple = (commands?: CommandOptions[]) => {
-    commands?.forEach((command) => {
+    commands?.forEach(async (command) => {
+      if (!command.metadata?.disabled) command.metadata!.disabled = [];
+      let d: DisabledCommand[] = await client.preparedQuery(
+        'SELECT server_id, channel_id FROM disabled_commands WHERE command = $1',
+        [command.name],
+        QueryType.Multi
+      );
+      if (d.length > 0) {
+        if (d[0].channel_id) command.metadata!.disabled.push(d[0].channel_id);
+        if (d[0].server_id) command.metadata!.disabled.push(d[0].server_id);
+      }
       client.add(command);
       console.log('Loaded Command', command.name);
     });
@@ -477,6 +491,12 @@ export default (
         payload.context.message.content.indexOf(
           payload.context.guild.prefix
         ) !== 0
+      )
+        return;
+      let command = client.commands.find((c) => c.name === 'tags')!;
+      if (
+        command.metadata.disabled.includes(payload.context.channelId) ||
+        command.metadata.disabled.includes(payload.context.guildId)
       )
         return;
       // If the command doesn't exist we check if it's a tag
@@ -567,37 +587,5 @@ export default (
       },
     }).then((d) => d.json());
     return img.color;
-  };
-
-  client.onCommandCheck = async (
-    ctx: Context,
-    command: Command
-  ): Promise<boolean> => {
-    if (!command.metadata.disabled) command.metadata.disabled = [];
-
-    if (
-      command.metadata.disabled.includes(ctx.channelId) ||
-      command.metadata.disabled.includes(ctx.guildId)
-    )
-      return false;
-    let cmds: DisabledCommand[] = await client
-      .preparedQuery(
-        'SELECT server_id, channel_id, COUNT(*) AS count FROM disabled_commands WHERE command = $1 AND (server_id = $2 OR channel_id = $3) GROUP BY server_id, channel_id',
-        [command.name, ctx.guildId, ctx.channelId],
-        QueryType.Multi
-      )
-      .catch(console.error);
-    console.log(cmds, cmds.length);
-    if (cmds.length < 1 || cmds[0].count! < 1) return true;
-    if (cmds[0].server_id) {
-      command.metadata.disabled.push(ctx.guildId);
-      return !(cmds[0].server_id === ctx.guildId);
-    }
-    if (cmds[0].channel_id) {
-      command.metadata.disabled.push(ctx.channelId);
-      return !(cmds[0].channel_id === ctx.channelId);
-    }
-
-    return true;
   };
 };
