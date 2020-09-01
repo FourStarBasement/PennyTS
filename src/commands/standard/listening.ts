@@ -6,6 +6,9 @@ import { Page } from '../../modules/utils';
 
 export const listening = {
   name: 'listening',
+  metadata: {
+    description: 'Shows what you and others are listening to!',
+  },
   run: async (ctx: Context) => {
     let opts = {
       maxResults: 10,
