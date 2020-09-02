@@ -12,7 +12,9 @@ export const disable = {
   },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args.disable) {
-      ctx.reply(`Usage: ${ctx.prefix}disable [thing to disable]`);
+      ctx.reply(
+        `Usage: ${ctx.prefix}disable {mod logs/levels/role edits/command}`
+      );
       return;
     }
 
@@ -41,7 +43,7 @@ export const disable = {
 
     if (!attr) {
       ctx.reply(
-        'Invalid feature. Available features: `levels`, `mod logs`, `role edits`'
+        'Invalid feature. Available features: `levels`, `mod logs`, `role edits`, `command`'
       );
       return;
     }

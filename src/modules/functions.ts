@@ -11,7 +11,15 @@ import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
 import { EventHandler, chanReg, FetchedStarData } from './utils';
-import { UserFlags, DBUser, DBServer, StarData, DBTags, QueryType } from './db';
+import {
+  UserFlags,
+  DBUser,
+  DBServer,
+  StarData,
+  DBTags,
+  QueryType,
+  DisabledCommand,
+} from './db';
 import { ClientEvents } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
@@ -266,7 +274,11 @@ export default (
 
   // This runs checks on commands when they are set in place so we don't have to do it for each file
   client.onCommandCheck = async (ctx: Context, command: Command) => {
-    if (command.metadata.disabled) return false;
+    if (
+      command.metadata.disabled.includes(ctx.channelId) ||
+      command.metadata.disabled.includes(ctx.guildId)
+    )
+      return false;
 
     if (command.metadata.owner) {
       if (ctx.content.indexOf(config.prefixes.owner) !== 0) {
@@ -404,7 +416,17 @@ export default (
 
   // This adds commands based on classes
   client.addMultiple = (commands?: CommandOptions[]) => {
-    commands?.forEach((command) => {
+    commands?.forEach(async (command) => {
+      if (!command.metadata?.disabled) command.metadata!.disabled = [];
+      let d: DisabledCommand[] = await client.preparedQuery(
+        'SELECT server_id, channel_id FROM disabled_commands WHERE command = $1',
+        [command.name],
+        QueryType.Multi
+      );
+      if (d.length > 0) {
+        if (d[0].channel_id) command.metadata!.disabled.push(d[0].channel_id);
+        if (d[0].server_id) command.metadata!.disabled.push(d[0].server_id);
+      }
       client.add(command);
       console.log('Loaded Command', command.name);
     });
@@ -469,6 +491,12 @@ export default (
         payload.context.message.content.indexOf(
           payload.context.guild.prefix
         ) !== 0
+      )
+        return;
+      let command = client.commands.find((c) => c.name === 'tags')!;
+      if (
+        command.metadata.disabled.includes(payload.context.channelId) ||
+        command.metadata.disabled.includes(payload.context.guildId)
       )
         return;
       // If the command doesn't exist we check if it's a tag
