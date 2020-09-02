@@ -20,14 +20,15 @@ export const disableCommand = {
       );
       return;
     }
-    if (args['disable command'].toLowerCase() === 'disable command') {
+    let toDisable = args['disable command'].toLowerCase();
+    if (toDisable === 'disable command') {
       ctx.reply(
         'You cannot disable this command. How else to you expect to enable commands :p'
       );
       return;
     }
     let cmd = ctx.commandClient.commands.find(
-      (command) => command.name === args['disable command'].toLowerCase()
+      (command) => command.name === toDisable
     );
 
     if (!cmd) {
@@ -37,7 +38,7 @@ export const disableCommand = {
     if (!cmd.metadata.disabled) cmd.metadata.disabled = [];
     let msg = await ctx.reply({
       embed: {
-        title: `Where do you want to disable/enable the ${args['disable command']} command from?`,
+        title: `Where do you want to disable/enable the ${toDisable} command from?`,
         description: `\`\`\`ini\n[1] This server\n[2] This channel\`\`\``,
       },
     });
@@ -70,51 +71,39 @@ export const disableCommand = {
           break;
       }
       col.destroy();
+      let updateId = toUpdate === 'server_id' ? ctx.guildId : ctx.channelId;
       let data = await ctx.commandClient.preparedQuery(
         `SELECT COUNT(*) AS count FROM disabled_commands WHERE ${toUpdate} = $1 AND command = $2`,
-        [
-          toUpdate === 'server_id' ? ctx.guildId : ctx.channelId,
-          args['disable command'].toLowerCase(),
-        ],
+        [updateId, toDisable],
         QueryType.Single
       );
       if (data.count > 0) {
         await ctx.commandClient.preparedQuery(
           `DELETE FROM disabled_commands WHERE command = $1 AND ${toUpdate} = $2`,
-          [
-            args['disable command'],
-            toUpdate === 'server_id' ? ctx.guildId : ctx.channelId,
-          ],
+          [toDisable, updateId],
           QueryType.Void
         );
         cmd!.metadata.disabled.splice(
-          cmd!.metadata.disabled.indexOf(
-            toUpdate === 'server_id' ? ctx.guildId : ctx.channelId
-          ),
+          cmd!.metadata.disabled.indexOf(updateId),
           1
         );
         msg.edit({
           embed: {
             title: 'Done!',
-            description: `\`\`\`diff\n+ Successfully enabled the ${args['disable command']} command.\`\`\``,
+            description: `\`\`\`diff\n+ Successfully enabled the ${toDisable} command.\`\`\``,
           },
         });
       } else {
         await ctx.commandClient.preparedQuery(
           `INSERT INTO disabled_commands (command, ${toUpdate}) VALUES($1, $2)`,
-          [
-            args['disable command'].toLowerCase(),
-            toUpdate === 'server_id' ? ctx.guildId : ctx.channelId,
-          ],
+          [toDisable, updateId],
           QueryType.Void
         );
-        cmd!.metadata.disabled.push(
-          toUpdate === 'server_id' ? ctx.guildId : ctx.channelId
-        );
+        cmd!.metadata.disabled.push(updateId);
         msg.edit({
           embed: {
             title: 'Done!',
-            description: `\`\`\`diff\n- Successfully disabled the ${args['disable command']} command.\`\`\``,
+            description: `\`\`\`diff\n- Successfully disabled the ${toDisable} command.\`\`\``,
           },
         });
       }
