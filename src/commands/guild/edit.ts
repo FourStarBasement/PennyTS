@@ -4,6 +4,7 @@ import config from '../../modules/config';
 import { DBServer, DBRoles } from '../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
+import { fetchRandomNumber, decimalToHex } from '../../modules/utils';
 
 export const edit = {
   name: 'edit',
@@ -50,6 +51,10 @@ export const edit = {
     }
 
     let hexThing = /^#?[0-9A-F]{6}$/i;
+    if (role[1].toString() === 'random') {
+      let nums: number[] = (await fetchRandomNumber(3)) as number[];
+      role[1] = decimalToHex((nums[0] << 16) + (nums[1] << 8) + nums[2]);
+    }
     if (!hexThing.test(role[1])) {
       ctx.reply('Please use a valid hex code.');
       return;
