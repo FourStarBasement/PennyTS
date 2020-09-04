@@ -1,4 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
+import { GuildFlags } from '../../modules/utils';
 
 interface CommandArgs {
   disable: string;
@@ -7,7 +8,8 @@ interface CommandArgs {
 export const disable = {
   name: 'disable',
   metadata: {
-    description: 'Disables levels or mod logs or role edits',
+    description:
+      'Disables levels or mod logs or role edits or a specific command',
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
@@ -24,17 +26,19 @@ export const disable = {
     switch (args.disable) {
       case 'levels':
         attr = toSay = args.disable;
-        ctx.guild!.levels = 0;
+        ctx.guild!.flags &= GuildFlags.LEVELS;
         break;
 
       case 'mod logs':
         attr = 'mod_log';
         toSay = 'mod logs';
+        ctx.guild!.flags &= GuildFlags.MOD_LOGS;
         break;
 
       case 'edits':
         attr = 'edits';
         toSay = 'role edits';
+        ctx.guild!.flags &= GuildFlags.ROLE_EDITS;
         break;
 
       default:
@@ -47,9 +51,12 @@ export const disable = {
       );
       return;
     }
-
     ctx.commandClient
-      .query(`UPDATE servers SET ${attr} = 0 WHERE server_id = ${ctx.guildId}`)
+      .query(
+        `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${
+          ctx.guildId
+        }`
+      )
       .then((v) => {
         ctx.reply(`Disabled ${toSay}.`);
       });
