@@ -43,6 +43,7 @@ export interface DBServer {
   modlog_perm: string;
   star_limit: number;
   starboard_emoji: string | number;
+  flags: number;
 }
 
 export interface DBStarboard {

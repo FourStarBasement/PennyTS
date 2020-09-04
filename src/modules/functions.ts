@@ -10,7 +10,7 @@ import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
-import { EventHandler, chanReg, FetchedStarData } from './utils';
+import { EventHandler, chanReg, FetchedStarData, GuildFlags } from './utils';
 import {
   UserFlags,
   DBUser,
@@ -34,6 +34,7 @@ declare module 'detritus-client/lib/structures/guild' {
     modLog: ModLogActions;
     checked: boolean;
     avgColor: number;
+    flags: GuildFlags;
   }
 }
 
@@ -64,7 +65,7 @@ declare module 'detritus-client/lib/commandclient' {
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
     checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
-    hasFlag: (flags: number, flag: UserFlags) => Boolean;
+    hasFlag: (flags: number, flag: UserFlags | GuildFlags) => Boolean;
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -141,7 +142,7 @@ export default (
   };
 
   // Check if a DBUser has a flag set
-  client.hasFlag = (flags: number, flag: UserFlags) => {
+  client.hasFlag = (flags: number, flag: UserFlags | GuildFlags) => {
     return (flags & flag.valueOf()) == flag.valueOf();
   };
 
@@ -172,7 +173,7 @@ export default (
     if (!guild) return;
     let result: DBServer = await client
       .queryOne(
-        `SELECT server_id, modlog_perm FROM servers WHERE server_id = ${id}`
+        `SELECT server_id, modlog_perm, flags FROM servers WHERE server_id = ${id}`
       )
       .catch(console.error);
     if (!result) {
@@ -182,10 +183,12 @@ export default (
       if (!guild?.modLog) {
         guild!.modLog = 0;
       }
+      if (!guild?.flags) guild.flags = 0;
     } else {
       if (!guild?.modLog) {
         guild!.modLog = parseInt(result.modlog_perm);
       }
+      if (!guild.flags) guild.flags = result.flags;
     }
     guild!.checked = true;
   };

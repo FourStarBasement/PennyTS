@@ -186,3 +186,23 @@ export function decimalToHex(number: number) {
   let hexyBoi = number.toString(16);
   return hexyBoi.length % 2 ? '0' + hexyBoi : hexyBoi;
 }
+
+export enum GuildFlags {
+  UNSET = 0,
+  LEVELS = 1 << 0,
+  MOD_LOGS = 1 << 1,
+  AUTO_QUOTE = 1 << 2,
+  AUTO_ROLE = 1 << 3,
+  PREMIUM = 1 << 4, // I have no clue if I will ever use this one but there just in case
+  WELCOMES = 1 << 5,
+  SELF_ROLE = 1 << 6,
+  ROLE_EDITS = 1 << 7,
+}
+
+export const GuildFlagReactions: Record<string, GuildFlags> = {
+  '0️⃣': GuildFlags.LEVELS,
+  '1️⃣': GuildFlags.MOD_LOGS,
+  '2️⃣': GuildFlags.AUTO_QUOTE,
+  '3️⃣': GuildFlags.AUTO_ROLE,
+  '4️⃣': GuildFlags.WELCOMES,
+};
