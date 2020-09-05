@@ -4,7 +4,7 @@ import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
-import { Page } from '../modules/utils';
+import { Page, GuildFlags } from '../modules/utils';
 
 export const guildMemberAdd = {
   event: ClientEvents.GUILD_MEMBER_ADD,
@@ -19,7 +19,7 @@ export const guildMemberAdd = {
 
     await client.checkGuild(payload.guildId).then(async () => {
       let server: DBServer = await client.queryOne(
-        `SELECT mod_channel, welcome, welcome_message, welcome_channel, welcome_role FROM servers WHERE server_id = ${payload.guildId}`
+        `SELECT mod_channel, flags, welcome_message, welcome_channel, welcome_role FROM servers WHERE server_id = ${payload.guildId}`
       );
 
       if (!server.mod_channel) return;
@@ -50,7 +50,7 @@ export const guildMemberAdd = {
         }
       }
 
-      if (server.welcome) {
+      if (client.hasFlag(server.flags, GuildFlags.WELCOMES)) {
         const channel = guild.channels.get(server.welcome_channel.toString());
 
         if (channel) {
