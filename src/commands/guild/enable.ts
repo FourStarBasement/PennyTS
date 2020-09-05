@@ -17,22 +17,15 @@ export const enable = {
     if (!args.enable) {
       ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
     }
+
+    let attr: string = '';
     switch (args.enable) {
       case 'levels':
-        ctx.commandClient
-          .query(
-            `UPDATE servers SET flags = ${(ctx.guild!.flags |=
-              GuildFlags.LEVELS)} WHERE server_id = ${ctx.guildId}`
-          )
-          .then(() => {
-            ctx.reply('Enabled level up messages.');
-          });
+        attr = 'level up messages';
+        ctx.guild!.flags |= GuildFlags.LEVELS;
         break;
       case 'mod logs':
-        ctx.commandClient.query(
-          `UPDATE servers SET flags = ${(ctx.guild!.flags |=
-            GuildFlags.MOD_LOGS)} WHERE server_id = ${ctx.guildId}`
-        );
+        ctx.guild!.flags |= GuildFlags.MOD_LOGS;
         ctx.reply('Please mention the chat for logs to be sent to:');
         let filter = (m: Message) =>
           m.author.id === ctx.member!.id && chanReg.test(m.content);
@@ -50,28 +43,36 @@ export const enable = {
           ctx.commandClient.query(
             `UPDATE servers SET mod_channel = '${channel.id}' WHERE server_id = ${ctx.guildId}`
           );
-          ctx.reply(
-            `Enabled mod logs and set ${channel.mention} as the mod channel.`
-          );
+          attr = `mod logs and set ${channel.mention} as the chat to log to`;
           collector.destroy();
         });
 
         collector.on('end', () => {
-          ctx.reply(
-            `You did not set a mod log channel. You can set one by doing ${ctx.prefix}set mod log channel #channel`
-          );
+          attr = `mod logs. You did not set a mod log channel. You can set one by doing ${ctx.prefix}set mod log channel #channel`;
         });
         break;
       case 'edits':
-        ctx.commandClient.query(
-          `UPDATE servers SET flags = ${(ctx.guild!.flags |=
-            GuildFlags.ROLE_EDITS)} WHERE server_id = ${ctx.guildId}`
-        );
-        ctx.reply('Enabled role edits.');
+        ctx.guild!.flags |= GuildFlags.ROLE_EDITS;
+        attr = 'role edits';
         break;
       default:
-        ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
         break;
     }
+
+    if (!attr) {
+      ctx.reply(
+        `Usage: ${ctx.prefix}enable {levels/mod logs/role edits/command}`
+      );
+      return;
+    }
+    ctx.commandClient
+      .query(
+        `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${
+          ctx.guildId
+        }`
+      )
+      .then(() => {
+        ctx.reply(`Enabled ${attr}.`);
+      });
   },
 };
