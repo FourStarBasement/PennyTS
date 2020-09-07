@@ -41,9 +41,7 @@ export const disable = {
       case 'auto quotes':
       case 'quotes':
         toSay = 'auto message quoting';
-        console.log(ctx.guild?.flags);
         ctx.guild!.flags &= ~GuildFlags.AUTO_QUOTE;
-        console.log(ctx.guild?.flags);
         break;
       default:
         break;
