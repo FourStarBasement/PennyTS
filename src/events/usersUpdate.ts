@@ -11,9 +11,10 @@ export const usersUpdate = {
       payload.user.avgColor = await client.fetchAverageColor(
         payload.user.avatarUrl
       );
-      console.log(
-        `User avatar update! Changing avgColor to ${payload.user.avgColor} for ${payload.user.username}`
-      );
+      // TODO: Change this to debug log
+      // console.log(
+      //  `User avatar update! Changing avgColor to ${payload.user.avgColor} for ${payload.user.username}`
+      // );
     }
   },
 };
