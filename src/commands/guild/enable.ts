@@ -15,7 +15,9 @@ export const enable = {
   },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args.enable) {
-      ctx.reply(`Usage: ${ctx.prefix}enable [levels/mod logs/role edits]`);
+      ctx.reply(
+        `Usage: ${ctx.prefix}enable [levels/mod logs/role edits/auto quotes]`
+      );
     }
 
     let attr: string = '';
@@ -54,6 +56,12 @@ export const enable = {
       case 'edits':
         ctx.guild!.flags |= GuildFlags.ROLE_EDITS;
         attr = 'role edits';
+        break;
+      case 'auto quote':
+      case 'auto quotes':
+      case 'quotes':
+        ctx.guild!.flags |= GuildFlags.AUTO_QUOTE;
+        attr = 'auto message quoting';
         break;
       default:
         break;
