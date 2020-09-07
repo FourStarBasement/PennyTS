@@ -34,7 +34,7 @@ export const whoIs = {
     if (!user.avgColor)
       user.avgColor = await ctx.commandClient.fetchAverageColor(user.avatarUrl);
     let embed: Page = {
-      title: `${user} (${user.id})\n`,
+      title: `${user.username} (${user.id})\n`,
       color: user.avgColor,
       thumbnail: {
         url: user.avatarUrl,
