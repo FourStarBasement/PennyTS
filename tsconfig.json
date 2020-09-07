@@ -11,6 +11,7 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "incremental": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "lib": ["ES2020.String"]
   }
 }

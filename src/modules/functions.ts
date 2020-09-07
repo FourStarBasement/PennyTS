@@ -10,7 +10,13 @@ import fetch from 'node-fetch';
 import { Job } from 'node-schedule';
 import config from './config';
 import pgPromise from 'pg-promise';
-import { EventHandler, chanReg, FetchedStarData, GuildFlags } from './utils';
+import {
+  EventHandler,
+  chanReg,
+  FetchedStarData,
+  GuildFlags,
+  Page,
+} from './utils';
 import {
   UserFlags,
   DBUser,
@@ -490,6 +496,65 @@ export default (
        * to run through onPrefixCheck in the library.
        */
       if (!payload.context.guild) return;
+
+      // This handles the auto quoting
+      if (client.hasFlag(payload.context.guild!.flags, GuildFlags.AUTO_QUOTE)) {
+        let msgReg = /(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(\@me|\d+)\/(\d+)\/(\d+)$/g;
+        if (msgReg.test(payload.context.content)) {
+          // Due to some amazing JavaScript goodness, I have to redeclare the regex here for it to work. I don't know why. Thank you, JS. Very cool
+          msgReg = /(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(\@me|\d+)\/(\d+)\/(\d+)$/g;
+          let arr = payload.context.content.matchAll(msgReg).next()
+            .value as string[];
+
+          let msg: Message = await (client.client as ShardClient).channels
+            .get(arr[2])
+            ?.fetchMessage(arr[3]);
+          if (msg) {
+            let embed: Page = {
+              author: {
+                iconUrl: msg.author.avatarUrl,
+                name: msg.author.username,
+              },
+              color:
+                msg.author.avgColor ||
+                (await client.fetchAverageColor(msg.author.avatarUrl)),
+              description: msg.content,
+              footer: {
+                text: `Requested by ${payload.context.user.username} (${payload.context.userId})`,
+              },
+            };
+
+            if (msg.embeds.size > 0) {
+              embed.image = { url: msg.embeds.first()!.url! };
+              if (msg.embeds.first()?.type === 'video')
+                embed.description += `\n\nView the video **[here](${
+                  msg.embeds.first()!.url
+                })**`;
+              if (
+                msg.embeds.first()!.type === 'rich' &&
+                msg.embeds.first()?.image
+              )
+                embed.image = { url: msg.embeds.first()!.image!.url };
+
+              if (msg.embeds.first()!.thumbnail)
+                embed.image = { url: msg.embeds.first()!.thumbnail!.url };
+            }
+
+            if (msg.attachments.size > 0) {
+              if (!msg.attachments.first()!.isImage)
+                embed.description += `View **[${
+                  msg.attachments.first()?.filename
+                }](${msg.attachments.first()?.url})**`;
+              embed.image = {
+                url: msg.attachments.first()?.url!,
+              };
+            }
+            payload.context.reply({
+              embed: embed,
+            });
+          }
+        }
+      }
       if (
         payload.context.message.content.indexOf(
           payload.context.guild.prefix
