@@ -23,15 +23,12 @@ const cmdClient = new CommandClient(config.token, {
   gateway: {
     presence: {
       activity: {
-        name: 'penny.wiggy.dev',
+        name: 'https://penny.wiggy.dev',
         type: ActivityTypes.PLAYING,
       },
       status: PresenceStatuses.ONLINE,
     },
     loadAllMembers: true,
-    identifyProperties: {
-      $browser: 'Discord iOS',
-    },
   },
   useClusterClient: false,
 });
@@ -71,6 +68,18 @@ cmdClient.addEvents(events);
     config.discordbotsgg.token.length !== 0
   )
     setInterval(async () => {
+      let statuses = [
+        `Online with ${(cmdClient.client as ShardClient).guilds.size} guilds`,
+        'Salutations!',
+        'https://penny.wiggy.dev',
+        `${(cmdClient.client as ShardClient).users.size} users`,
+      ];
+      (client as ShardClient).gateway.setPresence({
+        activity: {
+          name: statuses[Math.floor(Math.random() * statuses.length)],
+          type: ActivityTypes.PLAYING,
+        },
+      });
       await fetch(`https://top.gg/api/bots/309531399789215744/stats`, {
         method: 'POST',
         headers: {
