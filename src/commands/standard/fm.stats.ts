@@ -27,7 +27,7 @@ export const fmStats = {
       let userDB: DBUser = await ctx.commandClient.queryOne(
         `SELECT last_fm_name FROM users WHERE user_id = ${user.id}`
       );
-      if (!userDB) {
+      if (userDB.last_fm_name === null) {
         ctx.reply(
           `${user.username} has not set their last.fm username yet. You can set the last.fm username with ${ctx.prefix}fm add {last.fm username}`
         );
