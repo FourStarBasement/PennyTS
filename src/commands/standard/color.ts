@@ -45,6 +45,10 @@ export const color = {
         let nums: number[] = (await fetchRandomNumber(3)) as number[];
         color = decimalToHex((nums[0] << 16) + (nums[1] << 8) + nums[2]);
       }
+      if (!color) {
+        ctx.reply(`Usage: ${ctx.prefix}color {@user/hex code/random}`);
+        return;
+      }
       img = await fetch(`${config.imageAPI.url}/color`, {
         headers: {
           color: color,
