@@ -12,6 +12,6 @@
     "noImplicitAny": true,
     "incremental": true,
     "resolveJsonModule": true,
-    "lib": ["ES2020.String"]
+    "lib": ["ES2020.String", "dom"]
   }
 }
