@@ -67,6 +67,9 @@ import { setStarboardEmoji } from './guild/set.starboard.emoji';
 import { setStarboard } from './guild/set.starboard';
 import { setStarLimit } from './guild/set.star.limit';
 import { whoIs } from './standard/whois';
+import { fm } from './standard/fm';
+import { fmAdd } from './standard/fm.add';
+import { fmStats } from './standard/fm.stats';
 // import { claim } from './profile/claim';
 export default [
   avatar,
@@ -139,4 +142,7 @@ export default [
   serverinfo,
   whoIs,
   //claim,
+  fmStats,
+  fmAdd,
+  fm,
 ];

@@ -2,7 +2,8 @@ import { Context } from 'detritus-client/lib/command';
 import config from '../../modules/config';
 import { Member } from 'detritus-client/lib/structures';
 import search from 'youtube-search';
-import { Page } from '../../modules/utils';
+import { Page, fetchLastFMRecentTracks } from '../../modules/utils';
+import { DBUser } from '../../modules/db';
 
 export const listening = {
   name: 'listening',
@@ -22,6 +23,32 @@ export const listening = {
 
     let pre = member!.presence?.activities;
     if (pre!.filter((g) => g.isOnSpotify).length < 1) {
+      let user: DBUser = await ctx.commandClient.queryOne(
+        `SELECT last_fm_name FROM users WHERE user_id = ${member.id}`
+      );
+      if (user.last_fm_name) {
+        let track = (await fetchLastFMRecentTracks(user.last_fm_name))[0];
+        if (!track.current) {
+          ctx.reply(`${member.name} is not listening to anything.`);
+          return;
+        }
+        let s = await search(`${track.name} by ${track.artist.name}`, opts);
+        ctx.reply({
+          embed: {
+            title: track.name,
+            color: await ctx.commandClient.fetchAverageColor(track.album!.art),
+            description: `By ${track.artist.name} on ${
+              track.album!.name || 'Unknown album'
+            }\n[Youtube](${
+              s.results[0].link
+            })\nInfo from [last.fm](https://www.last.fm/user/${
+              user.last_fm_name
+            })`,
+            thumbnail: { url: track.album!.art },
+          },
+        });
+        return;
+      }
       ctx.reply(`${member.name} is not listening to anything.`);
       return;
     }
@@ -54,7 +81,9 @@ export const listening = {
       thumbnail: {
         url: thing!.assets!.largeImageUrl!,
       },
-      color: 2021216,
+      color: await ctx.commandClient.fetchAverageColor(
+        thing!.assets!.largeImageUrl!
+      ),
       description: `By: ${thing?.state}\nAlbum: ${thing?.assets?.largeText}\n[Youtube](${s.results[0].link})`,
       fields: [],
     };

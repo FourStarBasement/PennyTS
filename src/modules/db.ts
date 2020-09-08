@@ -78,6 +78,7 @@ export interface DBUser {
   emblem: string;
   token: string;
   flags: number;
+  last_fm_name: string;
 }
 
 export interface DBUserBackgrounds {

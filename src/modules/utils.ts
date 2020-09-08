@@ -9,6 +9,7 @@ import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
 import { ItemInfo } from './shop';
 import fetch from 'node-fetch';
+import config from './config';
 
 export const chanReg = /<#(\d+)>/;
 export const roleReg = /<@&(\d+)>/;
@@ -206,3 +207,187 @@ export const GuildFlagReactions: Record<string, GuildFlags> = {
   '3️⃣': GuildFlags.AUTO_ROLE,
   '4️⃣': GuildFlags.WELCOMES,
 };
+
+interface LastFMImage {
+  size: string;
+  '#text': string;
+}
+
+interface LastFMTrackResponse {
+  '@attr': {
+    nowplaying?: boolean;
+    rank?: number;
+  };
+  duration?: number;
+  playcount?: number;
+  artist: {
+    name?: string;
+    url?: string;
+    '#text': string;
+    mbid: string;
+  };
+  album: {
+    mbid: string;
+    '#text': string;
+  };
+  image: LastFMImage[];
+  mbid: string;
+  name: string;
+  url: string;
+}
+
+export interface LastFMTrack {
+  current: boolean;
+  rank?: number;
+  artist: {
+    name: string;
+    id: string;
+  };
+  album?: {
+    art: string;
+    name: string;
+    id: string;
+  };
+  name: string;
+  totalPlays?: number;
+  duration?: number;
+}
+
+interface LastFMTopTracksResponse {
+  error?: number;
+  message?: string;
+  toptracks: {
+    '@attr': {
+      page: number;
+      perPage: number;
+      user: string;
+      total: number;
+      totalPages: number;
+    };
+    track: LastFMTrackResponse[];
+  };
+}
+
+interface LastFMRecentTracksResponse {
+  error?: number;
+  message?: string;
+  recenttracks: {
+    '@attr': {
+      page: number;
+      perPage: number;
+      user: string;
+      total: number;
+      totalPages: number;
+    };
+    track: LastFMTrackResponse[];
+  };
+}
+
+interface LastFMUserGetInfoResponse {
+  error?: number;
+  message?: string;
+  user: {
+    playlists: number;
+    playcount: number;
+    gender: string;
+    subscriber: number;
+    url: string;
+    country: string;
+    name: string;
+    image: LastFMImage[];
+    registered: {
+      unixtime: number;
+      '#text': number;
+    };
+    type: string;
+    age: number;
+    realname: string | undefined;
+  };
+}
+
+export interface LastFMUser {
+  username: string;
+  avatar: string;
+  recentTracks: LastFMTrack[];
+  totalPlays: number;
+  country: string;
+  topTrack: LastFMTrack;
+}
+
+export async function fetchLastFMRecentTracks(
+  name: string
+): Promise<LastFMTrack[]> {
+  let data: LastFMRecentTracksResponse = await fetch(
+    `http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${name}&api_key=${config.lastFM.key}&format=json`
+  ).then((d) => d.json());
+  if (data.error)
+    throw new Error(
+      `Error fetching last.fm user. Error: ${data.error} ${data.message}`
+    );
+  let tracks: LastFMTrack[] = [];
+  for (let track of data.recenttracks.track) {
+    tracks.push({
+      current: track['@attr'] ? track['@attr'].nowplaying! : false,
+      artist: {
+        name: track.artist['#text'],
+        id: track.artist.mbid,
+      },
+      album: {
+        art: track.image[3]['#text'],
+        name: track.album['#text'],
+        id: track.album.mbid,
+      },
+      name: track.name,
+    });
+  }
+  return tracks;
+}
+
+export async function fetchLastfmUser(name: string): Promise<LastFMUser> {
+  let userData: LastFMUserGetInfoResponse = await fetch(
+    `http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${name}&api_key=${config.lastFM.key}&format=json`
+  ).then((d) => d.json());
+  if (userData.error) {
+    throw new Error(
+      `Error fetching last.fm user. Error: ${userData.error} ${userData.message}`
+    );
+  }
+  let topTracks = await fetchLastFMTopTracks(name);
+  let userTracks = await fetchLastFMRecentTracks(name);
+  let user: LastFMUser;
+  user = {
+    username: userData.user.name,
+    avatar: userData.user.image[3]['#text'],
+    totalPlays: userData.user.playcount,
+    country: userData.user.country,
+    recentTracks: userTracks,
+    topTrack: topTracks.filter((track) => track.rank == 1)[0],
+  };
+  return user;
+}
+
+export async function fetchLastFMTopTracks(
+  name: string
+): Promise<LastFMTrack[]> {
+  let tracksRes: LastFMTopTracksResponse = await fetch(
+    `http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=${name}&api_key=${config.lastFM.key}&format=json`
+  ).then((d) => d.json());
+  if (tracksRes.error)
+    throw new Error(
+      `Error fetching last.fm user. Error: ${tracksRes.error} ${tracksRes.message}`
+    );
+  let tracks: LastFMTrack[] = [];
+  for (let track of tracksRes.toptracks.track) {
+    tracks.push({
+      current: track['@attr'].nowplaying || false,
+      artist: {
+        name: track.artist.name!,
+        id: track.artist.mbid,
+      },
+      name: track.name,
+      rank: track['@attr'].rank,
+      totalPlays: track.playcount,
+    });
+  }
+  return tracks;
+}

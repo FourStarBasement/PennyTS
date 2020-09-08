@@ -123,7 +123,9 @@ export default (
   // Used for fetching guild member objects easier.
   client.fetchGuildMember = (ctx: Context) => {
     let msg = ctx.message;
-    let args = msg.content.slice(ctx.prefix?.length).split(' ');
+    let args = msg.content
+      .slice(ctx.prefix!.length + ctx.command!.name.length)
+      .split(' ');
 
     if (!args[1]) return undefined;
 
@@ -649,6 +651,7 @@ export default (
   // This function fetches an image's average color.
   client.fetchAverageColor = async (input: string): Promise<number> => {
     let img = await fetch(`${config.imageAPI.url}/averagecolor`, {
+      timeout: 5000,
       headers: {
         authorization: config.imageAPI.password,
         image: input,

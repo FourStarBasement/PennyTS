@@ -33,4 +33,7 @@ export default {
   osu: {
     token: '',
   },
+  lastFM: {
+    key: '',
+  },
 };
