@@ -14,7 +14,7 @@ export const fmStats = {
   run: async (ctx: Context, args: CommandArgs) => {
     let user: User | string = ctx.commandClient.fetchGuildMember(ctx) as User;
     if (!user && !args['fm stats']) user = ctx.user;
-    if (args['fm stats']) user = args['fm stats'];
+    if (args['fm stats'] && !user) user = args['fm stats'];
     let userFM: LastFMUser;
     if (typeof user === 'string') {
       try {
