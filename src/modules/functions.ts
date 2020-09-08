@@ -511,7 +511,7 @@ export default (
           let msg: Message = await (client.client as ShardClient).channels
             .get(arr[2])
             ?.fetchMessage(arr[3]);
-          if (msg) {
+          if (msg && !msg.channel?.nsfw) {
             let embed: Page = {
               author: {
                 iconUrl: msg.author.avatarUrl,
