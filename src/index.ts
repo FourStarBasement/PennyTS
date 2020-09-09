@@ -41,6 +41,7 @@ cmdClient.addEvents(events);
 
 (async () => {
   const client = await cmdClient.run();
+  const shardClient = client as ShardClient;
   // client has received the READY payload, do stuff now
   console.log(`Online with ${client.shardCount} shards`);
   cmdClient.ready = true;
@@ -69,12 +70,12 @@ cmdClient.addEvents(events);
   )
     setInterval(async () => {
       let statuses = [
-        `Online with ${(cmdClient.client as ShardClient).guilds.size} guilds`,
+        `Online with ${shardClient.guilds.size} guilds`,
         'Salutations!',
         'https://penny.wiggy.dev',
-        `${(cmdClient.client as ShardClient).users.size} users`,
+        `${shardClient.users.size} users`,
       ];
-      (client as ShardClient).gateway.setPresence({
+      shardClient.gateway.setPresence({
         activity: {
           name: statuses[Math.floor(Math.random() * statuses.length)],
           type: ActivityTypes.PLAYING,
@@ -86,14 +87,14 @@ cmdClient.addEvents(events);
           Authorization: config.topgg.token,
         },
         body: JSON.stringify({
-          server_count: (cmdClient.client as ShardClient).guilds.size,
-          shard_count: (cmdClient.client as ShardClient).shardCount,
+          server_count: shardClient.guilds.size,
+          shard_count: shardClient.shardCount,
         }),
       })
         .then((_) =>
           console.log(
             `[Top-GG_Interval] Posted ${
-              (cmdClient.client as ShardClient).guilds.size
+              shardClient.guilds.size
             } guilds to top.gg!`
           )
         )
@@ -106,15 +107,15 @@ cmdClient.addEvents(events);
             Authorization: config.discordbotsgg.token,
           },
           body: JSON.stringify({
-            guildCount: (cmdClient.client as ShardClient).guilds.size,
-            shardCount: (cmdClient.client as ShardClient).shardCount,
+            guildCount: shardClient.guilds.size,
+            shardCount: shardClient.shardCount,
           }),
         }
       )
         .then((_) =>
           console.log(
             `[Discord Bots.GG_Interval] Posted ${
-              (cmdClient.client as ShardClient).guilds.size
+              shardClient.guilds.size
             } guilds to discord.bots.gg!`
           )
         )
