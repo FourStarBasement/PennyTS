@@ -295,7 +295,7 @@ export default (
     if (command.metadata.owner) {
       if (ctx.content.indexOf(config.prefixes.owner) !== 0) {
         return false;
-      } else if (!ctx.client.owners.find((v, k) => v.id === ctx.member!.id)) {
+      } else if (!ctx.client.isOwner(ctx.member!.id)) {
         return false;
       }
     }
@@ -308,7 +308,7 @@ export default (
         case 'userAdmin':
           if (
             !ctx.member?.canAdministrator &&
-            !ctx.client.owners.find((v, k) => v.id === ctx.member!.id)
+            !ctx.client.isOwner(ctx.member!.id)
           ) {
             ctx.reply('This command is restricted to server admins.');
             return false;
