@@ -45,6 +45,27 @@ cmdClient.addEvents(events);
   // client has received the READY payload, do stuff now
   console.log(`Online with ${client.shardCount} shards`);
   cmdClient.ready = true;
+
+  // Add owners from config
+  config.owners.forEach(uid => {
+    const user = shardClient.users.get(uid);
+    if (!user) {
+      /*
+       * Try to fetch from the API
+       * TODO: fetching from API the best option here? perhaps make a fake user and fill in later
+       * Or maybe get from the gateway? a few options here...
+       */
+      shardClient.rest.fetchUser(uid).then(apiUser => {
+        shardClient.owners.set(apiUser.id, apiUser);
+        console.log(`Found ${apiUser.name} from the API, added as owner!`);
+      }).catch(_ => console.error(`Failed to add ${uid} as an owner, could not find them!`));
+      return;
+    }
+
+    shardClient.owners.set(user.id, user);
+    console.log(`Added ${user.name} as an owner!`);
+  });
+
   const s = require('node-schedule');
 
   cmdClient.job = s.scheduleJob({ hour: 0, minute: 0 }, () => {
