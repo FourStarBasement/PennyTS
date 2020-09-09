@@ -5,6 +5,12 @@ export default {
     owner: '', // Owner prefix (p@ on Penny)
   },
 
+  owners: [
+    "123456",
+    "515215",
+    "123145",
+  ],
+
   imageAPI: {
     url: '',
     password: '',
