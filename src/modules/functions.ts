@@ -286,8 +286,9 @@ export default (
   // This runs checks on commands when they are set in place so we don't have to do it for each file
   client.onCommandCheck = async (ctx: Context, command: Command) => {
     if (
-      command.metadata.disabled.includes(ctx.channelId) ||
-      command.metadata.disabled.includes(ctx.guildId)
+      command.metadata.disabled &&
+      (command.metadata.disabled.includes(ctx.channelId) ||
+      command.metadata.disabled.includes(ctx.guildId))
     )
       return false;
 
