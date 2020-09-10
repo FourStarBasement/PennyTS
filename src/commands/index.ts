@@ -144,7 +144,7 @@ export default [
   suggest,
   serverinfo,
   whoIs,
-  claim,
+  //claim,
   cardClaim,
   cardList,
 ];
