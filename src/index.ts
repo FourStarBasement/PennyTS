@@ -43,6 +43,7 @@ cmdClient.addEvents(events);
   const client = await cmdClient.run();
   const shardClient = client as ShardClient;
   // client has received the READY payload, do stuff now
+ // this should (in theory) allow for sharding as the command client (to my knowledge) handles sharding already :)
   console.log(`Online with ${client.shardCount} shards`);
   cmdClient.ready = true;
 
