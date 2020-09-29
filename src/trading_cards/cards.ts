@@ -25,7 +25,7 @@ export const RARITY_COLORS: { [index: string]: number } = {
   IMPOSSIBLE: 16735324,
 };
 export function getCards(): Card[] {
-  let cards = require('../trading_cards/cards.json');
+  let cards = require('../../src/trading_cards/cards.json');
   return cards as Card[];
 }
 
