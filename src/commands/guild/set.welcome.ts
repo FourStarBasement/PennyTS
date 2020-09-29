@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { chanReg, roleReg } from '../../modules/utils';
+import { chanReg, roleReg, GuildFlags } from '../../modules/utils';
 import { ChannelGuildText, Role } from 'detritus-client/lib/structures';
 import { QueryType } from '../../modules/db';
 
@@ -21,9 +21,12 @@ export const setWelcome = {
     let value = splitArgs.join(' ');
 
     if (attr === 'on') {
+      ctx.guild!.flags |= GuildFlags.WELCOMES;
       ctx.commandClient
         .query(
-          `UPDATE servers SET welcome = true WHERE server_id = ${ctx.guildId}`
+          `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${
+            ctx.guildId
+          }`
         )
         .then(() => {
           ctx.reply('Successfully turned on welcome messages.');
@@ -32,9 +35,12 @@ export const setWelcome = {
     }
 
     if (attr === 'off') {
+      ctx.guild!.flags &= ~GuildFlags.WELCOMES;
       ctx.commandClient
         .query(
-          `UPDATE servers SET welcome = false WHERE server_id = ${ctx.guildId}`
+          `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${
+            ctx.guildId
+          }`
         )
         .then(() => {
           ctx.reply('Successfully turned off welcome messages.');
