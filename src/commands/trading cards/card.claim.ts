@@ -44,7 +44,6 @@ export const cardClaim = {
     let sum = weights.reduce((acc, cur) => acc + cur, 0);
     let selected: Page[] = [];
 
-    //console.log(((await fetchRandomNumber()) / sum) * cards.length);
     for (let n = 0; n < 10; n++) {
       let remainder = Math.floor(Math.random() * sum);
       for (let i = 0; i < weights.length; i++) {
@@ -53,7 +52,6 @@ export const cardClaim = {
           let id = cards.indexOf(sorted[i]);
           picked.set(id, picked.get(id) + 1 || 1);
           selected.push(getEmbed(sorted[i], cards));
-          //console.log(cards[id], cards);
           let c = await ctx.commandClient.queryOne(
             `SELECT COUNT(*) as count FROM cards WHERE owner_id = ${ctx.userId} AND card_id = ${id}`
           );

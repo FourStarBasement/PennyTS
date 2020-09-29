@@ -1,5 +1,10 @@
 import { Context } from 'detritus-client/lib/command';
-import { getCards, Card } from '../../trading_cards/cards';
+import {
+  getCards,
+  Card,
+  RARITY_COLORS,
+  RARITIES,
+} from '../../trading_cards/cards';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 import { Page } from '../../modules/utils';
 
@@ -22,7 +27,7 @@ export const cardList = {
 function embed(card: Card): Page {
   return {
     title: card.name,
-    color: 9043849,
+    color: RARITY_COLORS[RARITIES[card.rarity]],
     image: {
       url: `https://penny.wiggy.dev/assets/trading-cards/${(
         card.name.replace(/ /g, '_') +
