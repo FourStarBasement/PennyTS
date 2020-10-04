@@ -652,7 +652,7 @@ export default (
   // This function fetches an image's average color.
   client.fetchAverageColor = async (input: string): Promise<number> => {
     let img = await fetch(`${config.imageAPI.url}/averagecolor`, {
-      timeout: 5000,
+      timeout: 10000,
       headers: {
         authorization: config.imageAPI.password,
         image: input,

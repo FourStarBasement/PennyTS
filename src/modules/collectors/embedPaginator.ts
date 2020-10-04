@@ -67,7 +67,9 @@ export class EmbedPaginator {
 
   async destroy() {
     this.collector.destroy();
-    this.message.delete().catch((r) => null);
+
+    if (!this.message) return;
+    this.message.delete().catch((_) => null);
   }
 
   async forward() {
@@ -100,7 +102,7 @@ export class EmbedPaginator {
     this.message.edit({ embed: this.prepare() });
   }
 
-  filter(r: Reaction, u: User) {
+  filter(_: Reaction, u: User) {
     if (this.ctx.member!.id !== u.id) return false;
     return true;
   }

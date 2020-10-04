@@ -24,6 +24,12 @@ export const tags = {
         ? `SELECT * FROM tags WHERE guild_id = ${ctx.guildId}`
         : `SELECT * FROM tags WHERE owner_id = ${user.id} AND guild_id = ${ctx.guildId}`;
     let data = await ctx.commandClient.query(query);
+
+    if (data.length == 0) {
+      ctx.reply(`I could not find any tags ${args.tags === 'all' ? 'in this server!' : 'owned by you, try passing `all` if you want the server tags!'} `);
+      return;
+    }
+
     let pages = new Array<Page>();
     let emotes = new Array<Array<DBTags>>();
     for (let i = 0; i < data.length; i += 6) {
