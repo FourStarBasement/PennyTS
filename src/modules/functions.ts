@@ -205,7 +205,7 @@ export default (
   client.onPrefixCheck = async (context: Context) => {
     if (context.user.bot) return '';
     if (!context.user.checked) {
-      client.checkUser(context, context.user.id).then((results: any) => {
+      await client.checkUser(context, context.user.id).then((results: any) => {
         // This may not be the best method. Please give feedback if you have suggestions :)
         for (let data in results) {
           (context.user as any)[data] = results[data];
