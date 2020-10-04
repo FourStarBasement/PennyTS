@@ -18,10 +18,13 @@ export const gamble = {
   },
   run: async (ctx: Context, args: CommandArgs) => {
     const member = ctx.member as Member;
+    let credits: bigint = BigInt(0);
 
-    let credits: bigint = args.gamble ? BigInt(args.gamble) : BigInt(100);
-    if (credits === undefined) {
-      ctx.reply('You must provide me with a valid number!');
+    // I hate this.
+    try {
+      credits = args.gamble ? BigInt(args.gamble) : BigInt(100);
+    } catch (e) {
+      ctx.reply('Please provide me with a valid number!');
       return;
     }
 
