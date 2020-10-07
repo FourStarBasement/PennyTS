@@ -12,6 +12,7 @@ export const cardList = {
   name: 'card list',
   metadata: {
     description: 'List all cards',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
     let cards = getCards();

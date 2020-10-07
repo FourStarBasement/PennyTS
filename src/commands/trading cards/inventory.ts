@@ -1,37 +1,56 @@
 import { Context } from 'detritus-client/lib/command';
-import { getCards, RARITIES } from '../../trading_cards/cards';
-import { DBCards, QueryType } from '../../modules/db';
-import { Emoji } from 'detritus-client/lib/structures';
-//import { fetchRandomNumber } from '../../modules/utils';
+import { getCards, RARITIES, RARITY_COLORS } from '../../trading_cards/cards';
+import { DBCard } from '../../modules/db';
+import { Page } from '../../modules/utils';
+import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 
 export const inventory = {
   name: 'inventory',
   metadata: {
     description: 'Show your card inventory',
+    checks: ['embeds'],
   },
   run: async (ctx: Context) => {
-    let cards = getCards();
-    let data: DBCards[] = await ctx.commandClient.query(
+    let data: DBCard[] = await ctx.commandClient.query(
       `SELECT * FROM cards WHERE owner_id = ${ctx.userId}`
     );
     if (!data || data.length < 1) {
       ctx.reply('You have no cards!');
       return;
     }
-    let allCards: string[] = [];
+    let allCards: Page[] = [];
     data
       .sort((a, b) => a.count - b.count)
-      .forEach((c: DBCards) => {
-        let rarity: Emoji = ctx.client.emojis.find(
-          (e) => e.name === RARITIES[cards[c.card_id].rarity]
-        )!;
-        allCards.push(
-          `${rarity} ${cards[c.card_id].name}: ${c.count} owned. (ID: ${
-            c.card_id
-          })`
-        );
+      .forEach((c: DBCard) => {
+        allCards.push(embed(c));
       });
-
-    ctx.reply(allCards.join('\n'));
+    new EmbedPaginator(ctx, allCards).start();
+    return;
   },
 };
+
+function embed(dbCard: DBCard): Page {
+  let cards = getCards();
+  let card = cards[dbCard.card_id];
+  return {
+    title: `${card.name} (${dbCard.count} owned)`,
+    color: RARITY_COLORS[RARITIES[card.rarity]],
+    image: {
+      url: `https://penny.wiggy.dev/assets/trading-cards/${(
+        card.name.replace(/ /g, '_') +
+        '_' +
+        card.series.replace(/ /g, '_')
+      ).toLowerCase()}.png`,
+    },
+    fields: [
+      {
+        name: 'Rarity',
+        value: `${card.rarity}/100`,
+      },
+      {
+        name: 'Series',
+        value: card.series,
+      },
+    ],
+  };
+}

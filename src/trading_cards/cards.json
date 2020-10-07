@@ -120,6 +120,16 @@
     "series": "My Hero Academia"
   },
   {
+    "name": "Monkey D Luffy",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
+    "name": "Usopp",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
     "name": "Himiko Toga",
     "rarity": 5,
     "series": "My Hero Academia"
@@ -140,6 +150,16 @@
     "series": "Danganronpa"
   },
   {
+    "name": "Roronoa Zoro",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Sanji",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
     "name": "Komi San",
     "rarity": 1,
     "series": "Komi-san wa Komyushou Desu"
@@ -158,26 +178,6 @@
     "name": "Futakuchi Onna",
     "rarity": 1,
     "series": "Yokai"
-  },
-  {
-    "name": "Monkey D Luffy",
-    "rarity": 10,
-    "series": "One Piece"
-  },
-  {
-    "name": "Roronoa Zoro",
-    "rarity": 5,
-    "series": "One Piece"
-  },
-  {
-    "name": "Usopp",
-    "rarity": 10,
-    "series": "One Piece"
-  },
-  {
-    "name": "Sanji",
-    "rarity": 5,
-    "series": "One Piece"
   },
   {
     "name": "Portgas D Ace",

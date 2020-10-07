@@ -6,7 +6,7 @@ import {
   RARITIES,
   RARITY_COLORS,
 } from '../../trading_cards/cards';
-import { DBCards, QueryType } from '../../modules/db';
+import { DBCard, QueryType } from '../../modules/db';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 //import { fetchRandomNumber } from '../../modules/utils';
@@ -19,14 +19,14 @@ export const cardClaim = {
   run: async (ctx: Context) => {
     let cards = getCards();
     sortCards(cards);
-    let data: DBCards[] = await ctx.commandClient.query(
+    let data: DBCard[] = await ctx.commandClient.query(
       `SELECT * FROM cards WHERE owner_id = ${ctx.userId}`
     );
     let total: number = 0;
     let picked = new Map();
     // ty Ivan for helping me to learn weighted randomness <3
     if (data) {
-      data.forEach((dbc: DBCards) => {
+      data.forEach((dbc: DBCard) => {
         picked.set(dbc.card_id, dbc.count);
         total += dbc.count;
       });

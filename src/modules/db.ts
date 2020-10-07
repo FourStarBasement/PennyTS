@@ -102,9 +102,8 @@ export interface DisabledCommand {
   count?: number;
   channel_id?: string;
   server_id?: string;
-
 }
-export interface DBCards {
+export interface DBCard {
   owner_id: string;
   card_id: number;
   count: number;

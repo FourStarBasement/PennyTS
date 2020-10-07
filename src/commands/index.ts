@@ -147,4 +147,5 @@ export default [
   //claim,
   cardClaim,
   cardList,
+  inventory,
 ];
