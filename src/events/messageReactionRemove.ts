@@ -6,7 +6,7 @@ import {
 } from 'detritus-client';
 import { Message, User, Emoji, Reaction } from 'detritus-client/lib/structures';
 import { Page, convertEmbed } from '../modules/utils';
-import { DBServer } from '../modules/db';
+import { QueryType, DBServer } from '../modules/db';
 
 export const messageReactionRemove = {
   event: ClientEvents.MESSAGE_REACTION_REMOVE,
@@ -133,7 +133,13 @@ async function prepare(
     }
 
     if (count < r.limit!) {
-      await r.starred.delete().catch(() => null);
+      await r.starred.delete().then(async () => {
+        await client.preparedQuery(
+          'DELETE FROM starboard WHERE message_id = $1',
+          [message.id],
+          QueryType.Void
+        );
+      }).catch(() => null);
     } else {
       await r.starred.edit({
         content: `${emote} ${count} ${emote.id ? emote.name : 'reaction'}s in ${
