@@ -117,20 +117,25 @@ async function prepare(
   let emote: Emoji = new Emoji(client.client as ShardClient, {
     name: '⭐',
   });
+
+  const starboard_emoji = server.starboard_emoji as string;
+
   if (server.starboard_emoji) {
     if (emoji.id) {
-      if (message.guild?.emojis.get(server.starboard_emoji as string))
-        emote = message.guild!.emojis.get(server.starboard_emoji as string)!;
-      else return;
+      if (message.guild?.emojis.has(starboard_emoji))
+        emote = message.guild!.emojis.get(starboard_emoji)!;
+    } else {
+      emote.name = starboard_emoji;
     }
   }
+
   if (r.original && r.starred) {
     if (reacted.id === r.original.author.id) {
       await r.original.reactions
-        .get(server.starboard_emoji as string)
+        .get(starboard_emoji)
         ?.delete(reacted.id);
       await r.starred.reactions
-        .get(server.starboard_emoji as string)
+        .get(starboard_emoji)
         ?.delete(reacted.id);
       console.log(
         `ReactionAdd/Starboard G#${message.guildId}: Self-star: M#${r.original.id} U#${reacted.id}`
