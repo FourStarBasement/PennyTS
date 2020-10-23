@@ -29,11 +29,24 @@ export const messageReactionRemove = {
       `SELECT starboard_emoji FROM servers WHERE server_id = ${payload.guildId}`
     );
 
+    let emote: Emoji = new Emoji(client.client as ShardClient, {
+      name: '⭐',
+    });
+
+    const starboard_emoji = server.starboard_emoji as string;
     if (isNaN(server.starboard_emoji as number)) {
-      if (payload.reaction.emoji.name !== server.starboard_emoji) return;
-    } else {
-      if (server.starboard_emoji !== payload.reaction.emoji.id) return;
+      if (payload.reaction.emoji.name !== starboard_emoji) return;
+
+      emote.name = starboard_emoji;
+    } else if (starboard_emoji.trim() !== '') {
+      if (starboard_emoji !== payload.reaction.emoji.id) return;
+
+      if (message.guild?.emojis.has(starboard_emoji))
+        emote = message.guild!.emojis.get(starboard_emoji)!;
     }
+
+    if (payload.reaction.emoji.id && payload.reaction.emoji.id !== emote.id) return;
+    if (payload.reaction.emoji.name && payload.reaction.emoji.name !== emote.name) return;
 
     // Drop-in Replacement for Embed
     let embed: Page = {
@@ -59,7 +72,7 @@ export const messageReactionRemove = {
           payload.user!,
           embed,
           server,
-          payload.reaction.emoji
+          emote,
         )
       );
     });
@@ -94,20 +107,10 @@ async function prepare(
   reacted: User,
   embed: Page,
   server: DBServer,
-  emoji: Emoji
+  emote: Emoji
 ) {
   let r = await client.fetchStarData(message);
-  let emote: Emoji = new Emoji(client.client as ShardClient, {
-    name: '⭐',
-  });
 
-  if (server.starboard_emoji) {
-    if (emoji.id) {
-      if (message.guild?.emojis.get(server.starboard_emoji as string))
-        emote = message.guild!.emojis.get(server.starboard_emoji as string)!;
-      else return;
-    }
-  }
   if (r.original && r.starred) {
     let rs: Reaction[] = Array.from(r.original.reactions.cache.values())
       .concat(Array.from(r.starred.reactions.cache.values()))
