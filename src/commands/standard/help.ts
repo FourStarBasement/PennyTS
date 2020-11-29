@@ -11,7 +11,7 @@ export const help = {
   name: 'help',
   metadata: {
     description: 'Does what you think it does.',
-    checks: ['embed'],
+    checks: ['embeds'],
   },
   arg: { name: 'command' },
   run: async (ctx: Context, args: CommandArgs) => {
