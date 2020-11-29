@@ -103,7 +103,7 @@ export class EmbedPaginator {
   }
 
   filter(_: Reaction, u: User) {
-    if (!u.id || this.ctx.member!.id !== u.id) return false;
+    if (this.ctx.member!.id !== u?.id) return false;
     return true;
   }
 }
