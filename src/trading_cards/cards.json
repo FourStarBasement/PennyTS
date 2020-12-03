@@ -5,6 +5,311 @@
     "series": "Danganronpa"
   },
   {
+    "name": "Ectoplasm",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Cemtentoss",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Denki Kaminari",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Principal Nezu",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mezou Shoji",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Snipe",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Edgeshot",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Vlad King",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kota",
+    "rarity": 100,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Arlong",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kuma",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Boa Hancock",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Bellamy",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Capone",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Carrot",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Karoo",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Caesar",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Domino",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Eneru",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Hatchan",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Tenguyama",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Iceberg",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Isshou",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Bonney",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kinemon",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Koala",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Momonosuke",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kureha",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Garp",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Vivi",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Reiju",
+    "rarity": 100,
+    "series": "One Piece"
+  },
+  {
+    "name": "Uzaki",
+    "rarity": 100,
+    "series": "Uzaki-Chan Wants to Hang Out"
+  },
+  {
+    "name": "Konohamaru Sarutobi",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Iruka Umino",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gamabunta",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gamahiro",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gamakichi",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gyuuki",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Suigetsu",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Mifune",
+    "rarity": 100,
+    "series": "Naruto"
+  },
+  {
+    "name": "Casca",
+    "rarity": 100,
+    "series": "Berserk"
+  },
+  {
+    "name": "Hannes",
+    "rarity": 100,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Marlo",
+    "rarity": 100,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Connie",
+    "rarity": 100,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Shippou",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Kirara",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Kohaku",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Kouga",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Myouga",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Rin",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Yura",
+    "rarity": 100,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Gon",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Leorio",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Komugi",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Phinks",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Shizuku",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Feitan",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Wing",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Zepile",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Alluka",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Zushi",
+    "rarity": 100,
+    "series": "Hunter x Hunter"
+  },
+  {
     "name": "Mirei Mikagura",
     "rarity": 80,
     "series": "Digimon"
@@ -35,6 +340,236 @@
     "series": "My Hero Academia"
   },
   {
+    "name": "Tenya Lida",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kurogiri",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Present Mic",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mustard",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Tiger",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Nejire Hado",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Muscular",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Gang Orca",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Pixiebob",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mandalay",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Ragdoll",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Eri",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Ruko Tatsuma",
+    "rarity": 80,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Chopper",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Buggy",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Bepo",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Mihawk",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Koby",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Monkey D Dragon",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Rebecca",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Rayleigh",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Zeff",
+    "rarity": 80,
+    "series": "One Piece"
+  },
+  {
+    "name": "Anko",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hiruzen Sarutobi",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "A",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Darui",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Kakuzu",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Tobirama",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Yahiko",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hanzou",
+    "rarity": 80,
+    "series": "Naruto"
+  },
+  {
+    "name": "Erwin",
+    "rarity": 80,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Hange",
+    "rarity": 80,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Jean",
+    "rarity": 80,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Reiner",
+    "rarity": 80,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Pixis",
+    "rarity": 80,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Netero",
+    "rarity": 80,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Gamaken",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Temari",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Deidara",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
     "name": "Corrin",
     "rarity": 40,
     "series": "Fire Emblem"
@@ -55,11 +590,6 @@
     "series": "My Hero Academia"
   },
   {
-    "name": "Kyoka Jiro",
-    "rarity": 40,
-    "series": "My Hero Academia"
-  },
-  {
     "name": "Judy",
     "rarity": 40,
     "series": "Cowboy Bebop"
@@ -71,6 +601,186 @@
   },
   {
     "name": "Mina Ashido",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kakashi Hatake",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Chichi",
+    "rarity": 40,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Izuku Midoriya",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Katsuki Bakugou",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Eijiro Kirishima",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Fumikage Tokoyami",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mei Hatsume",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Ms Midnight",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Itsuka Kendo",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Shinsou Hitoshi",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Tamaki Amajiki",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Mr Compress",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Nana Shimura",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Tetsutetsu Tetsutetsu",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Inasa Yoarashi",
+    "rarity": 40,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Franky",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Brook",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Bartolomeo",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Ivankov",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kid",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Lucci",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Marco",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Smoker",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
+    "name": "Aang",
+    "rarity": 40,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Katara",
+    "rarity": 40,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Kimimaro",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Orochimaru",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Asuma Sarutobi",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Nagato",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hagoromo",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Sai",
+    "rarity": 40,
+    "series": "Naruto"
+  },
+  {
+    "name": "Armin",
+    "rarity": 40,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Kurapika",
+    "rarity": 40,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Biscuit",
+    "rarity": 40,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Konan",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Kyoka Jiro",
     "rarity": 20,
     "series": "My Hero Academia"
   },
@@ -115,6 +825,136 @@
     "series": "One Piece"
   },
   {
+    "name": "Krillin",
+    "rarity": 20,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Neji Hyuga",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gaara",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Shoto Todoroki",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Gunhead",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Endeavor",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Gran Torino",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Twice",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Hood",
+    "rarity": 20,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Krillin",
+    "rarity": 20,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Kizaru",
+    "rarity": 20,
+    "series": "One Piece"
+  },
+  {
+    "name": "Rosinante",
+    "rarity": 20,
+    "series": "One Piece"
+  },
+  {
+    "name": "Sengoku",
+    "rarity": 20,
+    "series": "One Piece"
+  },
+  {
+    "name": "Ninamori",
+    "rarity": 20,
+    "series": "FLCL"
+  },
+  {
+    "name": "Sokka",
+    "rarity": 20,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Neji Hyuga",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Haku",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Kisame",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Kurama",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Sasori",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Tobi",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Gaara",
+    "rarity": 20,
+    "series": "Naruto"
+  },
+  {
+    "name": "Miroku",
+    "rarity": 20,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Hisoka",
+    "rarity": 20,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Silva",
+    "rarity": 20,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Meruem",
+    "rarity": 20,
+    "series": "Hunter x Hunter"
+  },
+  {
     "name": "Momo Yaoyorozu",
     "rarity": 10,
     "series": "My Hero Academia"
@@ -128,6 +968,141 @@
     "name": "Usopp",
     "rarity": 10,
     "series": "One Piece"
+  },
+  {
+    "name": "Shota Aizawa",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Piccolo",
+    "rarity": 10,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Kamui Woods",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Dabi",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Best Jeanist",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Overhaul",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Lemillion",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Fat Gum",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Kendo Rappa",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Hawks",
+    "rarity": 10,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Piccolo",
+    "rarity": 10,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Aokiji",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
+    "name": "Doflamingo",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kaido",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
+    "name": "Jinbei",
+    "rarity": 10,
+    "series": "One Piece"
+  },
+  {
+    "name": "Mamimi",
+    "rarity": 10,
+    "series": "FLCL"
+  },
+  {
+    "name": "Naota",
+    "rarity": 10,
+    "series": "FLCL"
+  },
+  {
+    "name": "Zuko",
+    "rarity": 10,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Minato Namikaze",
+    "rarity": 10,
+    "series": "Naruto"
+  },
+  {
+    "name": "Mikasa",
+    "rarity": 10,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Monkey Titan",
+    "rarity": 10,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Grisha",
+    "rarity": 10,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Sango",
+    "rarity": 10,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Chrollo",
+    "rarity": 10,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Zeno",
+    "rarity": 10,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Illumi",
+    "rarity": 10,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Maki Oze",
+    "rarity": 10,
+    "series": "Fire Force"
   },
   {
     "name": "Himiko Toga",
@@ -160,6 +1135,141 @@
     "series": "One Piece"
   },
   {
+    "name": "Vegeta",
+    "rarity": 5,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Rock Lee",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Shikimaru Nara",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Stain",
+    "rarity": 5,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "All for One",
+    "rarity": 5,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Nighteye",
+    "rarity": 5,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Vegeta",
+    "rarity": 5,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Katakuri",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Whitebeard",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Shanks",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Law",
+    "rarity": 5,
+    "series": "One Piece"
+  },
+  {
+    "name": "Haruko",
+    "rarity": 5,
+    "series": "FLCL"
+  },
+  {
+    "name": "Toph",
+    "rarity": 5,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Rock lee",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Zabuza",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Might Guy",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hashirama Senju",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Killer B",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Obito",
+    "rarity": 5,
+    "series": "Naruto"
+  },
+  {
+    "name": "Levi",
+    "rarity": 5,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Kenny",
+    "rarity": 5,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Kagome",
+    "rarity": 5,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Naraku",
+    "rarity": 5,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Kite",
+    "rarity": 5,
+    "series": "Hunter x Hunter"
+  },
+  {
+    "name": "Tohru Adachi",
+    "rarity": 5,
+    "series": "Persona"
+  },
+  {
+    "name": "Kumatetsu Ren",
+    "rarity": 5,
+    "series": "The Boy and the Beast"
+  },
+  {
+    "name": "Kyuta",
+    "rarity": 5,
+    "series": "The Boy and the Beast"
+  },
+  {
     "name": "Komi San",
     "rarity": 1,
     "series": "Komi-san wa Komyushou Desu"
@@ -183,5 +1293,155 @@
     "name": "Portgas D Ace",
     "rarity": 1,
     "series": "One Piece"
+  },
+  {
+    "name": "All Might",
+    "rarity": 1,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Goku",
+    "rarity": 1,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Naruto Uzumaki",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hinata Hyuga",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Jiriya",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Itachi Uchia",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Tomura Shigaraki",
+    "rarity": 1,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Daikaku Miyagi",
+    "rarity": 1,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Miruko",
+    "rarity": 1,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Goku",
+    "rarity": 1,
+    "series": "Dragon Ball"
+  },
+  {
+    "name": "Sogeking",
+    "rarity": 1,
+    "series": "One Piece"
+  },
+  {
+    "name": "Bon Clay",
+    "rarity": 1,
+    "series": "One Piece"
+  },
+  {
+    "name": "Sabo",
+    "rarity": 1,
+    "series": "One Piece"
+  },
+  {
+    "name": "Canti",
+    "rarity": 1,
+    "series": "FLCL"
+  },
+  {
+    "name": "Takkun",
+    "rarity": 1,
+    "series": "FLCL"
+  },
+  {
+    "name": "Iroh",
+    "rarity": 1,
+    "series": "Avatar The Last Airbender"
+  },
+  {
+    "name": "Naruto Uzamaki",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Hinata Hyuga",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Kakshi Hatake",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Jiriya Sensei",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Itachi Uchiha",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Pain",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Madara Uchiha",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Sasuke Uchiha",
+    "rarity": 1,
+    "series": "Naruto"
+  },
+  {
+    "name": "Guts",
+    "rarity": 1,
+    "series": "Berserk"
+  },
+  {
+    "name": "Griffith",
+    "rarity": 1,
+    "series": "Berserk"
+  },
+  {
+    "name": "Eren",
+    "rarity": 1,
+    "series": "Attack on Titan"
+  },
+  {
+    "name": "Inuyasha",
+    "rarity": 1,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Sesshoumaru",
+    "rarity": 1,
+    "series": "InuYasha"
+  },
+  {
+    "name": "Killua",
+    "rarity": 1,
+    "series": "Hunter x Hunter"
   }
 ]
