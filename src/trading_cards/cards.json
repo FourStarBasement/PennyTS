@@ -10,7 +10,7 @@
     "series": "My Hero Academia"
   },
   {
-    "name": "Cemtentoss",
+    "name": "Cementoss",
     "rarity": 100,
     "series": "My Hero Academia"
   },
@@ -71,11 +71,6 @@
   },
   {
     "name": "Capone",
-    "rarity": 100,
-    "series": "One Piece"
-  },
-  {
-    "name": "Carrot",
     "rarity": 100,
     "series": "One Piece"
   },
@@ -555,6 +550,11 @@
     "series": "Hunter x Hunter"
   },
   {
+    "name": "Carrot",
+    "rarity": 40,
+    "series": "One Piece"
+  },
+  {
     "name": "Gamaken",
     "rarity": 40,
     "series": "Naruto"
@@ -605,19 +605,9 @@
     "series": "My Hero Academia"
   },
   {
-    "name": "Kakashi Hatake",
-    "rarity": 40,
-    "series": "Naruto"
-  },
-  {
     "name": "Chichi",
     "rarity": 40,
     "series": "Dragon Ball"
-  },
-  {
-    "name": "Izuku Midoriya",
-    "rarity": 40,
-    "series": "My Hero Academia"
   },
   {
     "name": "Katsuki Bakugou",
@@ -960,11 +950,6 @@
     "series": "My Hero Academia"
   },
   {
-    "name": "Monkey D Luffy",
-    "rarity": 10,
-    "series": "One Piece"
-  },
-  {
     "name": "Usopp",
     "rarity": 10,
     "series": "One Piece"
@@ -1268,6 +1253,21 @@
     "name": "Kyuta",
     "rarity": 5,
     "series": "The Boy and the Beast"
+  },
+  {
+    "name": "Izuku Midoriya",
+    "rarity": 1,
+    "series": "My Hero Academia"
+  },
+  {
+    "name": "Monkey D Luffy",
+    "rarity": 1,
+    "series": "One Piece"
+  },
+  {
+    "name": "Kakashi Hatake",
+    "rarity": 1,
+    "series": "Naruto"
   },
   {
     "name": "Komi San",

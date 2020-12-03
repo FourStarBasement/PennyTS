@@ -1,5 +1,10 @@
 import { Context } from 'detritus-client/lib/command';
-import { getCards, RARITIES, RARITY_COLORS } from '../../trading_cards/cards';
+import {
+  Card,
+  getCards,
+  RARITIES,
+  RARITY_COLORS,
+} from '../../trading_cards/cards';
 import { DBCard } from '../../modules/db';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
@@ -20,18 +25,21 @@ export const inventory = {
     }
     let allCards: Page[] = [];
     data
-      .sort((a, b) => a.count - b.count)
+      .sort((a, b) => {
+        let card1 = fetchCard(a);
+        let card2 = fetchCard(b);
+        return card1.rarity - card2.rarity;
+      })
       .forEach((c: DBCard) => {
-        allCards.push(embed(c));
+        let card = fetchCard(c);
+        allCards.push(embed(card, c));
       });
     new EmbedPaginator(ctx, allCards).start();
     return;
   },
 };
 
-function embed(dbCard: DBCard): Page {
-  let cards = getCards();
-  let card = cards[dbCard.card_id];
+function embed(card: Card, dbCard: DBCard): Page {
   return {
     title: `${card.name} (${dbCard.count} owned)`,
     color: RARITY_COLORS[RARITIES[card.rarity]],
@@ -53,4 +61,9 @@ function embed(dbCard: DBCard): Page {
       },
     ],
   };
+}
+
+function fetchCard(card: DBCard): Card {
+  let cards = getCards();
+  return cards[card.card_id];
 }
