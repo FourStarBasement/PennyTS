@@ -74,6 +74,7 @@ import { fmAdd } from './standard/fm.add';
 import { fmStats } from './standard/fm.stats';
 // import { claim } from './profile/claim';
 import { inventory } from './trading cards/inventory';
+import { openPack } from './trading cards/open.pack';
 export default [
   avatar,
   daily,
@@ -145,7 +146,11 @@ export default [
   serverinfo,
   whoIs,
   //claim,
+  fmStats,
+  fmAdd,
+  fm,
   cardClaim,
   cardList,
   inventory,
+  openPack,
 ];

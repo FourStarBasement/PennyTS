@@ -45,3 +45,33 @@ export function sortCards(cards: Card[]) {
   let sorted = cards.sort((a, b) => b.rarity - a.rarity);
   saveCards(sorted);
 }
+
+export function getCardImage(card: Card): string {
+  return `https://penny.wiggy.dev/assets/trading-cards/${(
+    card.name.replace(/ /g, '_') +
+    '_' +
+    card.series.replace(/ /g, '_')
+  ).toLowerCase()}.png`;
+}
+
+// ty to Ivan for teaching me weighted randomness <3
+export function openPack(cards: Card[]): Card[] {
+  let picked: Card[] = [];
+  let weights: number[] = [];
+  let sorted = cards.sort((a, b) => b.rarity - a.rarity);
+  sorted.forEach((c: Card) => {
+    weights.push(c.rarity);
+  });
+  let sum = weights.reduce((acc, cur) => acc + cur, 0);
+  for (let n = 0; n < 10; n++) {
+    let remainder = Math.floor(Math.random() * sum);
+    for (let i = 0; i < weights.length; i++) {
+      remainder -= weights[i];
+      if (remainder < 0) {
+        picked.push(sorted[i]);
+        break;
+      }
+    }
+  }
+  return picked;
+}

@@ -1,6 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import {
   Card,
+  getCardImage,
   getCards,
   RARITIES,
   RARITY_COLORS,
@@ -44,11 +45,7 @@ function embed(card: Card, dbCard: DBCard): Page {
     title: `${card.name} (${dbCard.count} owned)`,
     color: RARITY_COLORS[RARITIES[card.rarity]],
     image: {
-      url: `https://penny.wiggy.dev/assets/trading-cards/${(
-        card.name.replace(/ /g, '_') +
-        '_' +
-        card.series.replace(/ /g, '_')
-      ).toLowerCase()}.png`,
+      url: getCardImage(card),
     },
     fields: [
       {
@@ -65,5 +62,12 @@ function embed(card: Card, dbCard: DBCard): Page {
 
 function fetchCard(card: DBCard): Card {
   let cards = getCards();
-  return cards[card.card_id];
+  return cards.find((c: Card) => {
+    return (
+      c.name.replace(/ /g, '_').toLowerCase() +
+        '_' +
+        c.series.replace(/ /g, '_').toLowerCase() ===
+      card.card_id
+    );
+  })!;
 }

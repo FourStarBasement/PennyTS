@@ -4,6 +4,7 @@ import {
   Card,
   RARITY_COLORS,
   RARITIES,
+  getCardImage,
 } from '../../trading_cards/cards';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 import { Page } from '../../modules/utils';
@@ -30,11 +31,7 @@ function embed(card: Card): Page {
     title: card.name,
     color: RARITY_COLORS[RARITIES[card.rarity]],
     image: {
-      url: `https://penny.wiggy.dev/assets/trading-cards/${(
-        card.name.replace(/ /g, '_') +
-        '_' +
-        card.series.replace(/ /g, '_')
-      ).toLowerCase()}.png`,
+      url: getCardImage(card),
     },
     fields: [
       {

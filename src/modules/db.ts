@@ -105,6 +105,6 @@ export interface DisabledCommand {
 }
 export interface DBCard {
   owner_id: string;
-  card_id: number;
+  card_id: string;
   count: number;
 }
