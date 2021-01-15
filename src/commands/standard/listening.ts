@@ -16,6 +16,35 @@ export const listening = {
       key: config.youtube.key,
     };
     let member = ctx.commandClient.fetchGuildMember(ctx) || ctx.member;
+    let user: DBUser = await ctx.commandClient.queryOne(
+      `SELECT last_fm_name FROM users WHERE user_id = ${member!.id}`
+    );
+    if (!user.last_fm_name) {
+      ctx.reply(
+        `${member?.username} has not set their last.fm username!\nThis command only works via last.fm until we can receive the presence intent from Discord.`
+      );
+      return;
+    }
+    let track = (await fetchLastFMRecentTracks(user.last_fm_name))[0];
+    if (!track.current) {
+      ctx.reply(`${member!.name} is not listening to anything.`);
+      return;
+    }
+    let s = await search(`${track.name} by ${track.artist.name}`, opts);
+    ctx.reply({
+      embed: {
+        title: track.name,
+        color: await ctx.commandClient.fetchAverageColor(track.album!.art),
+        description: `By ${track.artist.name} on ${
+          track.album!.name || 'Unknown album'
+        }\n[Youtube](${
+          s.results[0].link
+        })\nInfo from [last.fm](https://www.last.fm/user/${user.last_fm_name})`,
+        thumbnail: { url: track.album!.art },
+      },
+    });
+    /*
+    let member = ctx.commandClient.fetchGuildMember(ctx) || ctx.member;
     if (!member) {
       ctx.reply('I cannot find that user.');
       return;
@@ -134,6 +163,6 @@ export const listening = {
     }
     ctx.reply({
       embed: embed,
-    });
+    });*/
   },
 };
