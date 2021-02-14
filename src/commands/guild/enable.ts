@@ -10,13 +10,14 @@ interface CommandArgs {
 export const enable = {
   name: 'enable',
   metadata: {
-    description: 'Enables mod logs, levels, or role edits',
+    description:
+      'Enables mod logs, levels, or role edits or server welcome messages',
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args.enable) {
       ctx.reply(
-        `Usage: ${ctx.prefix}enable [levels/mod logs/role edits/auto quotes]`
+        `Usage: ${ctx.prefix}enable [levels/mod logs/role edits/auto quotes/welcomes]`
       );
     }
 
@@ -62,6 +63,10 @@ export const enable = {
       case 'quotes':
         ctx.guild!.flags |= GuildFlags.AUTO_QUOTE;
         attr = 'auto message quoting';
+        break;
+      case 'welcomes':
+      case 'welcome':
+        ctx.guild!.flags |= GuildFlags.WELCOMES;
         break;
       default:
         break;

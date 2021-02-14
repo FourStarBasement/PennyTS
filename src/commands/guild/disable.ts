@@ -9,13 +9,13 @@ export const disable = {
   name: 'disable',
   metadata: {
     description:
-      'Disables levels or mod logs or role edits or auto quotes or a specific command',
+      'Disables levels or mod logs or role edits or auto quotes or a specific command or server welcome messages',
     checks: ['userAdmin'],
   },
   run: async (ctx: Context, args: CommandArgs) => {
     if (!args.disable) {
       ctx.reply(
-        `Usage: ${ctx.prefix}disable {mod logs/levels/role edits/command/auto quotes}`
+        `Usage: ${ctx.prefix}disable {mod logs/levels/role edits/command/auto quotes/welcomes}`
       );
       return;
     }
@@ -43,13 +43,17 @@ export const disable = {
         toSay = 'auto message quoting';
         ctx.guild!.flags &= ~GuildFlags.AUTO_QUOTE;
         break;
+      case 'welcomes':
+      case 'welcome':
+        ctx.guild!.flags &= ~GuildFlags.WELCOMES;
+        break;
       default:
         break;
     }
 
     if (!toSay) {
       ctx.reply(
-        'Invalid feature. Available features: `levels`, `mod logs`, `role edits`, `command`, `auto quotes`'
+        'Invalid feature. Available features: `levels`, `mod logs`, `role edits`, `command`, `auto quotes`, `welcomes`'
       );
       return;
     }
