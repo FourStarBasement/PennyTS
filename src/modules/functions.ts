@@ -475,12 +475,13 @@ export default (
   client.emoteCheck = async (emoteID: string, serverID: string) => {
     let data = await client
       .query(
-        `SELECT COUNT(*) AS inD FROM emote WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
+        `SELECT COUNT(*) AS ind FROM emote WHERE server_id = ${serverID} AND emote_id = ${emoteID}`
       )
       .catch((error) => {
         if (error !== 'Query returned nothing') console.error(error);
       });
-    if (data[0].inD === 0) {
+    // Why does this return a string???
+    if (data[0].ind === '0') {
       await client.query(
         `INSERT INTO emote (server_id, emote_id) VALUES (${serverID}, ${emoteID})`
       );

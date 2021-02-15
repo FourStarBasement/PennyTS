@@ -55,15 +55,22 @@ export const emote = {
       }
 
       if (!data) ctx.reply('This emote has not been used.');
-
       ctx.reply(`That emote has been used ${data[0].used} times.`);
     } else if (args.emote.toLowerCase() === 'all') {
-      let data = await ctx.commandClient.query(
+      if (ctx.guild!.emojis.length < 1) {
+        ctx.reply("This server doesn't have any emojis!");
+        return;
+      }
+      let data: DBEmotes[] = await ctx.commandClient.query(
         `SELECT * FROM emote WHERE server_id = ${ctx.guildId}`
       );
-      data.sort((a: DBTags, b: DBTags) => b.used - a.used);
-      let pages = new Array<Page>();
-      let emotes = new Array<Array<DBEmotes>>();
+      if (ctx.guild!.emojis.length < 1 || data.length < 1) {
+        ctx.reply("This server doesn't have any emojis!");
+        return;
+      }
+      data.sort((a: DBEmotes, b: DBEmotes) => b.used - a.used);
+      let pages: Page[] = [];
+      let emotes: DBEmotes[][] = [];
       for (let i = 0; i < data.length; i += 5) {
         emotes.push(data.slice(i, i + 5));
       }
