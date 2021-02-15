@@ -288,7 +288,7 @@ export default (
     if (
       command.metadata.disabled &&
       (command.metadata.disabled.includes(ctx.channelId) ||
-      command.metadata.disabled.includes(ctx.guildId))
+        command.metadata.disabled.includes(ctx.guildId))
     )
       return false;
 
@@ -652,7 +652,7 @@ export default (
   // This function fetches an image's average color.
   client.fetchAverageColor = async (input: string): Promise<number> => {
     let img = await fetch(`${config.imageAPI.url}/averagecolor`, {
-      timeout: 10000,
+      timeout: 20000,
       headers: {
         authorization: config.imageAPI.password,
         image: input,
