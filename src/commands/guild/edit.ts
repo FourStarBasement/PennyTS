@@ -86,6 +86,12 @@ export const edit = {
     })
       .then((d) => d.json())
       .catch(console.error);
+    if (!img) {
+      ctx.reply(
+        'Our image server has failed to give us a response! I apologise for this. I will report it to the proper authorities. Please try again in a few minutes.'
+      );
+      return;
+    }
     ctx
       .reply({
         content: `Here is a preview of what your role will look like with ${role[1]}. React with 🇾 if you want to keep it or 🇳 if you do not.`,
