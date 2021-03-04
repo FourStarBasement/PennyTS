@@ -48,13 +48,13 @@ export const steal: CommandOptions = {
       let messages = await ctx.channel?.fetchMessages({
         limit: index + 1,
       });
-      message = messages!.toArray()[index]!;
+      message = messages.toArray()[index]!;
     } else if (!args.steal) {
       // get message before
       let messages = await ctx.channel?.fetchMessages({
         limit: 2,
       });
-      message = messages!.toArray()[1];
+      message = messages.toArray()[1];
     } else {
       // :id
       let splitArgs = args.steal.split(' ');

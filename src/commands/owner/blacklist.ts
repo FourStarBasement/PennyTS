@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../modules/utils';
-import { DBUser, QueryType } from '../../modules/db';
+import { QueryType } from '../../modules/db';
 
 interface CommandArgs {
   blacklist: string;

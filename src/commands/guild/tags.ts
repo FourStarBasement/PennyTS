@@ -2,7 +2,7 @@ import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
 import { DBTags } from '../../modules/db';
-import { Member, Guild } from 'detritus-client/lib/structures';
+import { Member } from 'detritus-client/lib/structures';
 
 interface CommandArgs {
   tags: string;
@@ -26,7 +26,13 @@ export const tags = {
     let data = await ctx.commandClient.query(query);
 
     if (data.length == 0) {
-      ctx.reply(`I could not find any tags ${args.tags === 'all' ? 'in this server!' : 'owned by you, try passing `all` if you want the server tags!'} `);
+      ctx.reply(
+        `I could not find any tags ${
+          args.tags === 'all'
+            ? 'in this server!'
+            : 'owned by you, try passing `all` if you want the server tags!'
+        } `
+      );
       return;
     }
 

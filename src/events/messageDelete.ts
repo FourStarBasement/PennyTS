@@ -1,10 +1,7 @@
 import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
-import { ShardClient } from 'detritus-client';
-import { Message, User, Reaction } from 'detritus-client/lib/structures';
 import { DBServer } from '../modules/db';
-import { RestClient } from 'detritus-client/lib/rest';
 import { ModLogActions } from '../modules/modlog';
 
 export const messageDelete = {

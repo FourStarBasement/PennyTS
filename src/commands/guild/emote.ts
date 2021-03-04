@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../modules/utils';
 import { EmbedPaginator } from '../../modules/collectors/embedPaginator';
-import { DBEmotes, DBTags } from '../../modules/db';
+import { DBEmotes } from '../../modules/db';
 
 interface CommandArgs {
   emote: string;

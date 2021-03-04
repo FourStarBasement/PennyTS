@@ -43,12 +43,12 @@ cmdClient.addEvents(events);
   const client = await cmdClient.run();
   const shardClient = client as ShardClient;
   // client has received the READY payload, do stuff now
- // this should (in theory) allow for sharding as the command client (to my knowledge) handles sharding already :)
+  // this should (in theory) allow for sharding as the command client (to my knowledge) handles sharding already :)
   console.log(`Online with ${client.shardCount} shards`);
   cmdClient.ready = true;
 
   // Add owners from config
-  config.owners.forEach(uid => {
+  config.owners.forEach((uid: string) => {
     const user = shardClient.users.get(uid);
     if (!user) {
       /*
@@ -56,10 +56,17 @@ cmdClient.addEvents(events);
        * TODO: fetching from API the best option here? perhaps make a fake user and fill in later
        * Or maybe get from the gateway? a few options here...
        */
-      shardClient.rest.fetchUser(uid).then(apiUser => {
-        shardClient.owners.set(apiUser.id, apiUser);
-        console.log(`Found ${apiUser.name} from the API, added as owner!`);
-      }).catch(_ => console.error(`Failed to add ${uid} as an owner, could not find them!`));
+      shardClient.rest
+        .fetchUser(uid)
+        .then((apiUser) => {
+          shardClient.owners.set(apiUser.id, apiUser);
+          console.log(`Found ${apiUser.name} from the API, added as owner!`);
+        })
+        .catch((_) =>
+          console.error(
+            `Failed to add ${uid} as an owner, could not find them!`
+          )
+        );
       return;
     }
 
@@ -115,9 +122,7 @@ cmdClient.addEvents(events);
       })
         .then((_) =>
           console.log(
-            `[Top-GG_Interval] Posted ${
-              shardClient.guilds.size
-            } guilds to top.gg!`
+            `[Top-GG_Interval] Posted ${shardClient.guilds.size} guilds to top.gg!`
           )
         )
         .catch(console.error);
@@ -136,9 +141,7 @@ cmdClient.addEvents(events);
       )
         .then((_) =>
           console.log(
-            `[Discord Bots.GG_Interval] Posted ${
-              shardClient.guilds.size
-            } guilds to discord.bots.gg!`
+            `[Discord Bots.GG_Interval] Posted ${shardClient.guilds.size} guilds to discord.bots.gg!`
           )
         )
         .catch(console.error);
