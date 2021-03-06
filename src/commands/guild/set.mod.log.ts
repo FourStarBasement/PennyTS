@@ -34,7 +34,7 @@ export const setModLog = {
         channel = ctx.guild!.channels.get(channelID);
       } else if (isNaN(Number(value))) {
         // Channel Name
-        channel = ctx.guild!.channels.find((v, k) => v.name === value);
+        channel = ctx.guild!.channels.find((v) => v.name === value);
       } else {
         // Channel ID (Last Resort)
         channel = ctx.guild!.channels.get(value);

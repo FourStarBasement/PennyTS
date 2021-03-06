@@ -3,7 +3,6 @@ import { CommandClient, GatewayClientEvents } from 'detritus-client';
 import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 import { AuditLog } from 'detritus-client/lib/structures';
-import { RequestTypes } from 'detritus-client-rest/lib/types';
 import { Page, GuildFlags } from '../modules/utils';
 
 export const guildMemberAdd = {

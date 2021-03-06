@@ -502,7 +502,7 @@ export default (
       if (!payload.context.guild) return;
 
       // This handles the auto quoting
-      if (client.hasFlag(payload.context.guild!.flags, GuildFlags.AUTO_QUOTE)) {
+      if (client.hasFlag(payload.context.guild.flags, GuildFlags.AUTO_QUOTE)) {
         let msgReg = /(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(\@me|\d+)\/(\d+)\/(\d+)$/g;
         if (msgReg.test(payload.context.content)) {
           // Due to some amazing JavaScript goodness, I have to redeclare the regex here for it to work. I don't know why. Thank you, JS. Very cool
@@ -573,7 +573,7 @@ export default (
         return;
       // If the command doesn't exist we check if it's a tag
       let content = payload.context.message.content
-        .substr(payload.context.guild.prefix!.length)
+        .substr(payload.context.guild.prefix.length)
         .split(/<@!?(\d+)>/);
       let tag: DBTags = await client
         .preparedQuery(

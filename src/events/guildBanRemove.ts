@@ -2,7 +2,6 @@ import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
-import { PageField } from '../modules/utils';
 import { DBServer } from '../modules/db';
 import { ModLogActions } from '../modules/modlog';
 
@@ -36,7 +35,7 @@ export const guildBanRemove = {
             .then((audit) =>
               audit.find(
                 (v, _) =>
-                  v.target!.id === payload.user!.id &&
+                  v.target!.id === payload.user.id &&
                   new Date().getTime() - v.createdAt.getTime() <= 60_0000
               )
             )
@@ -63,9 +62,7 @@ function makeEmbed(
     embed: {
       author: {
         iconUrl: payload.user.avatarUrl,
-        name: `${payload.user.username}#${payload.user.discriminator} (${
-          payload.user!.id
-        })`,
+        name: `${payload.user.username}#${payload.user.discriminator} (${payload.user.id})`,
       },
       color: 13369344,
       title: 'Member Unbanned',

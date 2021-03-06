@@ -133,13 +133,16 @@ async function prepare(
     }
 
     if (count < r.limit!) {
-      await r.starred.delete().then(async () => {
-        await client.preparedQuery(
-          'DELETE FROM starboard WHERE message_id = $1',
-          [message.id],
-          QueryType.Void
-        );
-      }).catch(() => null);
+      await r.starred
+        .delete()
+        .then(async () => {
+          await client.preparedQuery(
+            'DELETE FROM starboard WHERE message_id = $1',
+            [message.id],
+            QueryType.Void
+          );
+        })
+        .catch(() => null);
     } else {
       await r.starred.edit({
         content: `${emote} ${count} ${emote.id ? emote.name : 'reaction'}s in ${

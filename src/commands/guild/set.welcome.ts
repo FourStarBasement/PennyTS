@@ -127,7 +127,7 @@ export const setWelcome = {
         role = ctx.guild!.roles.get(roleID);
       } else if (isNaN(Number(value))) {
         // Role Name
-        role = ctx.guild!.roles.find((v, k) => v.name === value);
+        role = ctx.guild!.roles.find((v) => v.name === value);
       } else {
         // Role ID (Last Resort)
         role = ctx.guild!.roles.get(value);
