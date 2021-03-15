@@ -123,7 +123,7 @@ async function prepare(
   if (server.starboard_emoji) {
     if (emoji.id) {
       if (message.guild?.emojis.has(starboard_emoji))
-        emote = message.guild!.emojis.get(starboard_emoji)!;
+        emote = message.guild.emojis.get(starboard_emoji)!;
     } else {
       emote.name = starboard_emoji;
     }
@@ -131,12 +131,8 @@ async function prepare(
 
   if (r.original && r.starred) {
     if (reacted.id === r.original.author.id) {
-      await r.original.reactions
-        .get(starboard_emoji)
-        ?.delete(reacted.id);
-      await r.starred.reactions
-        .get(starboard_emoji)
-        ?.delete(reacted.id);
+      await r.original.reactions.get(starboard_emoji)?.delete(reacted.id);
+      await r.starred.reactions.get(starboard_emoji)?.delete(reacted.id);
       console.log(
         `ReactionAdd/Starboard G#${message.guildId}: Self-star: M#${r.original.id} U#${reacted.id}`
       );
@@ -202,7 +198,7 @@ async function prepare(
       }
 
       let stars = (await reaction.fetchUsers()).filter(
-        (v, k) => v.id !== message.author.id
+        (v) => v.id !== message.author.id
       );
 
       if (stars.length >= r.limit!) {

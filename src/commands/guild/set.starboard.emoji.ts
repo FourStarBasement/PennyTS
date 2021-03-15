@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { QueryType, DBServer } from '../../modules/db';
+import { QueryType } from '../../modules/db';
 import { emojiReg } from '../../modules/utils';
 interface CommandArgs {
   'set starboard emoji': string;
