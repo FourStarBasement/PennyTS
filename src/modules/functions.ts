@@ -245,7 +245,7 @@ export default (
         }
       }
       // Add XP to a user if it is needed
-      xpAdd(context, context.guild!.levels);
+      xpAdd(context);
       if (context.message.content.indexOf(prefix) === 0) {
         return prefix;
       }
@@ -617,7 +617,7 @@ export default (
     }
   );
   // This is the function that handled adding experience to people. Keeps the prefixCheck clean
-  async function xpAdd(ctx: Context, enabled: number) {
+  async function xpAdd(ctx: Context) {
     let user = ctx.user;
     // Right now in MS -> subtract xp cool down -> convert to seconds 120 seconds = 2 minutes
     if (Math.floor((Date.now() - user.xp_cool) / 1000) >= 120) {
@@ -631,7 +631,7 @@ export default (
       user.xp_cool = now;
       user.xp += xp;
       if (user.xp > user.next) {
-        if (enabled === 1) {
+        if (client.hasFlag(ctx.guild!.flags, GuildFlags.LEVELS)) {
           ctx.reply(
             `Congrats ${ctx.user.username}! You just leveled up to level ${
               user.level + 1
