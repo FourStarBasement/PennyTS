@@ -46,6 +46,7 @@ export const disable = {
       case 'welcomes':
       case 'welcome':
         ctx.guild!.flags &= ~GuildFlags.WELCOMES;
+        toSay = 'welcome messages';
         break;
       default:
         break;
