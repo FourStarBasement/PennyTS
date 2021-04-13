@@ -28,7 +28,7 @@ const cmdClient = new CommandClient(config.token, {
       },
       status: PresenceStatuses.ONLINE,
     },
-    loadAllMembers: true,
+    loadAllMembers: false,
   },
   useClusterClient: false,
 });
