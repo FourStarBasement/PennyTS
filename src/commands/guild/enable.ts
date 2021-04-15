@@ -55,6 +55,7 @@ export const enable = {
         });
         break;
       case 'edits':
+      case 'role edits':
         ctx.guild!.flags |= GuildFlags.ROLE_EDITS;
         attr = 'role edits';
         break;

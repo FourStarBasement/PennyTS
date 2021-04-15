@@ -4,7 +4,11 @@ import config from '../../modules/config';
 import { DBServer, DBRoles } from '../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../modules/collectors/reactionCollector';
-import { fetchRandomNumber, decimalToHex } from '../../modules/utils';
+import {
+  fetchRandomNumber,
+  decimalToHex,
+  GuildFlags,
+} from '../../modules/utils';
 
 export const edit = {
   name: 'edit',
@@ -24,7 +28,7 @@ export const edit = {
     let guild: DBServer = await ctx.commandClient.queryOne(
       `SELECT edits FROM servers WHERE server_id = ${ctx.guildId}`
     );
-    if (guild.edits !== 1) {
+    if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS)) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
     }

@@ -34,6 +34,7 @@ export const disable = {
         break;
 
       case 'edits':
+      case 'role edits':
         toSay = 'role edits';
         ctx.guild!.flags &= ~GuildFlags.ROLE_EDITS;
         break;
