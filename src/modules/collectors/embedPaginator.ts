@@ -15,7 +15,13 @@ export class EmbedPaginator {
   constructor(ctx: Context, pages: Page[]) {
     this.ctx = ctx;
     this.pages = pages;
-    this.collector = new ReactionCollector(ctx, 30000, this.message, (r, u) =>
+  }
+
+  async start() {
+    this.message = await this.ctx.reply({ embed: this.prepare() });
+    await this.addReactions();
+
+    this.collector = new ReactionCollector(this.ctx, 30000, this.message, (r, u) =>
       this.filter(r, u)
     );
 
@@ -49,11 +55,6 @@ export class EmbedPaginator {
         this.destroy();
       }
     });
-  }
-
-  async start() {
-    this.message = await this.ctx.reply({ embed: this.prepare() });
-    await this.addReactions();
   }
 
   async back() {
