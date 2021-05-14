@@ -79,5 +79,7 @@ export const gamble = {
     collector.on('end', () => {
       ctx.reply('You took too long, gamble cancelled!');
     });
+
+    collector.start();
   },
 };

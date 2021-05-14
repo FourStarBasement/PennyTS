@@ -27,14 +27,38 @@ export class MessageCollector extends EventEmitter {
     this.filter = filter;
     (this.channel as ChannelGuildText) = ctx.channel as ChannelGuildText;
     this.listener = (m: GatewayClientEvents.MessageCreate) => this.verify(m);
+
+    this.once('end', () => {
+      this.destroy();
+    });
+  }
+
+  // Starts a message collector, does not block or wait for the result.
+  start() {
     this.ctx.client.on(ClientEvents.MESSAGE_CREATE, this.listener);
 
     this.destroyTimeout = setTimeout(() => {
       this.emit('end');
-    }, timeout);
+    }, this.timeout);
+  }
 
-    this.once('end', () => {
-      this.destroy();
+  // Starts a message collector, blocks until a result is returned.
+  wait() {
+    return new Promise((resolve, _reject) => {
+      this.listener = (m: GatewayClientEvents.MessageCreate) => {
+        const flag = this.verify(m);
+        if (flag)
+          resolve(m);
+
+        return flag;
+      };
+
+      this.ctx.client.on(ClientEvents.MESSAGE_CREATE, this.listener);
+
+      this.destroyTimeout = setTimeout(() => {
+        resolve();
+        this.emit('end');
+      }, this.timeout);
     });
   }
 
