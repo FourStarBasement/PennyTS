@@ -36,9 +36,10 @@ export const mir = {
         ctx.prefix
       }grab" gets to keep them!`
     );
-    let thing = new MessageCollector(ctx, 30000, filter);
-    thing.on('collect', (m: Message) => {
-      thing.destroy();
+
+    let collector = new MessageCollector(ctx, 30000, filter);
+    collector.on('collect', (m: Message) => {
+      collector.destroy();
       ctx.commandClient.query(
         `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
           m.member!.id
@@ -49,7 +50,7 @@ export const mir = {
       );
     });
 
-    thing.on('end', () => {
+    collector.on('end', () => {
       ctx.reply('It seems as if no one has picked up the credits. Oh well.');
       ctx.commandClient.query(
         `UPDATE users SET credits = credits + ${cr} WHERE user_id = ${
@@ -57,5 +58,7 @@ export const mir = {
         }`
       );
     });
+
+    collector.start();
   },
 };

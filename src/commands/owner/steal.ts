@@ -112,6 +112,8 @@ export const steal: CommandOptions = {
       collector.on('end', () => {
         ctx.reply('Why do you type so slow dude.');
       });
+
+      collector.start();
     } else {
       await createEmoji(ctx, emojis, r, 0, true);
     }

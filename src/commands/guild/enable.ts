@@ -19,6 +19,7 @@ export const enable = {
       ctx.reply(
         `Usage: ${ctx.prefix}enable [levels/mod logs/role edits/auto quotes/welcomes]`
       );
+      return;
     }
 
     let attr: string = '';
@@ -53,6 +54,8 @@ export const enable = {
         collector.on('end', () => {
           attr = `mod logs. You did not set a mod log channel. You can set one by doing ${ctx.prefix}set mod log channel #channel`;
         });
+
+        await collector.wait();
         break;
       case 'edits':
       case 'role edits':
