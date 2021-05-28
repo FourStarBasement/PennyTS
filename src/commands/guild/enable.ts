@@ -71,6 +71,7 @@ export const enable = {
       case 'welcomes':
       case 'welcome':
         ctx.guild!.flags |= GuildFlags.WELCOMES;
+        attr = 'welcome messages';
         break;
       default:
         break;
