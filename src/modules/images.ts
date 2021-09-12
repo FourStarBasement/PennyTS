@@ -203,7 +203,7 @@ export default {
       'https://data.whicdn.com/images/69819901/original.gif',
       'https://media1.tenor.com/images/112c2abcf585b37e6c6950ebc3ab4168/tenor.gif',
       'https://lh4.googleusercontent.com/-xxPcIb2lzAw/VIkdc2oRu7I/AAAAAAAAJrU/4bIJ8zJl9hE/w426-h239/Kill%2Bla%2Bkill%2B2.gif',
-      'http://i0.kym-cdn.com/photos/images/original/000/906/455/51f.gif',
+      'http://i.kym-cdn.com/photos/images/original/000/906/455/51f.gif',
       'https://media.giphy.com/media/IFqVnhA55IUdG/giphy.gif',
       'http://mrwgifs.com/wp-content/uploads/2013/09/Awkward-Hug-Gif-In-Americas-Next-Top-Model.gif',
       'https://vignette.wikia.nocookie.net/teen-titans-go/images/4/49/No_Hugs.gif',
