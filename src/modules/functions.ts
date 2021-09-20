@@ -414,7 +414,7 @@ export default (
     if (starData) {
       starMessage = await starboard?.fetchMessage(starData.star_id);
       starredMessage = await channels
-        .get(chanReg.exec(starMessage.content)![1])
+        .get(chanReg.exec(starMessage!.content)![1])
         ?.fetchMessage(starData.message_id);
     }
 
@@ -512,7 +512,7 @@ export default (
 
           let msg: Message = await (client.client as ShardClient).channels
             .get(arr[2])
-            ?.fetchMessage(arr[3]);
+            ?.fetchMessage(arr[3])!;
           if (msg && !msg.channel?.nsfw) {
             let embed: Page = {
               author: {

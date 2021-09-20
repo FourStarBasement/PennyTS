@@ -1,10 +1,19 @@
 import config from './modules/config';
 import commands from './commands/index';
-import ownerCommands from './commands/owner/index';
+import ownerCommands from './commands/bot/owner/index';
+import slashCommands from './commands/slash/index';
 import functions from './modules/functions';
-import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
+import {
+  PresenceStatuses,
+  ActivityTypes,
+  InteractionCallbackTypes,
+} from 'detritus-client/lib/constants';
 
-import { CommandClient, ShardClient } from 'detritus-client';
+import {
+  CommandClient,
+  ShardClient,
+  InteractionCommandClient,
+} from 'detritus-client';
 import events from './events';
 import { Range } from 'node-schedule';
 
@@ -32,15 +41,19 @@ const cmdClient = new CommandClient(config.token, {
   },
   useClusterClient: false,
 });
-
-functions(cmdClient, connection);
+const interactionClient = new InteractionCommandClient(cmdClient);
+functions(cmdClient, connection, interactionClient);
 //cmdClient.addMultipleIn('../src/commands');
 cmdClient.addMultiple(commands);
+interactionClient.addMultiple(slashCommands);
+
 cmdClient.addOwnerOnly(ownerCommands);
 cmdClient.addEvents(events);
 
 (async () => {
   const client = await cmdClient.run();
+  await interactionClient.run().catch(console.error);
+
   const shardClient = client as ShardClient;
   // client has received the READY payload, do stuff now
   // this should (in theory) allow for sharding as the command client (to my knowledge) handles sharding already :)

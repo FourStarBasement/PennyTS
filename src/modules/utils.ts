@@ -4,6 +4,7 @@ import {
   ChannelGuildText,
   User,
   Member,
+  Channel,
 } from 'detritus-client/lib/structures';
 import { Context } from 'detritus-client/lib/command';
 import { Duration } from 'moment';
@@ -112,7 +113,7 @@ export interface EventHandler {
 export interface FetchedStarData {
   original?: Message;
   starred?: Message;
-  starboard?: ChannelGuildText;
+  starboard?: Channel;
   limit?: number;
 }
 
