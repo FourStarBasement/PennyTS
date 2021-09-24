@@ -19,6 +19,12 @@ export const highlightAdd = {
     },
   ],
   run: async (ctx: InteractionContext, args: CommandArgs) => {
+    if (args.term.split(' ').length > 1) {
+      ctx.editOrRespond(
+        'The highlight feature only works with single word terms. For example: `/highlight-add wiggy`'
+      );
+      return;
+    }
     if (args.term.length < 2) {
       ctx.editOrRespond(
         'This term is too short! Please pick a work greater than 2 characters.'
