@@ -276,7 +276,11 @@ export default (
 
       for (let i = 0; i < context.guild.terms.length; i++) {
         let term = context.guild.terms[i].toLowerCase();
-        if (context.content.toLowerCase().includes(term)) {
+        if (
+          context.content.toLowerCase().includes(term + ' ') ||
+          context.content.toLowerCase().includes(' ' + term) ||
+          context.content.toLowerCase() === term.toLowerCase()
+        ) {
           context.guild.highlights.forEach((terms: string[], owner: string) => {
             if (terms.includes(term)) {
               setTimeout(async () => {
@@ -350,6 +354,13 @@ export default (
       'UPDATE users SET used = used + 1 WHERE user_id = $1',
       [cmd.context.userId],
       QueryType.Void
+    );
+  });
+  interactionClient.on('commandRan', async (cmd) => {
+    console.log(
+      `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.userId} ${
+        cmd.context.user.username
+      } ran interaction: ${cmd.command.name}`
     );
   });
 
