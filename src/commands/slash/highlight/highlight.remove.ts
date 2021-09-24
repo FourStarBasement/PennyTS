@@ -40,8 +40,12 @@ export const highlightRemove = {
         QueryType.Void
       )
       .catch(console.error);
+    if (!ctx.guild?.highlights) ctx.guild!.highlights = new Map();
     let userCache = ctx.guild?.highlights.get(ctx.userId);
-    if (!userCache) ctx.guild?.highlights.set(ctx.userId, []);
+    if (!userCache) {
+      ctx.guild?.highlights.set(ctx.userId, []);
+      userCache = [];
+    }
 
     userCache?.splice(userCache.indexOf(args.term), 1);
     ctx.guild?.highlights.set(ctx.userId, userCache!);

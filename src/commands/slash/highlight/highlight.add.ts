@@ -44,8 +44,12 @@ export const highlightAdd = {
         QueryType.Void
       )
       .catch(console.error);
+    if (!ctx.guild?.highlights) ctx.guild!.highlights = new Map();
     let userCache = ctx.guild?.highlights.get(ctx.userId);
-    if (!userCache) ctx.guild?.highlights.set(ctx.userId, []);
+    if (!userCache) {
+      ctx.guild?.highlights.set(ctx.userId, []);
+      userCache = [];
+    }
 
     userCache?.push(args.term.toLowerCase());
     ctx.guild?.highlights.set(ctx.userId, userCache!);
