@@ -27,7 +27,7 @@ import {
   DisabledCommand,
   DBHighlights,
 } from './db';
-import { ClientEvents } from 'detritus-client/lib/constants';
+import { ClientEvents, Permissions } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
 import { InteractionCommandClient } from 'detritus-client';
@@ -273,7 +273,6 @@ export default (
           });
         });
       }
-
       for (let i = 0; i < context.guild.terms.length; i++) {
         let term = context.guild.terms[i].toLowerCase();
         if (
@@ -297,20 +296,26 @@ export default (
                       );
                     }).length === 0
                   ) {
-                    context.client.users
-                      .get(owner)!
-                      .createMessage({
-                        embed: {
-                          color: 9043849,
-                          title: `Someone mentioned *${term}*`,
-                          description: `In <#${context.channelId}>:\n**\n${context.message.author.username}**: ${context.message.content}\n\n[**Jump!**](${context.message.jumpLink}) to this message`,
-                          footer: {
-                            text: `In server: ${context.guild!.name}`,
-                            iconUrl: context.guild!.iconUrl!,
+                    let user = context.guild?.members.get(owner)!;
+                    if (
+                      (context.member!.permissionsIn(context.channel!) &
+                        Permissions.VIEW_CHANNEL.valueOf()) ==
+                      Permissions.VIEW_CHANNEL.valueOf()
+                    ) {
+                      user
+                        .createMessage({
+                          embed: {
+                            color: 9043849,
+                            title: `Someone mentioned *${term}*`,
+                            description: `In <#${context.channelId}>:\n**\n${context.message.author.username}**: ${context.message.content}\n\n[**Jump!**](${context.message.jumpLink}) to this message`,
+                            footer: {
+                              text: `In server: ${context.guild!.name}`,
+                              iconUrl: context.guild!.iconUrl!,
+                            },
                           },
-                        },
-                      })
-                      .catch(console.error);
+                        })
+                        .catch(console.error);
+                    }
                   }
                 }
               }, 5000);
