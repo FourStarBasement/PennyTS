@@ -18,11 +18,11 @@ export const messageReactionRemove = {
 
     let channel = shardClient.channels.get(payload.channelId)!;
     let message: Message =
-      payload.message || (await channel.fetchMessage(payload.messageId).catch((_) => null));
+      payload.message ||
+      (await channel.fetchMessage(payload.messageId).catch());
 
     // The message could already be removed from our reaction collector
-    if (!message)
-      return;
+    if (!message) return;
 
     let author = message.author;
 

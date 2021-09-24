@@ -23,6 +23,7 @@ export interface DBEmotes {
 }
 
 export interface DBRoles {
+  count?: number;
   guild: bigint;
   role: bigint;
 }
@@ -102,4 +103,10 @@ export interface DisabledCommand {
   count?: number;
   channel_id?: string;
   server_id?: string;
+}
+
+export interface DBHighlights {
+  server_id: string;
+  user_id: string;
+  terms: string[];
 }

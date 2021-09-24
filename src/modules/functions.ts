@@ -25,10 +25,13 @@ import {
   DBTags,
   QueryType,
   DisabledCommand,
+  DBHighlights,
 } from './db';
-import { ClientEvents } from 'detritus-client/lib/constants';
+import { ClientEvents, Permissions } from 'detritus-client/lib/constants';
 import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
+import { InteractionCommandClient } from 'detritus-client';
+import { InteractionCommand } from 'detritus-client/lib/interaction';
 
 // Additional properties/functions to access on the Guild
 declare module 'detritus-client/lib/structures/guild' {
@@ -41,6 +44,8 @@ declare module 'detritus-client/lib/structures/guild' {
     checked: boolean;
     avgColor: number;
     flags: GuildFlags;
+    highlights: Map<string, string[]>;
+    terms: string[];
   }
 }
 
@@ -86,7 +91,8 @@ declare module 'detritus-client/lib/commandclient' {
 
 export default (
   client: CommandClient,
-  connection: pgPromise.IBaseProtocol<{}>
+  connection: pgPromise.IBaseProtocol<{}>,
+  interactionClient: InteractionCommandClient
 ) => {
   // SQL queries to return promises so we can await them
   client.query = (query: string) => {
@@ -179,6 +185,9 @@ export default (
   client.checkGuild = async (id: string) => {
     const guild = (client.client as ShardClient).guilds.get(id);
     if (!guild) return;
+
+    if (!guild.highlights) guild.highlights = new Map();
+    if (!guild.terms) guild.terms = [];
     let result: DBServer = await client
       .queryOne(
         `SELECT server_id, modlog_perm, flags FROM servers WHERE server_id = ${id}`
@@ -246,6 +255,76 @@ export default (
       }
       // Add XP to a user if it is needed
       xpAdd(context);
+
+      let userCache = context.guild?.highlights.get(context.userId);
+      if (!userCache) {
+        let t: DBHighlights = await client.queryOne(
+          `SELECT terms FROM highlights WHERE user_id = '${context.userId}' AND server_id = '${context.guildId}'`
+        );
+        if (t) context.guild.highlights.set(context.userId, t.terms || []);
+        else context.guild.highlights.set(context.userId, []);
+
+        userCache = context.guild?.highlights.get(context.userId);
+        context.guild.highlights.forEach((terms: string[]) => {
+          terms.forEach((term: string) => {
+            if (!context.guild?.terms.includes(term)) {
+              context.guild?.terms.push(term);
+            }
+          });
+        });
+      }
+      for (let i = 0; i < context.guild.terms.length; i++) {
+        let term = context.guild.terms[i].toLowerCase();
+        if (
+          context.content.toLowerCase().includes(term + ' ') ||
+          context.content.toLowerCase().includes(' ' + term) ||
+          context.content.toLowerCase() === term.toLowerCase()
+        ) {
+          context.guild.highlights.forEach((terms: string[], owner: string) => {
+            if (terms.includes(term)) {
+              setTimeout(async () => {
+                if (context.userId !== owner) {
+                  let messages = await context.channel?.fetchMessages({
+                    limit: 5,
+                  });
+                  if (
+                    messages?.filter((msg: Message) => {
+                      return (
+                        msg.author.id === owner &&
+                        msg.createdAt.getTime() >
+                          context.message.createdAt.getTime()
+                      );
+                    }).length === 0
+                  ) {
+                    let user = context.guild?.members.get(owner)!;
+                    if (
+                      (context.member!.permissionsIn(context.channel!) &
+                        Permissions.VIEW_CHANNEL.valueOf()) ==
+                      Permissions.VIEW_CHANNEL.valueOf()
+                    ) {
+                      user
+                        .createMessage({
+                          embed: {
+                            color: 9043849,
+                            title: `Someone mentioned *${term}*`,
+                            description: `In <#${context.channelId}>:\n**\n${context.message.author.username}**: ${context.message.content}\n\n[**Jump!**](${context.message.jumpLink}) to this message`,
+                            footer: {
+                              text: `In server: ${context.guild!.name}`,
+                              iconUrl: context.guild!.iconUrl!,
+                            },
+                          },
+                        })
+                        .catch(console.error);
+                    }
+                  }
+                }
+              }, 5000);
+            }
+          });
+          break;
+        }
+      }
+
       if (context.message.content.indexOf(prefix) === 0) {
         return prefix;
       }
@@ -280,6 +359,13 @@ export default (
       'UPDATE users SET used = used + 1 WHERE user_id = $1',
       [cmd.context.userId],
       QueryType.Void
+    );
+  });
+  interactionClient.on('commandRan', async (cmd) => {
+    console.log(
+      `[${cmd.context.guildId || 'No Guild'}] ${cmd.context.userId} ${
+        cmd.context.user.username
+      } ran interaction: ${cmd.command.name}`
     );
   });
 
@@ -414,7 +500,7 @@ export default (
     if (starData) {
       starMessage = await starboard?.fetchMessage(starData.star_id);
       starredMessage = await channels
-        .get(chanReg.exec(starMessage.content)![1])
+        .get(chanReg.exec(starMessage!.content)![1])
         ?.fetchMessage(starData.message_id);
     }
 
@@ -453,6 +539,14 @@ export default (
       console.log('Loaded Owner Only Command', command.name);
     });
     return client;
+  };
+  // This adds commands based on classes
+  interactionClient.addMultiple = (commands?: InteractionCommand[]) => {
+    commands?.forEach(async (command) => {
+      interactionClient.add(command);
+      console.log('Loaded Slash Command', command.name);
+    });
+    return interactionClient;
   };
 
   // This adds events based on classes
@@ -512,7 +606,7 @@ export default (
 
           let msg: Message = await (client.client as ShardClient).channels
             .get(arr[2])
-            ?.fetchMessage(arr[3]);
+            ?.fetchMessage(arr[3])!;
           if (msg && !msg.channel?.nsfw) {
             let embed: Page = {
               author: {
@@ -649,6 +743,8 @@ export default (
       }
     }
   }
+
+  async function highlight(ctx: Context) {}
 
   // This function fetches an image's average color.
   client.fetchAverageColor = async (input: string): Promise<number> => {
