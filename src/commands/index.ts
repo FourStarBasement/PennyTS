@@ -71,7 +71,6 @@ import { fm } from './bot/standard/fm';
 import { fmAdd } from './bot/standard/fm.add';
 import { fmStats } from './bot/standard/fm.stats';
 // import { claim } from './profile/claim';
-import { blacklist } from './bot/guild/blacklist';
 export default [
   avatar,
   daily,
@@ -146,5 +145,4 @@ export default [
   fmStats,
   fmAdd,
   fm,
-  blacklist,
 ];
