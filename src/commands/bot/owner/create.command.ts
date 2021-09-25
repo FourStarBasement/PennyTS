@@ -1,6 +1,6 @@
 import { Context, CommandOptions } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
-import config from '../../modules/config';
+import config from '../../../modules/config';
 
 export const createCommand: CommandOptions = {
   name: 'create command',
