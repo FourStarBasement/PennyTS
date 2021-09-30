@@ -5,7 +5,7 @@ export default {
     owner: '', // Owner prefix (p@ on Penny)
   },
 
-  owners: [],
+  owners: [], // list of strings
 
   imageAPI: {
     url: '',
@@ -38,4 +38,5 @@ export default {
   lastFM: {
     key: '',
   },
+  stealHubID: '',
 };
