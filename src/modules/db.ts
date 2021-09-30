@@ -16,14 +16,46 @@ export enum UserFlags {
   BugFinder = 1 << 6,
 }
 
-export interface DBEmotes {
+export enum ServerFlags {
+  UNSET = 0,
+  LEVELS = 1 << 0,
+  MOD_LOGS = 1 << 1,
+  AUTO_QUOTE = 1 << 2,
+  AUTO_ROLE = 1 << 3,
+  PREMIUM = 1 << 4, // I have no clue if I will ever use this one but there just in case
+  WELCOMES = 1 << 5,
+  SELF_ROLE = 1 << 6,
+  ROLE_EDITS = 1 << 7,
+}
+
+export enum ModLogActionFlags {
+  UNSET = 0,
+  CHANNEL_CREATE = 1 << 0,
+  CHANNEL_UPDATE = 1 << 1,
+  CHANNEL_DELETE = 1 << 2,
+  GUILD_ROLE_CREATE = 1 << 3,
+  GUILD_ROLE_UPDATE = 1 << 4,
+  GUILD_ROLE_DELETE = 1 << 5,
+  CHANNEL_PINS_UPDATE = 1 << 6,
+  GUILD_MEMBER_ADD = 1 << 7,
+  GUILD_MEMBER_UPDATE = 1 << 8,
+  GUILD_MEMBER_REMOVE = 1 << 9,
+  GUILD_BAN_ADD = 1 << 10,
+  GUILD_BAN_REMOVE = 1 << 11,
+  GUILD_EMOJIS_UPDATE = 1 << 12,
+  INVITE_CREATE = 1 << 13,
+  INVITE_DELETE = 1 << 14,
+  MESSAGE_DELETE = 1 << 15,
+  MESSAGE_DELETE_BULK = 1 << 16,
+}
+
+export interface DBEmote {
   server_id: BigInt;
-  emote_id: string;
+  emote_id: BigInt;
   used: number;
 }
 
-export interface DBRoles {
-  count?: number;
+export interface DBRole {
   guild: bigint;
   role: bigint;
 }
@@ -41,10 +73,10 @@ export interface DBServer {
   starboard_channel: BigInt;
   mod_log: number;
   mod_channel: BigInt;
-  modlog_perm: string;
+  modlog_perm: ModLogActionFlags;
   star_limit: number;
-  starboard_emoji: string | number;
-  flags: number;
+  starboard_emoji: string;
+  flags: ServerFlags;
 }
 
 export interface DBStarboard {
@@ -52,61 +84,54 @@ export interface DBStarboard {
   star_id: BigInt;
 }
 
-export interface DBTags {
-  id: string;
+export interface DBTag {
+  tag_id: string;
   name: string;
-  owner: string;
+  owner_id: BigInt;
   content: string;
-  guild: string;
+  guild_id: BigInt;
   used: number;
 }
 
 export interface DBUser {
   user_id: BigInt;
-  credits: bigint;
-  daily_time: number;
+  credits: BigInt;
+  daily_time: boolean;
   used: number;
   highfives: number;
   blacklisted: boolean;
   xp: number;
   level: number;
-  xp_cool: Date;
   next: number;
   warns: number;
-  cookie_time: number;
+  cookie_time: boolean;
   cookies: number;
   background: string;
   emblem: string;
   token: string;
-  flags: number;
+  flags: UserFlags;
+  xp_cool: BigInt;
   last_fm_name: string;
 }
 
-export interface DBUserBackgrounds {
+export interface DBUserBackground {
   user_id: BigInt;
   name: string;
 }
 
-export interface DBUserEmblems {
+export interface DBUserEmblem {
   emblem: string;
   user_id: BigInt;
 }
 
-// Deserialise some starboard stuff
-export interface StarData {
-  count: number;
-  message_id: string;
-  star_id: string;
+export interface DBDisabledCommand {
+  command: string;
+  channel_id?: BigInt;
+  server_id?: BigInt;
 }
 
-export interface DisabledCommand {
-  count?: number;
-  channel_id?: string;
-  server_id?: string;
-}
-
-export interface DBHighlights {
-  server_id: string;
-  user_id: string;
-  terms: string[];
+export interface DBHighlight {
+  server_id: BigInt;
+  user_id: BigInt;
+  terms?: string[];
 }
