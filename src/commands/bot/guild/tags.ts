@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../../modules/utils';
 import { EmbedPaginator } from '../../../modules/collectors/embedPaginator';
-import { DBTags } from '../../../modules/db';
+import { DBTag } from '../../../modules/db';
 import { Member } from 'detritus-client/lib/structures';
 
 interface CommandArgs {
@@ -36,13 +36,14 @@ export const tags = {
       return;
     }
 
+    // TODO: review.
     let pages = new Array<Page>();
-    let emotes = new Array<Array<DBTags>>();
+    let emotes = new Array<Array<DBTag>>();
     for (let i = 0; i < data.length; i += 6) {
       emotes.push(data.slice(i, i + 6));
     }
 
-    emotes.forEach((emote: Array<DBTags>) => {
+    emotes.forEach((emote: Array<DBTag>) => {
       pages.push(embed(ctx, emote));
     });
     new EmbedPaginator(ctx, pages).start();
@@ -50,7 +51,7 @@ export const tags = {
   },
 };
 
-function embed(ctx: Context, tags: Array<DBTags>): Page {
+function embed(ctx: Context, tags: Array<DBTag>): Page {
   let user = (ctx.commandClient.fetchGuildMember(ctx) as Member) || ctx.member!;
   let e: Page = {
     title: `Tags for ${user.username}`,
@@ -69,7 +70,7 @@ function embed(ctx: Context, tags: Array<DBTags>): Page {
       color: ctx.guild?.avgColor,
       fields: [],
     };
-  tags.forEach((tag: DBTags, _i: number) => {
+  tags.forEach((tag: DBTag, _i: number) => {
     e.fields?.push({
       name: `${tag.name}    ​   ​`,
       value: `${tag.used} uses.`,

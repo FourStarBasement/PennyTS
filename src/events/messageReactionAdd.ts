@@ -26,7 +26,7 @@ export const messageReactionAdd = {
     let server: DBServer = await client.queryOne(
       `SELECT starboard_emoji FROM servers WHERE server_id = ${payload.guildId}`
     );
-    if (isNaN(server.starboard_emoji as number)) {
+    if (isNaN(parseInt(server.starboard_emoji))) {
       if (payload.reaction.emoji.name !== server.starboard_emoji) return;
     } else {
       if (server.starboard_emoji !== payload.reaction.emoji.id) return;

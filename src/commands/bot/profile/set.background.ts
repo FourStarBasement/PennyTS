@@ -62,7 +62,8 @@ export const setBackground = {
         return;
       }
 
-      if (price > data.credits) {
+      // TODO: fix
+      if (BigInt(price) > data.credits) {
         ctx.reply('You do not have enough credits for this background.');
         return;
       }

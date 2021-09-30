@@ -3,8 +3,7 @@ import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
 import { PageField } from '../modules/utils';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ModLogActionFlags, DBServer } from '../modules/db';
 
 export const guildBanAdd = {
   event: ClientEvents.GUILD_BAN_ADD,
@@ -26,8 +25,8 @@ export const guildBanAdd = {
       let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
-          (ModLogActions.GUILD_BAN_ADD & guild.modLog) ===
-          ModLogActions.GUILD_BAN_ADD
+          (ModLogActionFlags.GUILD_BAN_ADD & guild.modLog) ===
+          ModLogActionFlags.GUILD_BAN_ADD
         ) {
           let auditLog = await guild
             .fetchAuditLogs({

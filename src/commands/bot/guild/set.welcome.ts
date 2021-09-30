@@ -1,11 +1,11 @@
 import { Context } from 'detritus-client/lib/command';
-import { chanReg, roleReg, GuildFlags } from '../../../modules/utils';
+import { chanReg, roleReg } from '../../../modules/utils';
 import {
   Channel,
   ChannelGuildText,
   Role,
 } from 'detritus-client/lib/structures';
-import { QueryType } from '../../../modules/db';
+import { QueryType, ServerFlags } from '../../../modules/db';
 
 export const setWelcome = {
   name: 'set welcome',
@@ -25,7 +25,7 @@ export const setWelcome = {
     let value = splitArgs.join(' ');
 
     if (attr === 'on') {
-      ctx.guild!.flags |= GuildFlags.WELCOMES;
+      ctx.guild!.flags |= ServerFlags.WELCOMES;
       ctx.commandClient
         .query(
           `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${
@@ -39,7 +39,7 @@ export const setWelcome = {
     }
 
     if (attr === 'off') {
-      ctx.guild!.flags &= ~GuildFlags.WELCOMES;
+      ctx.guild!.flags &= ~ServerFlags.WELCOMES;
       ctx.commandClient
         .query(
           `UPDATE servers SET flags = ${ctx.guild!.flags} WHERE server_id = ${

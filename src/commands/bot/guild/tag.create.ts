@@ -59,7 +59,7 @@ export const tagCreate = {
     }
 
     await ctx.commandClient.preparedQuery(
-      'INSERT INTO tags (id, name, owner_id, content, guild_id) VALUES ($1, $2, $3, $4, $5)',
+      'INSERT INTO tags (tag_id, name, owner_id, content, guild_id) VALUES ($1, $2, $3, $4, $5)',
       [Date.now().toString(16), name, ctx.user.id, content, ctx.guildId],
       QueryType.Void
     );

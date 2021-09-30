@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import { Page } from '../../../modules/utils';
 import { EmbedPaginator } from '../../../modules/collectors/embedPaginator';
-import { DBEmotes } from '../../../modules/db';
+import { DBEmote } from '../../../modules/db';
 
 interface CommandArgs {
   emote: string;
@@ -61,21 +61,23 @@ export const emote = {
         ctx.reply("This server doesn't have any emojis!");
         return;
       }
-      let data: DBEmotes[] = await ctx.commandClient.query(
+      let data: DBEmote[] = await ctx.commandClient.query(
         `SELECT * FROM emote WHERE server_id = ${ctx.guildId}`
       );
       if (ctx.guild!.emojis.length < 1 || data.length < 1) {
         ctx.reply("This server doesn't have any emojis!");
         return;
       }
-      data.sort((a: DBEmotes, b: DBEmotes) => b.used - a.used);
+      data.sort((a: DBEmote, b: DBEmote) => b.used - a.used);
+
+      // TODO: review.
       let pages: Page[] = [];
-      let emotes: DBEmotes[][] = [];
+      let emotes: DBEmote[][] = [];
       for (let i = 0; i < data.length; i += 5) {
         emotes.push(data.slice(i, i + 5));
       }
 
-      emotes.forEach((emote: Array<DBEmotes>) => {
+      emotes.forEach((emote: Array<DBEmote>) => {
         pages.push(embed(ctx, emote));
       });
       new EmbedPaginator(ctx, pages).start();
@@ -87,7 +89,7 @@ export const emote = {
   },
 };
 
-function embed(ctx: Context, emotes: Array<DBEmotes>): Page {
+function embed(ctx: Context, emotes: Array<DBEmote>): Page {
   let e: Page = {
     title: `Emoji stats for ${ctx.guild!.name}.`,
     author: {
@@ -97,7 +99,7 @@ function embed(ctx: Context, emotes: Array<DBEmotes>): Page {
     color: 9043849,
   };
   emotes.forEach(async (em) => {
-    if (!ctx.guild?.emojis.get(em.emote_id)) {
+    if (!ctx.guild?.emojis.get(em.emote_id.toString())) {
       await ctx.commandClient.query(
         `DELETE FROM emote WHERE emote_id = ${em.emote_id}`
       );
@@ -105,8 +107,8 @@ function embed(ctx: Context, emotes: Array<DBEmotes>): Page {
     }
     e.fields?.push({
       name: `${
-        ctx.guild?.emojis.get(em.emote_id)?.name
-      }: ${ctx.guild?.emojis.get(em.emote_id)}`,
+        ctx.guild?.emojis.get(em.emote_id.toString())?.name
+      }: ${ctx.guild?.emojis.get(em.emote_id.toString())}`,
       value: `Used: ${em.used}`,
     });
   });

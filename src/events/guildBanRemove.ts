@@ -2,8 +2,7 @@ import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ModLogActionFlags, DBServer } from '../modules/db';
 
 export const guildBanRemove = {
   event: ClientEvents.GUILD_BAN_REMOVE,
@@ -25,8 +24,8 @@ export const guildBanRemove = {
       let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
-          (ModLogActions.GUILD_BAN_REMOVE & guild.modLog) ===
-          ModLogActions.GUILD_BAN_REMOVE
+          (ModLogActionFlags.GUILD_BAN_REMOVE & guild.modLog) ===
+          ModLogActionFlags.GUILD_BAN_REMOVE
         ) {
           let auditLog = await guild
             .fetchAuditLogs({

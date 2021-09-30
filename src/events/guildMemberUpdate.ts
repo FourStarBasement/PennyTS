@@ -3,8 +3,7 @@ import { GatewayClientEvents, CommandClient } from 'detritus-client';
 import { AuditLog } from 'detritus-client/lib/structures';
 import { RequestTypes } from 'detritus-client-rest/lib/types';
 import { PageField, escapeMarkdown } from '../modules/utils';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ModLogActionFlags, DBServer } from '../modules/db';
 
 export const guildMemberUpdate = {
   event: ClientEvents.GUILD_MEMBER_UPDATE,
@@ -26,8 +25,8 @@ export const guildMemberUpdate = {
       let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
-          (ModLogActions.GUILD_MEMBER_UPDATE & guild.modLog) ===
-          ModLogActions.GUILD_MEMBER_UPDATE
+          (ModLogActionFlags.GUILD_MEMBER_UPDATE & guild.modLog) ===
+          ModLogActionFlags.GUILD_MEMBER_UPDATE
         ) {
           let auditLog = await guild
             .fetchAuditLogs({

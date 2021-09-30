@@ -1,9 +1,8 @@
 import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { CommandClient, GatewayClientEvents } from 'detritus-client';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ServerFlags, ModLogActionFlags, DBServer } from '../modules/db';
 import { AuditLog, Guild, Member } from 'detritus-client/lib/structures';
-import { Page, GuildFlags } from '../modules/utils';
+import { Page } from '../modules/utils';
 
 export const guildMemberAdd = {
   event: ClientEvents.GUILD_MEMBER_ADD,
@@ -39,8 +38,8 @@ async function maybeModLog(
   let channel = guild.channels.get(server.mod_channel.toString());
   if (channel) {
     if (
-      (ModLogActions.GUILD_MEMBER_ADD & guild.modLog) ===
-      ModLogActions.GUILD_MEMBER_ADD
+      (ModLogActionFlags.GUILD_MEMBER_ADD & guild.modLog) ===
+      ModLogActionFlags.GUILD_MEMBER_ADD
     ) {
       if (member.bot) {
         guild
@@ -69,13 +68,14 @@ async function maybeWelcome(
   guild: Guild,
   server: DBServer
 ) {
-  if (!client.hasFlag(server.flags, GuildFlags.WELCOMES)) return;
+  if (!client.hasFlag(server.flags, ServerFlags.WELCOMES)) return;
   if (server.welcome_role) {
     const role = guild.roles.get(server.welcome_role.toString());
     if (role) {
       await member.addRole(role.id);
     }
   }
+
   const channel = guild.channels.get(server.welcome_channel.toString());
 
   if (channel) {

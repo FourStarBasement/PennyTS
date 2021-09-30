@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionTypes } from 'detritus-client/lib/constants';
 import { InteractionContext } from 'detritus-client/lib/interaction';
-import { DBHighlights, QueryType } from '../../../modules/db';
+import { DBHighlight, QueryType } from '../../../modules/db';
 
 interface CommandArgs {
   term: string;
@@ -31,7 +31,7 @@ export const highlightAdd = {
       );
       return;
     }
-    let d: DBHighlights[] = await ctx.client.commandClient!.query(
+    let d: DBHighlight[] = await ctx.client.commandClient!.query(
       `SELECT * FROM highlights WHERE user_id = '${ctx.userId}' AND server_id = '${ctx.guildId}'`
     );
     if (d.length === 0)

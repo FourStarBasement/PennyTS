@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { stringExtractor } from '../../../modules/utils';
-import { QueryType } from '../../../modules/db';
+import { DBTag, QueryType } from '../../../modules/db';
 
 interface CommandArgs {
   'tag info': string;
@@ -27,8 +27,8 @@ export const tagInfo = {
     if (quotes.includes(args['tag info'].charAt(0)))
       name = stringExtractor(args['tag info'])[0];
     else name = tagArg[0];
-    let data = await ctx.commandClient.preparedQuery(
-      'SELECT id, used, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
+    let data : DBTag = await ctx.commandClient.preparedQuery(
+      'SELECT tag_id, used, owner_id FROM tags WHERE guild_id = $1 AND name = $2',
       [ctx.guildId, name],
       QueryType.Single
     );
@@ -38,7 +38,7 @@ export const tagInfo = {
       return;
     }
 
-    let user = ctx.guild?.members.get(data.owner_id);
+    let user = ctx.guild?.members.get(data.owner_id.toString());
 
     if (!user) {
       ctx.reply('The owner of this tag has left the server.');
@@ -58,11 +58,11 @@ export const tagInfo = {
           },
           {
             name: 'Tag ID',
-            value: data.id,
+            value: data.tag_id,
           },
           {
             name: 'Uses',
-            value: data.used,
+            value: data.used.toString(),
           },
         ],
       },

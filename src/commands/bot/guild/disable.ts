@@ -1,5 +1,5 @@
 import { Context } from 'detritus-client/lib/command';
-import { GuildFlags } from '../../../modules/utils';
+import { ServerFlags } from '../../../modules/db';
 
 interface CommandArgs {
   disable: string;
@@ -25,28 +25,28 @@ export const disable = {
     switch (args.disable) {
       case 'levels':
         toSay = 'level up messages';
-        ctx.guild!.flags &= ~GuildFlags.LEVELS;
+        ctx.guild!.flags &= ~ServerFlags.LEVELS;
         break;
 
       case 'mod logs':
         toSay = 'mod logs';
-        ctx.guild!.flags &= ~GuildFlags.MOD_LOGS;
+        ctx.guild!.flags &= ~ServerFlags.MOD_LOGS;
         break;
 
       case 'edits':
       case 'role edits':
         toSay = 'role edits';
-        ctx.guild!.flags &= ~GuildFlags.ROLE_EDITS;
+        ctx.guild!.flags &= ~ServerFlags.ROLE_EDITS;
         break;
       case 'auto quote':
       case 'auto quotes':
       case 'quotes':
         toSay = 'auto message quoting';
-        ctx.guild!.flags &= ~GuildFlags.AUTO_QUOTE;
+        ctx.guild!.flags &= ~ServerFlags.AUTO_QUOTE;
         break;
       case 'welcomes':
       case 'welcome':
-        ctx.guild!.flags &= ~GuildFlags.WELCOMES;
+        ctx.guild!.flags &= ~ServerFlags.WELCOMES;
         toSay = 'welcome messages';
         break;
       default:

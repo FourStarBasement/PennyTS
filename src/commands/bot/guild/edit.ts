@@ -1,13 +1,12 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import config from '../../../modules/config';
-import { DBRoles } from '../../../modules/db';
+import { DBServer, DBRole, ServerFlags } from '../../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
 import {
   fetchRandomNumber,
   decimalToHex,
-  GuildFlags,
 } from '../../../modules/utils';
 
 export const edit = {
@@ -25,12 +24,12 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS)) {
+    if (!ctx.commandClient.hasFlag(ctx.guild!.flags, ServerFlags.ROLE_EDITS)) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
     }
 
-    let roles: DBRoles[] = await ctx.commandClient
+    let roles: DBRole[] = await ctx.commandClient
       .query(`SELECT * FROM roles WHERE guild = ${ctx.guildId}`)
       .catch(() => (blacklist = []));
 

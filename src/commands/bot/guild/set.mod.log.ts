@@ -1,5 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
-import { ModLogActions, ModLogReactions } from '../../../modules/modlog';
+import { ModLogReactions } from '../../../modules/modlog';
+import { ModLogActionFlags } from '../../../modules/db';
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
 import {
   Reaction,
@@ -58,7 +59,7 @@ export const setModLog = {
       }
       return;
     } else if (attr === 'config') {
-      let bits: ModLogActions = ctx.guild?.modLog!;
+      let bits: ModLogActionFlags = ctx.guild?.modLog!;
 
       let message = await ctx.reply({
         embed: makeEmbed(bits),
@@ -115,37 +116,37 @@ function addReactions(msg: Message, i: number = 0) {
   msg.react(reactions[i]).then(() => addReactions(msg, ++i));
 }
 
-function makeEmbed(bits: ModLogActions): Page {
+function makeEmbed(bits: ModLogActionFlags): Page {
   let description = `What events would you like to toggle?
 ${check(
-  (ModLogActions.CHANNEL_CREATE & bits) === ModLogActions.CHANNEL_CREATE
+  (ModLogActionFlags.CHANNEL_CREATE & bits) === ModLogActionFlags.CHANNEL_CREATE
 )} 0️⃣ Channel Changes
 ${check(
-  (ModLogActions.GUILD_ROLE_CREATE & bits) === ModLogActions.GUILD_ROLE_CREATE
+  (ModLogActionFlags.GUILD_ROLE_CREATE & bits) === ModLogActionFlags.GUILD_ROLE_CREATE
 )} 1️⃣ Role Changes
 ${check(
-  (ModLogActions.CHANNEL_PINS_UPDATE & bits) ===
-    ModLogActions.CHANNEL_PINS_UPDATE
+  (ModLogActionFlags.CHANNEL_PINS_UPDATE & bits) ===
+    ModLogActionFlags.CHANNEL_PINS_UPDATE
 )} 2️⃣ Message Pins
 ${check(
-  (ModLogActions.GUILD_MEMBER_ADD & bits) === ModLogActions.GUILD_MEMBER_ADD
+  (ModLogActionFlags.GUILD_MEMBER_ADD & bits) === ModLogActionFlags.GUILD_MEMBER_ADD
 )} 3️⃣ Bots Added & Member Kicks
 ${check(
-  (ModLogActions.GUILD_MEMBER_UPDATE & bits) ===
-    ModLogActions.GUILD_MEMBER_UPDATE
+  (ModLogActionFlags.GUILD_MEMBER_UPDATE & bits) ===
+    ModLogActionFlags.GUILD_MEMBER_UPDATE
 )} 4️⃣ Member Changes
 ${check(
-  (ModLogActions.GUILD_BAN_ADD & bits) === ModLogActions.GUILD_BAN_ADD
+  (ModLogActionFlags.GUILD_BAN_ADD & bits) === ModLogActionFlags.GUILD_BAN_ADD
 )} 5️⃣ Bans
 ${check(
-  (ModLogActions.GUILD_EMOJIS_UPDATE & bits) ===
-    ModLogActions.GUILD_EMOJIS_UPDATE
+  (ModLogActionFlags.GUILD_EMOJIS_UPDATE & bits) ===
+    ModLogActionFlags.GUILD_EMOJIS_UPDATE
 )} 6️⃣ Emoji Changes
 ${check(
-  (ModLogActions.INVITE_CREATE & bits) === ModLogActions.INVITE_CREATE
+  (ModLogActionFlags.INVITE_CREATE & bits) === ModLogActionFlags.INVITE_CREATE
 )} 7️⃣ Invite Changes
 ${check(
-  (ModLogActions.MESSAGE_DELETE & bits) === ModLogActions.MESSAGE_DELETE
+  (ModLogActionFlags.MESSAGE_DELETE & bits) === ModLogActionFlags.MESSAGE_DELETE
 )} 8️⃣ Messages Deleted`;
 
   return {

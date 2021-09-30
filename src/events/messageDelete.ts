@@ -1,8 +1,7 @@
 import { ClientEvents, AuditLogActions } from 'detritus-client/lib/constants';
 import { GatewayClientEvents } from 'detritus-client/lib/gateway/clientevents';
 import { CommandClient } from 'detritus-client/lib/commandclient';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ModLogActionFlags, DBServer } from '../modules/db';
 
 export const messageDelete = {
   event: ClientEvents.MESSAGE_DELETE,
@@ -31,8 +30,8 @@ export const messageDelete = {
     if (!channel) return;
 
     if (
-      (ModLogActions.MESSAGE_DELETE & guild.modLog) !==
-      ModLogActions.MESSAGE_DELETE
+      (ModLogActionFlags.MESSAGE_DELETE & guild.modLog) !==
+      ModLogActionFlags.MESSAGE_DELETE
     )
       return;
     setTimeout(async () => {

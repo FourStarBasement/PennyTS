@@ -4,10 +4,9 @@ import {
   CommandClient,
   ShardClient,
 } from 'detritus-client';
-import { DBServer } from '../modules/db';
-import { ModLogActions } from '../modules/modlog';
+import { ModLogActionFlags, ServerFlags, DBServer } from '../modules/db';
 import { AuditLog } from 'detritus-client/lib/structures';
-import { Page, GuildFlags } from '../modules/utils';
+import { Page } from '../modules/utils';
 
 export const guildMemberRemove = {
   event: ClientEvents.GUILD_MEMBER_REMOVE,
@@ -32,8 +31,8 @@ export const guildMemberRemove = {
       let channel = guild.channels.get(server.mod_channel.toString());
       if (channel) {
         if (
-          (ModLogActions.GUILD_MEMBER_REMOVE & guild.modLog) ===
-          ModLogActions.GUILD_MEMBER_REMOVE
+          (ModLogActionFlags.GUILD_MEMBER_REMOVE & guild.modLog) ===
+          ModLogActionFlags.GUILD_MEMBER_REMOVE
         ) {
           guild
             .fetchAuditLogs({
@@ -57,7 +56,7 @@ export const guildMemberRemove = {
         }
       }
 
-      if (client.hasFlag(server.flags, GuildFlags.WELCOMES)) {
+      if (client.hasFlag(server.flags, ServerFlags.WELCOMES)) {
         let channel = shardClient.channels.get(
           server.welcome_channel.toString()
         );

@@ -14,7 +14,9 @@ export const mir = {
     let data: DBUser = await ctx.commandClient.queryOne(
       `SELECT credits from users WHERE user_id = ${ctx.member!.id}`
     );
-    if (data.credits < cr) {
+
+    // TODO: fix
+    if (data.credits < BigInt(cr)) {
       ctx.reply('You do not have enough credits to perform this command.');
       return;
     }

@@ -14,21 +14,21 @@ import {
   EventHandler,
   chanReg,
   FetchedStarData,
-  GuildFlags,
   Page,
 } from './utils';
 import {
+  QueryType,
+  ServerFlags,
   UserFlags,
+  ModLogActionFlags,
   DBUser,
   DBServer,
-  StarData,
-  DBTags,
-  QueryType,
-  DisabledCommand,
-  DBHighlights,
+  DBStarboard,
+  DBTag,
+  DBDisabledCommand,
+  DBHighlight,
 } from './db';
 import { ClientEvents, Permissions } from 'detritus-client/lib/constants';
-import { ModLogActions } from './modlog';
 import { ShardClient } from 'detritus-client/lib/client';
 import { InteractionCommandClient } from 'detritus-client';
 import { InteractionCommand } from 'detritus-client/lib/interaction';
@@ -40,10 +40,10 @@ declare module 'detritus-client/lib/structures/guild' {
     nsfwArr: Array<string>;
     prefix: string;
     levels: number;
-    modLog: ModLogActions;
+    modLog: ModLogActionFlags;
     checked: boolean;
     avgColor: number;
-    flags: GuildFlags;
+    flags: ServerFlags;
     highlights: Map<string, string[]>;
     terms: string[];
   }
@@ -77,7 +77,7 @@ declare module 'detritus-client/lib/commandclient' {
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
     checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
-    hasFlag: (flags: number, flag: UserFlags | GuildFlags) => Boolean;
+    hasFlag: (flags: number, flag: UserFlags | ServerFlags) => Boolean;
     addOwnerOnly: (commands?: CommandOptions[]) => CommandClient; // Loads in commands from ./commands/owner/
     addEvents: (events: EventHandler[]) => CommandClient; // Load in events from ./events/
     fetchStarData: (message: Message) => Promise<FetchedStarData>; // Fetches data for starboard
@@ -174,7 +174,7 @@ export default (
   };
 
   // Check if a DBUser has a flag set
-  client.hasFlag = (flags: number, flag: UserFlags | GuildFlags) => {
+  client.hasFlag = (flags: number, flag: UserFlags | ServerFlags) => {
     return (flags & flag.valueOf()) == flag.valueOf();
   };
 
@@ -221,7 +221,7 @@ export default (
       if (!guild?.flags) guild.flags = 0;
     } else {
       if (!guild?.modLog) {
-        guild!.modLog = parseInt(result.modlog_perm);
+        guild!.modLog = result.modlog_perm;
       }
       if (!guild.flags) guild.flags = result.flags;
     }
@@ -276,7 +276,7 @@ export default (
 
       let userCache = context.guild?.highlights.get(context.userId);
       if (!userCache) {
-        let t: DBHighlights = await client.queryOne(
+        let t: DBHighlight = await client.queryOne(
           `SELECT terms FROM highlights WHERE user_id = '${context.userId}' AND server_id = '${context.guildId}'`
         );
         if (t) context.guild.highlights.set(context.userId, t.terms || []);
@@ -499,7 +499,7 @@ export default (
 
   // This fetches starboard data
   client.fetchStarData = async (message: Message) => {
-    let starData: StarData = await client.queryOne(
+    let starData: DBStarboard = await client.queryOne(
       `SELECT message_id, star_id FROM starboard WHERE message_id = ${message.id} OR star_id = ${message.id}`
     );
     let starboardInfo: DBServer = await client.queryOne(
@@ -516,10 +516,10 @@ export default (
     let starMessage;
     let starredMessage;
     if (starData) {
-      starMessage = await starboard?.fetchMessage(starData.star_id);
+      starMessage = await starboard?.fetchMessage(starData.star_id.toString());
       starredMessage = await channels
         .get(chanReg.exec(starMessage!.content)![1])
-        ?.fetchMessage(starData.message_id);
+        ?.fetchMessage(starData.message_id.toString());
     }
 
     return {
@@ -534,7 +534,7 @@ export default (
   client.addMultiple = (commands?: CommandOptions[]) => {
     commands?.forEach(async (command) => {
       if (!command.metadata?.disabled) command.metadata!.disabled = [];
-      let d: DisabledCommand[] = await client.preparedQuery(
+      let d: DBDisabledCommand[] = await client.preparedQuery(
         'SELECT server_id, channel_id FROM disabled_commands WHERE command = $1',
         [command.name],
         QueryType.Multi
@@ -614,7 +614,7 @@ export default (
       if (!payload.context.guild) return;
 
       // This handles the auto quoting
-      if (client.hasFlag(payload.context.guild.flags, GuildFlags.AUTO_QUOTE)) {
+      if (client.hasFlag(payload.context.guild.flags, ServerFlags.AUTO_QUOTE)) {
         let msgReg = /(?:https?):\/\/(?:(?:(?:canary|ptb)\.)?(?:discord|discordapp)\.com\/channels\/)(\@me|\d+)\/(\d+)\/(\d+)$/g;
         if (msgReg.test(payload.context.content)) {
           // Due to some amazing JavaScript goodness, I have to redeclare the regex here for it to work. I don't know why. Thank you, JS. Very cool
@@ -687,7 +687,7 @@ export default (
       let content = payload.context.message.content
         .substr(payload.context.guild.prefix.length)
         .split(/<@!?(\d+)>/);
-      let tag: DBTags = await client
+      let tag: DBTag = await client
         .preparedQuery(
           'SELECT * FROM tags WHERE guild_id = $1 AND name = $2',
           [payload.context.guildId, content[0].trim()],
@@ -743,7 +743,7 @@ export default (
       user.xp_cool = now;
       user.xp += xp;
       if (user.xp > user.next) {
-        if (client.hasFlag(ctx.guild!.flags, GuildFlags.LEVELS)) {
+        if (client.hasFlag(ctx.guild!.flags, ServerFlags.LEVELS)) {
           ctx.reply(
             `Congrats ${ctx.user.username}! You just leveled up to level ${
               user.level + 1

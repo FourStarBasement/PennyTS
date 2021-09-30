@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { Role } from 'detritus-client/lib/structures';
-import { DBRoles } from '../../../modules/db';
+import { DBRole } from '../../modules/db';
 
 let blacklisted: Role[] = [];
 let removed: Role[] = [];
@@ -21,11 +21,11 @@ export const blacklist = {
 };
 
 async function addOrRemoveFromDB(role: Role, ctx: Context) {
-  let res: DBRoles[] = await ctx.commandClient?.query(
+  let res: DBRole[] = await ctx.commandClient?.query(
     `SELECT COUNT(*) AS count FROM roles WHERE guild = ${ctx.guildId} AND role = ${role.id}`
   );
-  console.log(res);
-  if (res[0] && res[0].count! < 1) {
+
+  if (res.length == 0) {
     await ctx.commandClient.query(
       `INSERT INTO roles (role, guild) VALUES (${role.id}, ${ctx.guildId})`
     );

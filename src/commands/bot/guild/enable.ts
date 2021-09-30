@@ -1,7 +1,8 @@
 import { Context } from 'detritus-client/lib/command';
 import { Message } from 'detritus-client/lib/structures';
 import { MessageCollector } from '../../../modules/collectors/messageCollector';
-import { chanReg, GuildFlags } from '../../../modules/utils';
+import { chanReg } from '../../../modules/utils';
+import { ServerFlags } from '../../../modules/db';
 
 interface CommandArgs {
   enable: string;
@@ -26,10 +27,10 @@ export const enable = {
     switch (args.enable) {
       case 'levels':
         attr = 'level up messages';
-        ctx.guild!.flags |= GuildFlags.LEVELS;
+        ctx.guild!.flags |= ServerFlags.LEVELS;
         break;
       case 'mod logs':
-        ctx.guild!.flags |= GuildFlags.MOD_LOGS;
+        ctx.guild!.flags |= ServerFlags.MOD_LOGS;
         ctx.reply('Please mention the chat for logs to be sent to:');
         let filter = (m: Message) =>
           m.author.id === ctx.member!.id && chanReg.test(m.content);
@@ -59,18 +60,18 @@ export const enable = {
         break;
       case 'edits':
       case 'role edits':
-        ctx.guild!.flags |= GuildFlags.ROLE_EDITS;
+        ctx.guild!.flags |= ServerFlags.ROLE_EDITS;
         attr = 'role edits';
         break;
       case 'auto quote':
       case 'auto quotes':
       case 'quotes':
-        ctx.guild!.flags |= GuildFlags.AUTO_QUOTE;
+        ctx.guild!.flags |= ServerFlags.AUTO_QUOTE;
         attr = 'auto message quoting';
         break;
       case 'welcomes':
       case 'welcome':
-        ctx.guild!.flags |= GuildFlags.WELCOMES;
+        ctx.guild!.flags |= ServerFlags.WELCOMES;
         attr = 'welcome messages';
         break;
       default:

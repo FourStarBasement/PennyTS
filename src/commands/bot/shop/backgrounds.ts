@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { EmbedPaginator } from '../../../modules/collectors/embedPaginator';
-import { DBUserBackgrounds, DBUser } from '../../../modules/db';
+import { DBUserBackground, DBUser } from '../../../modules/db';
 
 export const backgrounds = {
   name: 'backgrounds',
@@ -12,7 +12,7 @@ export const backgrounds = {
   run: async (ctx: Context) => {
     let bg: Array<any> = [];
     let i = 0;
-    let data: DBUserBackgrounds[] = await ctx.commandClient
+    let data: DBUserBackground[] = await ctx.commandClient
       .query(`SELECT * FROM user_backgrounds WHERE user_id = ${ctx.member!.id}`)
       .catch(console.error);
     if (!data || data.length < 1) {
@@ -20,7 +20,7 @@ export const backgrounds = {
       return;
     }
 
-    data.forEach((element: DBUserBackgrounds) => {
+    data.forEach((element: DBUserBackground) => {
       if (element.name !== 'default') {
         bg.push(embed(element.name));
       }
