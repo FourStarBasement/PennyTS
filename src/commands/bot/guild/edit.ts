@@ -25,9 +25,6 @@ export const edit = {
       return;
     }
     let blacklist: string[] = [];
-    let guild: DBServer = await ctx.commandClient.queryOne(
-      `SELECT edits FROM servers WHERE server_id = ${ctx.guildId}`
-    );
     if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS)) {
       ctx.reply('Role edits are not enabled on this server.');
       return;
