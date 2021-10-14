@@ -9,7 +9,7 @@ import {
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
 import { DBServer } from '../../../modules/db';
 import config from '../../../modules/config';
-import { fetchRandomNumber, decimalToHex } from '../../../modules/utils';
+import { fetchRandomNumber, decimalToHex, GuildFlags } from '../../../modules/utils';
 
 interface CommandArgs {
   color: string;
@@ -92,7 +92,8 @@ async function updateColor(ctx: Context, m: Message, color: string) {
         console.error(err);
         return;
       }
-      if (server.edits === 0) return;
+      if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS))
+        return;
       m.react('📝');
 
       let filter = (r: Reaction, u: User) => {

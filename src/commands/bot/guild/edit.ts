@@ -1,7 +1,7 @@
 import { Context } from 'detritus-client/lib/command';
 import fetch from 'node-fetch';
 import config from '../../../modules/config';
-import { DBServer, DBRoles } from '../../../modules/db';
+import { DBRoles } from '../../../modules/db';
 import { Role, Message, Reaction, User } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
 import {
