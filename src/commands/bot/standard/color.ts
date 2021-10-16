@@ -72,18 +72,17 @@ export const color = {
 };
 
 async function updateColor(ctx: Context, m: Message, color: string) {
+  if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS))
+  return;
   if (
     !ctx.member!.colorRole ||
     ctx.member!.colorRole!.position >= ctx.me!.highestRole!.position ||
     !ctx.me?.canManageRoles
   )
     return;
-  let server: DBServer = await ctx.commandClient
-    .queryOne(`SELECT * FROM servers WHERE server_id = ${ctx.guildId}`)
-    .catch(console.error);
-  await ctx.commandClient
+ let c = await ctx.commandClient
     .query(
-      `SELECT * FROM roles WHERE guild = ${ctx.guildId} AND role = ${
+      `SELECT COUNT(*) FROM roles WHERE guild = ${ctx.guildId} AND role = ${
         ctx.member!.colorRole!.id
       }`
     )
@@ -92,8 +91,8 @@ async function updateColor(ctx: Context, m: Message, color: string) {
         console.error(err);
         return;
       }
-      if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS))
-        return;
+    });
+    if (c.count > 0) return;
       m.react('📝');
 
       let filter = (r: Reaction, u: User) => {
@@ -113,5 +112,4 @@ async function updateColor(ctx: Context, m: Message, color: string) {
         ctx.reply(`Your role color is now ${color}. Enjoy!`);
         collector.destroy();
       });
-    });
 }
