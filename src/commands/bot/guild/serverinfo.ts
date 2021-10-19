@@ -60,6 +60,11 @@ export const serverinfo = {
       },
       color: ctx.guild?.avgColor,
     };
+    if (ctx.guild?.bannerUrl)
+    embed.fields.push({
+      name: 'Link to Server Banner',
+      value: ctx.guild.bannerUrl
+    })
     ctx.reply({
       embed: embed,
     });
