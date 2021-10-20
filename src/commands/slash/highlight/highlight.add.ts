@@ -27,7 +27,7 @@ export const highlightAdd = {
     }
     if (args.term.length < 2) {
       ctx.editOrRespond(
-        'This term is too short! Please pick a work greater than 2 characters.'
+        'This term is too short! Please pick a word greater than 2 characters.'
       );
       return;
     }

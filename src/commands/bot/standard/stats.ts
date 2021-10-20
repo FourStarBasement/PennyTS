@@ -1,3 +1,4 @@
+import { Constants } from 'detritus-client';
 import { Context } from 'detritus-client/lib/command';
 
 export const stats = {
@@ -27,7 +28,7 @@ export const stats = {
           },
           color: 9043849,
           footer: {
-            text: 'PennyBot by Lilwiggy',
+            text: 'PennyBot by Lilwiggy and friends',
           },
           url: 'https://penny.wiggy.dev',
           fields: [
@@ -37,7 +38,7 @@ export const stats = {
             \n**Ping:** ${ping.gateway}ms
             \n**Total Servers:** ${ctx.client.guilds.cache.size}
             \n**Server Prefix:** ${ctx.prefix}
-            \n**FrameWork:** Detritus-client
+            \n**FrameWork:** Detritus-client v${Constants.Package.VERSION}
             \n**NodeJS version:** ${process.version.substr(1)}`,
             },
           ],
