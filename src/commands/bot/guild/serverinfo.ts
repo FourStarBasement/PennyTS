@@ -24,10 +24,6 @@ export const serverinfo = {
     ).length;
     let bots = ctx.guild!.members.filter((m: Member) => m.bot).length;
 
-    if (!ctx.guild?.avgColor)
-      ctx.guild!.avgColor = await ctx.commandClient.fetchAverageColor(
-        ctx.guild!.iconUrl!
-      );
     let embed = {
       title: ctx.guild?.name,
       fields: [
@@ -37,34 +33,29 @@ export const serverinfo = {
         },
         {
           name: 'Members',
-          value: `Total: ${total}
-          <:online:499784465145397258> ${online}
-                <:dnd:499778040147083264> ${dnd}
-                <:idle:499784448334888960> ${idle}
-                <:invisible:499784436276133889> ${offline}
-                <:bot:499786409348038686> ${bots}`,
+          value: `Total: ${total}\n<:online:499784465145397258> ${online}\n<:dnd:499778040147083264> ${dnd}\n<:idle:499784448334888960> ${idle}\n<:invisible:499784436276133889> ${offline}\n<:bot:499786409348038686> ${bots}`,
         },
         {
           name: 'Owner',
           value: `${ctx.guild?.members.get(ctx.guild?.ownerId)} | ${
             ctx.guild?.ownerId
           }`,
-        },
-        {
-          name: 'Server created',
-          value: ctx.guild!.createdAt.toString(),
-        },
+        }
       ],
       thumbnail: {
         url: ctx.guild?.iconUrl!,
       },
-      color: ctx.guild?.avgColor,
+      color: 6969,
     };
     if (ctx.guild?.bannerUrl)
     embed.fields.push({
       name: 'Link to Server Banner',
       value: ctx.guild.bannerUrl
-    })
+    });
+    embed.fields.push({
+      name: 'Server created',
+      value: ctx.guild!.createdAt.toString(),
+    });
     ctx.reply({
       embed: embed,
     });
