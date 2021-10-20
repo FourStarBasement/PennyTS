@@ -60,6 +60,12 @@ async function maybeModLog(payload: GatewayClientEvents.GuildMemberAdd, member: 
 
 async function maybeWelcome(client: CommandClient, member: Member, guild: Guild, server: DBServer) {
   if (!client.hasFlag(server.flags, GuildFlags.WELCOMES)) return;
+  if (server.welcome_role) {
+  const role = guild.roles.get(server.welcome_role.toString());
+  if (role) {
+    await member.addRole(role.id);
+  }
+}
   const channel = guild.channels.get(server.welcome_channel.toString());
 
   if (channel) {
@@ -73,12 +79,6 @@ async function maybeWelcome(client: CommandClient, member: Member, guild: Guild,
         `**${member.username}** just joined **${guild.name}**`
       );
     }
-  }
-
-  if (!server.welcome_role) return;
-  const role = guild.roles.get(server.welcome_role.toString());
-  if (role) {
-    await member.addRole(role.id);
   }
 }
 

@@ -20,6 +20,7 @@ import { Range } from 'node-schedule';
 import fetch from 'node-fetch';
 
 import pgPromise, { IBaseProtocol } from 'pg-promise';
+import { GatewayIntents } from 'detritus-client-socket/lib/constants';
 const pgp = pgPromise();
 
 // TODO: Perhaps make a custom class wrapper for this?
@@ -37,7 +38,8 @@ const cmdClient = new CommandClient(config.token, {
       },
       status: PresenceStatuses.ONLINE,
     },
-    loadAllMembers: false,
+    loadAllMembers: true,
+    intents: 32509
   },
   useClusterClient: false,
 });
