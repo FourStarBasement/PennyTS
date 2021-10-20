@@ -54,6 +54,7 @@ cmdClient.addEvents(events);
 
 (async () => {
   const client = await cmdClient.run();
+  await interactionClient.uploadApplicationCommands().catch(console.error); // Upload slash commands if any
   await interactionClient.run().catch(console.error);
 
   const shardClient = client as ShardClient;
