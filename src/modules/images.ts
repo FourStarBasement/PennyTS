@@ -265,4 +265,22 @@ export default {
     'https://media2.giphy.com/media/1eEAo5f1NXDtxHLgLM/200.gif',
     'https://i.pinimg.com/originals/4f/63/83/4f638310f10f35282c4bfb393d973c22.gif'
   ],
+  highfives: [
+    'https://thumbs.gfycat.com/ElaborateAccurateFerret-small.gif',
+    'https://c.tenor.com/JBBZ9mQntx8AAAAC/anime-high-five.gif',
+    'https://thumbs.gfycat.com/AllEqualInvisiblerail-size_restricted.gif',
+    'https://thumbs.gfycat.com/DirtyFlashyAlleycat-size_restricted.gif',
+    'https://lh6.googleusercontent.com/43sPkpSRFKrnFENGv9MTfl5Q5DgAZrDCFNmq0nu0BUOhUxAJwakNko51QvAV5DMG7E2LnD2rHWESzIvfEV2XfaX0lBUps6Lv6Mu4K6PTOb5IDqLVtsAeFXuZ_b2WWH3Adp4PpUPi',
+    'https://thumbs.gfycat.com/ActualWarmheartedDungbeetle-max-1mb.gif',
+    'https://i.imgur.com/B2p4NpM.gif',
+    'https://c.tenor.com/0qE8u_3oJUsAAAAC/highfive-emperors-new-groove.gif',
+    'https://c.tenor.com/zBysJTUFixAAAAAC/fairytail-wink.gif',
+    'https://i.imgur.com/VaynTWU.gif',
+    'https://gifimage.net/wp-content/uploads/2017/11/epic-high-five-gif-2.gif',
+    'https://lh5.googleusercontent.com/ItTBRIvAXhfhNmeCDBDiQyA_J7bDtgTRjLLirgvaPbz3mzvDWQXxDsSXhWJqX_2Iu-zymoSakrk9lJwzQAItqbEzzVqbPwU9Xu2DSivH9sqp_9KhHevtfOYDkbDtMSXiUH8EebhG',
+    'https://64.media.tumblr.com/5d986778e534ba847a8908eedf731722/tumblr_inline_ncz37lShz81t15dj0.gif',
+    'https://i.ppy.sh/fb4e05d3d8cb5fd0d356a470d08a45e2304e4dd6/68747470733a2f2f7061312e6e61727669692e636f6d2f363437352f613666373935353263343335666136333434323235353335613138366433336132653136333530335f68712e676966',
+    'https://c.tenor.com/mNWiDzK4Hb4AAAAC/high-five-fist-bump.gif'
+
+  ],
 };
