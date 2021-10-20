@@ -10,6 +10,7 @@ let canHugWiggy = [
   '600058196249411587', // Batthew's dummy thicc cheeks like holy fuck they're so thicc
   '411710271229526017', // Bats cause she wants to be nice
   '357763197559767041', // Glowwy cause 😳😳😳
+  '175453970989449216' // little thing if she ever finds the command lmfao
 ];
 
 export const hug = {
