@@ -6,7 +6,6 @@ import functions from './modules/functions';
 import {
   PresenceStatuses,
   ActivityTypes,
-  InteractionCallbackTypes,
 } from 'detritus-client/lib/constants';
 
 import {
@@ -39,7 +38,7 @@ const cmdClient = new CommandClient(config.token, {
       status: PresenceStatuses.ONLINE,
     },
     loadAllMembers: true,
-    intents: 32509
+    intents: 1543
   },
   useClusterClient: false,
 });
