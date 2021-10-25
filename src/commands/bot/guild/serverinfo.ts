@@ -24,6 +24,10 @@ export const serverinfo = {
     ).length;
     let bots = ctx.guild!.members.filter((m: Member) => m.bot).length;
 
+    if (!ctx.guild?.avgColor)
+      ctx.guild!.avgColor = await ctx.commandClient.fetchAverageColor(
+        ctx.guild!.iconUrl!
+      );
     let embed = {
       title: ctx.guild?.name,
       fields: [
