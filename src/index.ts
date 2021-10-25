@@ -3,11 +3,7 @@ import commands from './commands/index';
 import ownerCommands from './commands/bot/owner/index';
 import slashCommands from './commands/slash/index';
 import functions from './modules/functions';
-import {
-  PresenceStatuses,
-  ActivityTypes,
-  InteractionCallbackTypes,
-} from 'detritus-client/lib/constants';
+import { PresenceStatuses, ActivityTypes } from 'detritus-client/lib/constants';
 
 import {
   CommandClient,
@@ -20,6 +16,7 @@ import { Range } from 'node-schedule';
 import fetch from 'node-fetch';
 
 import pgPromise, { IBaseProtocol } from 'pg-promise';
+import { GatewayIntents } from 'detritus-client-socket/lib/constants';
 const pgp = pgPromise();
 
 // TODO: Perhaps make a custom class wrapper for this?
@@ -37,7 +34,8 @@ const cmdClient = new CommandClient(config.token, {
       },
       status: PresenceStatuses.ONLINE,
     },
-    loadAllMembers: false,
+    loadAllMembers: true,
+    intents: 1543,
   },
   useClusterClient: false,
 });
@@ -52,6 +50,7 @@ cmdClient.addEvents(events);
 
 (async () => {
   const client = await cmdClient.run();
+  await interactionClient.uploadApplicationCommands().catch(console.error); // Upload slash commands if any
   await interactionClient.run().catch(console.error);
 
   const shardClient = client as ShardClient;

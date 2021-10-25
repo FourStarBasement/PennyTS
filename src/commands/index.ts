@@ -45,7 +45,6 @@ import { arrest } from './bot/memes/arrest';
 import { wj } from './bot/memes/wolfjob';
 import { top } from './bot/profile/top';
 import { profile } from './bot/profile/profile';
-import { spacehuhn } from './bot/memes/spacehuhn';
 import { edit } from './bot/guild/edit';
 import { tag } from './bot/guild/tag';
 import { tags } from './bot/guild/tags';
@@ -127,7 +126,6 @@ export default [
   wj,
   top,
   profile,
-  spacehuhn,
   edit,
   tagCreate,
   tagDelete,

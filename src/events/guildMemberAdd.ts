@@ -14,7 +14,7 @@ export const guildMemberAdd = {
     let member = payload.member;
     let guild = payload.member.guild!;
 
-    await client.checkGuild(payload.guildId)
+    await client.checkGuild(payload.guildId);
 
     let server: DBServer = await client.queryOne(
       `SELECT mod_channel, flags, welcome_message, welcome_channel, welcome_role FROM servers WHERE server_id = ${payload.guildId}`
@@ -22,12 +22,17 @@ export const guildMemberAdd = {
 
     await Promise.all([
       maybeModLog(payload, member, guild, server),
-      maybeWelcome(client, member, guild, server)
-    ])
+      maybeWelcome(client, member, guild, server),
+    ]);
   },
 };
 
-async function maybeModLog(payload: GatewayClientEvents.GuildMemberAdd, member: Member, guild: Guild, server: DBServer) {
+async function maybeModLog(
+  payload: GatewayClientEvents.GuildMemberAdd,
+  member: Member,
+  guild: Guild,
+  server: DBServer
+) {
   if (!server.mod_channel) return;
   if (!guild.me?.canViewAuditLogs) return;
 
@@ -58,8 +63,19 @@ async function maybeModLog(payload: GatewayClientEvents.GuildMemberAdd, member: 
   }
 }
 
-async function maybeWelcome(client: CommandClient, member: Member, guild: Guild, server: DBServer) {
+async function maybeWelcome(
+  client: CommandClient,
+  member: Member,
+  guild: Guild,
+  server: DBServer
+) {
   if (!client.hasFlag(server.flags, GuildFlags.WELCOMES)) return;
+  if (server.welcome_role) {
+    const role = guild.roles.get(server.welcome_role.toString());
+    if (role) {
+      await member.addRole(role.id);
+    }
+  }
   const channel = guild.channels.get(server.welcome_channel.toString());
 
   if (channel) {
@@ -73,12 +89,6 @@ async function maybeWelcome(client: CommandClient, member: Member, guild: Guild,
         `**${member.username}** just joined **${guild.name}**`
       );
     }
-  }
-
-  if (!server.welcome_role) return;
-  const role = guild.roles.get(server.welcome_role.toString());
-  if (role) {
-    await member.addRole(role.id);
   }
 }
 

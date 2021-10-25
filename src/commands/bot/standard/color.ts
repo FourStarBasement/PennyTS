@@ -9,7 +9,11 @@ import {
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
 import { DBServer } from '../../../modules/db';
 import config from '../../../modules/config';
-import { fetchRandomNumber, decimalToHex } from '../../../modules/utils';
+import {
+  fetchRandomNumber,
+  decimalToHex,
+  GuildFlags,
+} from '../../../modules/utils';
 
 interface CommandArgs {
   color: string;
@@ -72,18 +76,17 @@ export const color = {
 };
 
 async function updateColor(ctx: Context, m: Message, color: string) {
+  if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS))
+    return;
   if (
     !ctx.member!.colorRole ||
     ctx.member!.colorRole!.position >= ctx.me!.highestRole!.position ||
     !ctx.me?.canManageRoles
   )
     return;
-  let server: DBServer = await ctx.commandClient
-    .queryOne(`SELECT * FROM servers WHERE server_id = ${ctx.guildId}`)
-    .catch(console.error);
-  await ctx.commandClient
+  let c = await ctx.commandClient
     .query(
-      `SELECT * FROM roles WHERE guild = ${ctx.guildId} AND role = ${
+      `SELECT COUNT(*) FROM roles WHERE guild = ${ctx.guildId} AND role = ${
         ctx.member!.colorRole!.id
       }`
     )
@@ -92,25 +95,25 @@ async function updateColor(ctx: Context, m: Message, color: string) {
         console.error(err);
         return;
       }
-      if (server.edits === 0) return;
-      m.react('📝');
-
-      let filter = (r: Reaction, u: User) => {
-        return r.emoji.name === '📝' && u.id === ctx.member!.id;
-      };
-      let collector = new ReactionCollector(ctx, 30000, m, filter);
-      let old = ctx.member!.colorRole?.color.toString(16);
-      collector.on('collect', (r: Reaction, u: User) => {
-        ctx
-          .member!.colorRole?.edit({
-            color: parseInt(`0x${color.replace('#', '')}`),
-            reason: `Requested change by ${
-              ctx.member!.username
-            }. Used to be ${old}.`,
-          })
-          .catch(console.error);
-        ctx.reply(`Your role color is now ${color}. Enjoy!`);
-        collector.destroy();
-      });
     });
+  if (c.count > 0) return;
+  m.react('📝');
+
+  let filter = (r: Reaction, u: User) => {
+    return r.emoji.name === '📝' && u.id === ctx.member!.id;
+  };
+  let collector = new ReactionCollector(ctx, 30000, m, filter);
+  let old = ctx.member!.colorRole?.color.toString(16);
+  collector.on('collect', (r: Reaction, u: User) => {
+    ctx
+      .member!.colorRole?.edit({
+        color: parseInt(`0x${color.replace('#', '')}`),
+        reason: `Requested change by ${
+          ctx.member!.username
+        }. Used to be ${old}.`,
+      })
+      .catch(console.error);
+    ctx.reply(`Your role color is now ${color}. Enjoy!`);
+    collector.destroy();
+  });
 }

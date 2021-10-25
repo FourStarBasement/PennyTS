@@ -19,31 +19,6 @@ export const messageReactionAdd = {
     let message: Message =
       payload.message || (await channel.fetchMessage(payload.messageId));
     let author = message.author;
-    // This lets me auto add images to waifu or nsfw commands cause no one suggests anything anymore :(
-    if (
-      payload.userId === '232614905533038593' &&
-      (message.attachments.length > 0 || message.embeds.length > 0)
-    ) {
-      let images = JSON.parse(
-        await fs.promises.readFile('./images.json', 'utf-8')
-      );
-      let arrName: string = '';
-      let url: string = '';
-      if (message.attachments.length > 0)
-        url = message.attachments.first()?.url!;
-      else url = message.embeds.first()?.url!;
-      if (payload.reaction.emoji.id === '685818296637194240') arrName = 'nsfw';
-      else if (payload.reaction.emoji.id === '673366401804795917')
-        arrName = 'waifu';
-      if (arrName) {
-        console.log(`Adding ${url} to the ${arrName} array`);
-        (images[arrName] as string[]).push(url);
-        fs.writeFile('./images.json', JSON.stringify(images, null, 2), (er) => {
-          if (er) console.log(er);
-        });
-      }
-    }
-
     if (!payload.guildId || channel.nsfw || payload.member!.bot) {
       return;
     }
