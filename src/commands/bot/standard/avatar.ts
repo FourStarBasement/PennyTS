@@ -10,7 +10,6 @@ export const avatar = {
   run: async (ctx: Context) => {
     let user =
       (ctx.commandClient.fetchGuildMember(ctx) as User) || ctx.message.author;
-    console.log(ctx.member);
     if (!user.avgColor)
       user.avgColor = await ctx.commandClient.fetchAverageColor(user.avatarUrl);
     let embed = {
@@ -20,8 +19,9 @@ export const avatar = {
       },
       color: 6969,
     };
-    if (ctx.member && ctx.member.avatar !== user.avatar)
-      embed.image = { url: `${ctx.member.avatarUrl}?size=2048` };
+    let member = ctx.guild!.members.get(user.id);
+    if (member?.avatar !== user.avatar)
+      embed.image = { url: `${member?.avatarUrl}?size=2048` };
 
     ctx.reply({
       embed: embed,
