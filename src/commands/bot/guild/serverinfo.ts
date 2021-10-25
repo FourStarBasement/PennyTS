@@ -45,7 +45,7 @@ export const serverinfo = {
       thumbnail: {
         url: ctx.guild?.iconUrl!,
       },
-      color: 6969,
+      color: ctx.guild?.avgColor,
     };
     if (ctx.guild?.bannerUrl)
       embed.fields.push({
