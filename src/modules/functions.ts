@@ -73,6 +73,7 @@ declare module 'detritus-client/lib/commandclient' {
       typ: QueryType
     ) => Promise<any>;
     fetchGuildMember: (ctx: Context) => Member | User | undefined; // Easier method to fetch guild members
+    fetchUser: (ctx: Context) => User | undefined; // Easier method to users
     checkImage: (image: string) => Promise<string>; // Checks if an image returns OK before sending
     checkGuild: (id: string) => Promise<void>; // Checks if a guild is in the database before making SQL calls
     checkUser: (context: Context, id: string) => Promise<DBUser>; // Checks if a user is in the database before making SQL calls
@@ -143,6 +144,23 @@ export default (
       ) ||
       msg.guild?.members.find(
         (m) => m.nick?.toLowerCase() === args[1].toLowerCase()
+      );
+    return m;
+  };
+  // Same as fetchGuildMember but for users
+  client.fetchUser = (ctx: Context) => {
+    let msg = ctx.message;
+    let args = msg.content
+      .slice(ctx.prefix!.length + ctx.command!.name.length)
+      .split(' ');
+
+    if (!args[1]) return undefined;
+
+    let m =
+      ctx.client.users.get(msg.mentions.first()?.id || '') ||
+      ctx.client.users.get(args[1]) ||
+      ctx.client.users.find(
+        (m) => m.username.toLowerCase() === args[1].toLowerCase()
       );
     return m;
   };
@@ -743,8 +761,6 @@ export default (
       }
     }
   }
-
-  async function highlight(ctx: Context) {}
 
   // This function fetches an image's average color.
   client.fetchAverageColor = async (input: string): Promise<number> => {

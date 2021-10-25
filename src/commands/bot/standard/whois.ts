@@ -17,22 +17,16 @@ export const whoIs = {
     name: 'whois',
   },
   run: async (ctx: Context, args: CommandArgs) => {
-    let user = ctx.commandClient.fetchGuildMember(ctx) as User;
-    if (!user)
-      if (isNaN(args.whois)) user = ctx.user;
-      else
-        user = (await ctx.client.rest
-          .fetchUser(args.whois.toString())
-          .catch((err) => {
-            console.log(err);
-            return;
-          })) as User;
+    let user = ctx.commandClient.fetchUser(ctx);
+    if (!user && (!args.whois || isNaN(args.whois))) user = ctx.user;
     if (!user) {
       ctx.reply('I could not find that user!');
       return;
     }
     if (!user.avgColor)
       user.avgColor = await ctx.commandClient.fetchAverageColor(user.avatarUrl);
+
+    let member = ctx.guild!.members.get(user.id);
     let embed: Page = {
       title: `${user.username} (${user.id})\n`,
       color: user.avgColor,
@@ -43,6 +37,7 @@ export const whoIs = {
         {
           name: 'Account created on',
           value: user.createdAt.toDateString(),
+          inline: true,
         },
       ],
     };
@@ -54,10 +49,11 @@ export const whoIs = {
       (e: Emoji) => e.name === e_name
     )} (${e_name === 'invisible' ? 'offline' : e_name})`;
 
-    if (ctx.guild?.members.get(user.id))
+    if (member)
       embed.fields?.push({
         name: `${user.username} joined this server on`,
         value: ctx.guild!.members.get(user.id)!.joinedAt!.toDateString(),
+        inline: true,
       });
     let status: string | undefined;
     if (user.presence) {
@@ -91,6 +87,51 @@ export const whoIs = {
       embed.fields?.push({
         name: 'Public badges',
         value: flags.join(' '),
+        inline: true,
+      });
+    }
+    if (member) {
+      if (member?.avatar && member?.avatar !== user.avatar)
+        embed.fields!.push({
+          name: 'Server specific icon',
+          value: `[Click me!](${member?.avatarUrl}?size=2048)`,
+          inline: true,
+        });
+
+      if (member.premiumSince) {
+        embed.fields?.push({
+          name: 'Boosting server since',
+          value: member.premiumSince.toDateString(),
+        });
+      }
+
+      embed.fields?.push({
+        name: 'Roles',
+        value: `Count: ${member.roles.length}\nHighest Role: ${member.highestRole?.name}\nColor Role: ${member.colorRole?.name}`,
+        inline: true,
+      });
+
+      embed.fields?.push({
+        name: 'Permissions',
+        value: `${checkPerm(member.canAdministrator)} Admin\n${checkPerm(
+          member.canBanMembers
+        )} Ban members\n${checkPerm(
+          member.canChangeNicknames
+        )} Edit nicknames\n${checkPerm(
+          member.canCreateInstantInvite
+        )} Create Invites\n${checkPerm(
+          member.canManageChannels
+        )} Create/Edit Channels\n${checkPerm(
+          member.canManageEmojis
+        )} Create Emojis/Stickers\n${checkPerm(
+          member.canManageGuild
+        )} Edit Server\n${checkPerm(
+          member.canManageMessages
+        )} Delete Messages\n${checkPerm(
+          member.canManageRoles
+        )} Create/Edit Roles\n${checkPerm(
+          member.canViewAuditLogs
+        )} View Audit Logs\nBitwise for nerds: **${member.permissions}**`,
       });
     }
     ctx.reply({
@@ -98,3 +139,7 @@ export const whoIs = {
     });
   },
 };
+
+function checkPerm(perm: boolean) {
+  return perm ? '✅' : '❌';
+}
