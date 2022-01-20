@@ -1,6 +1,6 @@
 import { Context } from 'detritus-client/lib/command';
 import { Role } from 'detritus-client/lib/structures';
-import { DBRole } from '../../modules/db';
+import { DBRole } from '../../../modules/db';
 
 let blacklisted: Role[] = [];
 let removed: Role[] = [];

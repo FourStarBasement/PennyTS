@@ -44,7 +44,7 @@ export class MessageCollector extends EventEmitter {
 
   // Starts a message collector, blocks until a result is returned.
   wait() {
-    return new Promise((resolve, _reject) => {
+    return new Promise((resolve, reject) => {
       this.listener = (m: GatewayClientEvents.MessageCreate) => {
         const flag = this.verify(m);
         if (flag)
@@ -56,7 +56,7 @@ export class MessageCollector extends EventEmitter {
       this.ctx.client.on(ClientEvents.MESSAGE_CREATE, this.listener);
 
       this.destroyTimeout = setTimeout(() => {
-        resolve();
+        reject();
         this.emit('end');
       }, this.timeout);
     });

@@ -7,9 +7,9 @@
 
   "dev": {
     "driver": "pg",
-    "user": "postgres",
-    "password": "lol",
-    "host": "localhost",
+    "user": "penny",
+    "password": "yeet",
+    "host": "penny_db",
     "database": "penny"
   }
 }

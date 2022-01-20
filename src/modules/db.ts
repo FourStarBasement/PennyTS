@@ -95,7 +95,7 @@ export interface DBTag {
 
 export interface DBUser {
   user_id: BigInt;
-  credits: BigInt;
+  credits: bigint;
   daily_time: boolean;
   used: number;
   highfives: number;

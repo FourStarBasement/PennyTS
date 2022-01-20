@@ -7,12 +7,11 @@ import {
   Message,
 } from 'detritus-client/lib/structures';
 import { ReactionCollector } from '../../../modules/collectors/reactionCollector';
-import { DBServer } from '../../../modules/db';
+import { DBServer, ServerFlags } from '../../../modules/db';
 import config from '../../../modules/config';
 import {
   fetchRandomNumber,
   decimalToHex,
-  GuildFlags,
 } from '../../../modules/utils';
 
 interface CommandArgs {
@@ -76,7 +75,7 @@ export const color = {
 };
 
 async function updateColor(ctx: Context, m: Message, color: string) {
-  if (!ctx.commandClient.hasFlag(ctx.guild!.flags, GuildFlags.ROLE_EDITS))
+  if (!ctx.commandClient.hasFlag(ctx.guild!.flags, ServerFlags.ROLE_EDITS))
     return;
   if (
     !ctx.member!.colorRole ||

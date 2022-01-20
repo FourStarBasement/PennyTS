@@ -1,4 +1,4 @@
-FROM node:14.3.0-alpine3.11
+FROM node:17-stretch-slim
 
 WORKDIR /opt/penny
 COPY package*.json ./
